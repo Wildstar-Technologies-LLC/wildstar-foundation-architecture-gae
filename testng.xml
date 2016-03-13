@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Suite" parallel="false">
+  <test name="dao.Test">
+    <classes>
+      <class name="com.wildstartech.gae.wfa.LocalHighRepDatastoreTest"/>
+      <class name="com.wildstartech.gae.wfa.dao.WildObjectImplTest"/>
+      <class name="com.wildstartech.gae.wfa.dao.WildDAOImplTest"/>
+      <class name="com.wildstartech.gae.wfa.dao.UserDAOImplTest"/>
+      <class name="com.wildstartech.gae.wfa.dao.UserDAOTest"/>
+      <class name="com.wildstartech.gae.wfa.dao.PasswordEncryptorTest"/>      
+    </classes>
+  </test> 
+  <test name="dao.logistics.ltl.Test">
+    <classes>
+      <class name="com.wildstartech.gae.waf.dao.logistics.ltl.AccessorialDAOTest"/>
+      <class name="com.wildstartech.gae.waf.dao.logistics.ltl.QuoteDAOTest"/>
+    </classes>      
+  </test>
+</suite> <!-- Suite -->
