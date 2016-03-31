@@ -44,8 +44,8 @@
  */
 package com.wildstartech.wfa.dao.ticketing;
 
-public class BasicTicketTestCase1 extends BasicTicketTestCase {
-   public BasicTicketTestCase1() {
+public class TestCaseBasicTicket1 extends TestCaseBasicTicket {
+   public TestCaseBasicTicket1() {
       setTitle("Test Title for Basic Ticket");
       setShortDescription(
             "This is a plain text narrative describing the ticket.");

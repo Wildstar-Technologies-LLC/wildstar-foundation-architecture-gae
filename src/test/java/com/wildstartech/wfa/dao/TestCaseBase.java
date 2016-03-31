@@ -42,48 +42,23 @@
  *      derek.berube@wildstartech.com
  *      www.wildstartech.com
  */
-package com.wildstartech.wfa.dao.logistics.ltl;
+package com.wildstartech.wfa.dao;
 
-public class EditableCommodityLineItemBaseTestCase
-extends CommodityLineItemBaseTestCase {
-   /* 
-    * Indicates if the description can be edited.
-    */
-   private boolean customDescription=true;
-   /*
-    * Indicates if length, width and height can be edited.
-    */
-   private boolean customDimensions=true;
-   /*
-    * Indicates if the weight can be edited.
-    */
-   private boolean customWeight=true;
-   
-   /**
-    * Default, no-argumnet constructor.
-    */
-   public EditableCommodityLineItemBaseTestCase() {
-      super();
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+public class TestCaseBase {
+   //********** Utility methods
+   public Date parseDate(String parseableDate) {
+      Date returnDate=null;
+      DateFormat fmt=new SimpleDateFormat("MM/dd/yyyy hh:mm a");
+      try {
+         returnDate=fmt.parse(parseableDate);
+      } catch (ParseException ex) {
+         
+      } // END try/catch
+      return returnDate;
    }
-   
-   //********** BEGIN: Accessor methods
-   public boolean isCustomDescription() {
-      return this.customDescription;
-   }
-   public void setCustomDescription(boolean customDescription) {
-      this.customDescription = customDescription;
-   }
-   public boolean isCustomDimensions() {
-      return this.customDimensions;
-   }
-   public void setCustomDimensions(boolean customDimensions) {
-      this.customDimensions = customDimensions;
-   }
-   public boolean isCustomWeight() {
-      return this.customWeight;
-   }
-   public void setCustomWeight(boolean customWeight) {
-      this.customWeight = customWeight;
-   }
-   //********** END: Accessor Methods
 }

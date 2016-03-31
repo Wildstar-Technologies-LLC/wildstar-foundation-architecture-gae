@@ -176,14 +176,17 @@ implements PersistentCreditCard {
          setAccountNumber(creditCard.getAccountNumber());
          // brandName
          setBrandName(creditCard.getBrandName());
-         // expirationDate
-         setExpirationDate(creditCard.getExpirationDate());
+         // expirationMonth
+         setExpirationMonth(creditCard.getExpirationMonth());
+         // expirationYear
+         setExpirationYear(creditCard.getExpirationYear());
          // issuingBankName
          setIssuingBankName(creditCard.getIssuingBankName());
          // description
          setDescription(creditCard.getDescription());
-         // END FIXME
+         // cardholder Name
          setCardHolderName(creditCard.getCardHolderName());
+         // verification
          setVerification(creditCard.getVerification());
       } else {
          logger.warning("The specified parameter is null.");

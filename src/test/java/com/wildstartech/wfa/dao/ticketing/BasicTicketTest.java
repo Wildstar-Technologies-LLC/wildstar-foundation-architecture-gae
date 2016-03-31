@@ -69,12 +69,12 @@ public class BasicTicketTest {
       BasicTicket ticket=null;
       BasicTicketDAO<BasicTicket, PersistentBasicTicket<?>> dao=null;
       BasicTicketDAOFactory factory=null;      
-      BasicTicketTestCase1 testCase1=null;
+      TestCaseBasicTicket1 testCase1=null;
       
       factory=new BasicTicketDAOFactory();
       dao=factory.getDAO();
       ticket=dao.create();
-      testCase1=new BasicTicketTestCase1();
+      testCase1=new TestCaseBasicTicket1();
       assert testCase1.getShortDescription() != null;
       ticket.setShortDescription(testCase1.getShortDescription());
       assert ticket.getShortDescription() != null;
@@ -87,12 +87,12 @@ public class BasicTicketTest {
       BasicTicket ticket=null;
       BasicTicketDAO<BasicTicket, PersistentBasicTicket<?>> dao=null;
       BasicTicketDAOFactory factory=null;      
-      BasicTicketTestCase1 testCase1=null;
+      TestCaseBasicTicket1 testCase1=null;
       
       factory=new BasicTicketDAOFactory();
       dao=factory.getDAO();
       ticket=dao.create();
-      testCase1=new BasicTicketTestCase1();
+      testCase1=new TestCaseBasicTicket1();
       assert testCase1.getStatusReason() != null;
       ticket.setStatusReason(testCase1.getStatusReason());
       assert ticket.getStatusReason() != null;
@@ -104,12 +104,12 @@ public class BasicTicketTest {
       BasicTicket ticket=null;
       BasicTicketDAO<BasicTicket, PersistentBasicTicket<?>> dao=null;
       BasicTicketDAOFactory factory=null;      
-      BasicTicketTestCase1 testCase1=null;
+      TestCaseBasicTicket1 testCase1=null;
       
       factory=new BasicTicketDAOFactory();
       dao=factory.getDAO();
       ticket=dao.create();
-      testCase1=new BasicTicketTestCase1();
+      testCase1=new TestCaseBasicTicket1();
       assert testCase1.getStatusState() != null;
       ticket.setStatusState(testCase1.getStatusState());
       assert ticket.getStatusState() != null;
@@ -121,12 +121,12 @@ public class BasicTicketTest {
       BasicTicket ticket=null;
       BasicTicketDAO<BasicTicket, PersistentBasicTicket<?>> dao=null;
       BasicTicketDAOFactory factory=null;      
-      BasicTicketTestCase1 testCase1=null;
+      TestCaseBasicTicket1 testCase1=null;
       
       factory=new BasicTicketDAOFactory();
       dao=factory.getDAO();
       ticket=dao.create();
-      testCase1=new BasicTicketTestCase1();
+      testCase1=new TestCaseBasicTicket1();
       assert testCase1.getTitle() != null;
       ticket.setTitle(testCase1.getTitle());
       assert testCase1.getTitle().equals(ticket.getTitle());

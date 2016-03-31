@@ -242,6 +242,7 @@ implements PersistentFreightDueInWorkOrder {
          setEstimatedShipDate(wo.getEstimatedShipDate());
          setManufacturerName(wo.getManufacturerName());
          setPurchaseOrder(wo.getPurchaseOrder());
+         setQuoteRequestId(wo.getQuoteRequestId());
          setReferenceIdentifier(wo.getReferenceIdentifier());
          setSpecialHandling(wo.getSpecialHandling());
          

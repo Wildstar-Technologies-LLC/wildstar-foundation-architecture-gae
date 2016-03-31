@@ -44,22 +44,14 @@
  */
 package com.wildstartech.wfa.dao.logistics.ltl;
 
-public class FreightDueInWorkOrderTestCase2 
-extends FreightDueInWorkOrderBaseTestCase {
-   
-   public FreightDueInWorkOrderTestCase2() {
-      setEstimatedShipDate("10/13/2014 10:13 AM");
-      setDateShipped("10/13/2014 12:15 AM");
-      setCarrierName("World Logistics");
-      setCarrierTrackingNumber("WLG9876543210");
-      setContactCompanyName("ACME Incorporated, Inc.");
-      setContactName("Amy Admin");
-      setContactEmail("amy.admin@acme.com");
-      setContactPreferredTelephoneNumber("855-555-1234");
-      setManufacturerName("Foo Inc.");
-      setReferenceIdentifier("PO987654321");
-      setSpecialHandling("You just cannot get away from special handling.");
+public class TestCaseFreightDueInWorkOrderLineItem2
+extends TestCaseEditableCommodityLineItemBase {   
+   public TestCaseFreightDueInWorkOrderLineItem2() {
+      this.setDescription("Second Freight Due In Work Order Line Item");
+      this.setLength(15);
+      this.setWidth(25);
+      this.setHeight(35);
+      this.setWeight(59);
+      this.setQuantity(1);
    }
-   
-   
 }

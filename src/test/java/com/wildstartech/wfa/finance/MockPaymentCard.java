@@ -1,12 +1,10 @@
 package com.wildstartech.wfa.finance;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class MockPaymentCard extends MockPaymentType implements PaymentCard {
-   private Date expirationDate=null;
+   private int expirationMonth=0;
+   private int expirationYear=0;
    private String accountNumber="";
    private String brandName="";   
    private String issuingBankName=null;
@@ -20,7 +18,8 @@ public class MockPaymentCard extends MockPaymentType implements PaymentCard {
       if (card != null) {
          setAccountNumber(card.getAccountNumber());
          setBrandName(card.getBrandName());
-         setExpirationDate(card.getExpirationDate());
+         setExpirationMonth(card.getExpirationMonth());
+         setExpirationYear(card.getExpirationYear());
          setIssuingBankName(card.getIssuingBankName());
       } // END if (card != null)
    }
@@ -29,11 +28,13 @@ public class MockPaymentCard extends MockPaymentType implements PaymentCard {
          String accountNumber,
          String brandName,
          String issuingBankName,
-         Date expirationDate) {
+         int expirationMonth,
+         int expirationYear) {
       setAccountNumber(accountNumber);
       setBrandName(brandName);
       setIssuingBankName(issuingBankName);
-      setExpirationDate(expirationDate);
+      setExpirationMonth(expirationMonth);
+      setExpirationYear(expirationYear);
    }
    
    @Override
@@ -65,30 +66,23 @@ public class MockPaymentCard extends MockPaymentType implements PaymentCard {
    }
 
    @Override
-   public Date getExpirationDate() {
-      return this.expirationDate;
+   public int getExpirationMonth() {
+      return this.expirationMonth;
    }
 
    @Override
-   public void setExpirationDate(Date expirationDate) {
-      this.expirationDate=expirationDate;
+   public void setExpirationMonth(int expirationMonth) {
+      this.expirationMonth=expirationMonth;
+   }
+   
+   @Override
+   public int getExpirationYear() {
+      return this.expirationYear;
    }
 
    @Override
-   public Date parseExpirationDate(String expirationDate) {
-      Date pDate=null;
-      DateFormat fmt=null;
-      
-      if (expirationDate != null) {
-         fmt=new SimpleDateFormat("MM / yy");
-         try {
-            pDate=fmt.parse(expirationDate);
-         } catch (ParseException ex) {
-            
-         } // END try/catch
-      } // END if (expirationDate != null)
-      
-      return pDate;
+   public void setExpirationYear(int expirationYear) {
+      this.expirationYear=expirationYear;
    }
 
    @Override

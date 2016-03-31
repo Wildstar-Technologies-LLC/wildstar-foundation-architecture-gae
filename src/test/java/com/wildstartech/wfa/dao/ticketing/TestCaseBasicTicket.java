@@ -42,16 +42,71 @@
  *      derek.berube@wildstartech.com
  *      www.wildstartech.com
  */
-package com.wildstartech.wfa.dao.logistics.ltl;
+package com.wildstartech.wfa.dao.ticketing;
 
-public class FreightDueInWorkOrderLineItemTestCase1
-extends EditableCommodityLineItemBaseTestCase {   
-   public FreightDueInWorkOrderLineItemTestCase1() {
-      this.setDescription("Test Line Item for Freight Due In Work Order");
-      this.setLength(10);
-      this.setWidth(20);
-      this.setHeight(30);
-      this.setWeight(90);
-      this.setQuantity(1);
+import java.util.ArrayList;
+import java.util.List;
+
+import com.wildstartech.wfa.dao.TestCaseBase;
+import com.wildstartech.wfa.ticketing.BasicTicket;
+
+public class TestCaseBasicTicket
+extends TestCaseBase 
+implements BasicTicket {
+   private String requestId="";
+   private String shortDescription="";
+   private String statusReason="";
+   private String statusState="";
+   private String title="";
+   
+   //********** accessor methods
+   //***** requestId
+   public String getRequestId() {
+      return this.requestId;
+   }
+   public void setRequestId(String requestId) {
+      this.requestId = (requestId);      
+   }
+   //***** shortDescription
+   public String getShortDescription() {
+     return this.shortDescription;      
+   }
+   public void setShortDescription(String shortDescription) {
+      this.shortDescription = shortDescription;      
+   }
+   //***** statusReason
+   public List<String> getAvailableStatusReasons() {
+      List<String> statusReasons=null;
+      
+      statusReasons=new ArrayList<String>();
+      
+      return statusReasons;
+   }
+   public String getStatusReason() {
+      return this.statusReason;
+   }
+   public void setStatusReason(String statusReason) {
+      this.statusReason = statusReason;      
+   }
+   //***** statusState
+   public List<String> getAvailableStatusStates() {
+      List<String> statusStates=null;
+      
+      statusStates=new ArrayList<String>();
+      
+      return statusStates;
+   }
+   public String getStatusState() {
+      return this.statusState;
+   }
+   public void setStatusState(String statusState) {
+      this.statusState = statusState;
+   }
+   //***** title
+   public String getTitle() {
+      return this.title;
+   }
+   public void setTitle(String title) {
+      this.title = title;      
    }
 }

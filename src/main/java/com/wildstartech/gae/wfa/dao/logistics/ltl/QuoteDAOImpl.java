@@ -69,7 +69,6 @@ import com.wildstartech.wfa.dao.logistics.ltl.PersistentQuoteLineItem;
 import com.wildstartech.wfa.dao.logistics.ltl.QuoteDAO;
 import com.wildstartech.wfa.dao.logistics.ltl.QuoteLineItemDAO;
 import com.wildstartech.wfa.dao.logistics.ltl.QuoteLineItemDAOFactory;
-import com.wildstartech.wfa.journal.JournalEntry;
 import com.wildstartech.wfa.logistics.ltl.Quote;
 import com.wildstartech.wfa.logistics.ltl.QuoteLineItem;
 
@@ -245,7 +244,7 @@ public class QuoteDAOImpl extends WildDAOImpl<Quote, PersistentQuote>
                   pQli = (PersistentQuoteLineItemImpl) qliDAO
                         .findByIdentifier(identifier, ctx);
                } else {
-                  logger.warning(
+                  logger.info(
                    "The entity is a persistent one, but it hasn't been saved.");
                } // END if (identifier != null)
             } // END if (!(qli instanceof PersistentQuoteLineItemImpl))

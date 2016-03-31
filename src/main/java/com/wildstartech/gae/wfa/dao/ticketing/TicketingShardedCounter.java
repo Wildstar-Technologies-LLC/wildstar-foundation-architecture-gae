@@ -200,7 +200,7 @@ extends RequestIdGenerator {
             try {
                shardIndex = TicketingShardedCounter.DATASTORE.get(key);
             } catch (EntityNotFoundException ex) {
-               logger.log(Level.WARNING,
+               logger.log(Level.INFO,
                      "The ShardedCounter Entity for the shardKind couldn't be found.",
                      ex);
                shardIndex = new Entity(key);

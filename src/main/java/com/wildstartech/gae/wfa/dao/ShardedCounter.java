@@ -240,7 +240,7 @@ public abstract class ShardedCounter<T extends Object> {
             try {
                shardIndex = ShardedCounter.DATASTORE.get(key);
             } catch (EntityNotFoundException ex) {
-               logger.log(Level.WARNING,
+               logger.log(Level.INFO,
                      "The ShardedCounter Entity for the shardKind couldn't be found.",
                      ex);
                shardIndex = new Entity(key);

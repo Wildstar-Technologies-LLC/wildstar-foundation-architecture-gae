@@ -76,7 +76,7 @@ public class BasicTicketDAOTest extends WildDAOTest {
       BasicTicket ticket=null;
       BasicTicketDAO<BasicTicket,PersistentBasicTicket<?>> dao=null;
       BasicTicketDAOFactory factory=null;
-      BasicTicketTestCase testCase=null;
+      TestCaseBasicTicket testCase=null;
       PersistentBasicTicket<?> pTicket=null;
       UserContext ctx=null;
       
@@ -89,7 +89,7 @@ public class BasicTicketDAOTest extends WildDAOTest {
       assert dao != null;
       ticket=dao.create();
       assert ticket != null;
-      testCase=new BasicTicketTestCase1();
+      testCase=new TestCaseBasicTicket1();
       ticket.setTitle(testCase.getTitle());
       ticket.setShortDescription(testCase.getShortDescription());
       ticket.setStatusState(testCase.getStatusState());

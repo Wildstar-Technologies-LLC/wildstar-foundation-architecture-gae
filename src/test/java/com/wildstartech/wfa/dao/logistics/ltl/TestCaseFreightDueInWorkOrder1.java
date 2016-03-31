@@ -44,10 +44,10 @@
  */
 package com.wildstartech.wfa.dao.logistics.ltl;
 
-public class FreightDueInWorkOrderTestCase1 
-extends FreightDueInWorkOrderBaseTestCase {
+public class TestCaseFreightDueInWorkOrder1 
+extends TestCaseFreightDueInWorkOrderBase {
    
-   public FreightDueInWorkOrderTestCase1() {
+   public TestCaseFreightDueInWorkOrder1() {
       setEstimatedShipDate("10/13/2015 10:13 AM");
       setDateShipped("10/13/2015 12:15 AM");
       setCarrierName("World Logistics");

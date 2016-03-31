@@ -136,66 +136,86 @@ implements FreightDueInWorkOrderDAO {
       List<FreightDueInWorkOrderLineItem> lineItems=null;
       List<FreightDueInWorkOrderLineItem> lineItemsToDelete=null;
       PersistentFreightDueInWorkOrderImpl pWorkOrder=null;
-      PersistentFreightDueInWorkOrderLineItem pLineItem=null;
+      PersistentFreightDueInWorkOrderLineItemImpl pLineItem=null;
       String lineItemIdentifier=null;
       String requestId=null;
       String workOrderIdentifier=null;
       
       if ((workOrder != null) && (ctx != null)) {        
-         lineItemDAOFactory=new FreightDueInWorkOrderLineItemDAOFactory();
-         lineItemDAO=lineItemDAOFactory.getDAO();
-         
-         //***** lineItems
-         lineItems=workOrder.getLineItems();
-         
-         // Let's save the work order.
+         // Get the work Order Request ID
          requestId=workOrder.getRequestId();
-         if ((requestId == null) || (requestId.length() == 0)) {
+         if (!isEmpty(requestId)) {
+            /* Yes there is a requestId, let's use it to get the current 
+             * version of the object. */
+            pWorkOrder=(PersistentFreightDueInWorkOrderImpl) 
+                  findByRequestId(requestId,ctx);
+         } else {
+            // No, there is no requestId, so let's generate one.
             requestIdGenerator=new FreightDueInWorkOrderRequestIdGenerator();
             requestId=requestIdGenerator.getNextId();
-            workOrder.setRequestId(requestId);
-         } // END if ((requestId == null) || (requestId.length() == 0))
-         pWorkOrder=(PersistentFreightDueInWorkOrderImpl) 
-               super.save(workOrder, ctx);
-         workOrderIdentifier=pWorkOrder.getIdentifier();
+         } // END if (!isEmpty(requestId))
+         // Let's check to see if the persistent work order was found.
+         if (pWorkOrder == null) {
+            // Nope, so let's create a new persistent object.
+            pWorkOrder=(PersistentFreightDueInWorkOrderImpl) create();
+         } // END if (pWorkOrder == null)
+         // Let's update the persistent work order from the specified work order
+         pWorkOrder.updateFromObject(workOrder);
+         pWorkOrder.setRequestId(requestId);
+         //***** Process Rules
          
-         //***** Save the work order line items.
+         // Get the list of line items that will need to be saved.
+         lineItems=pWorkOrder.getLineItems();
+         // Get the list of line items that will need to be removed.
+         lineItemsToDelete=pWorkOrder.getLineItemsToDelete();
+         /* Get the journal Entry */
+         // TODO
+         
+         /* Saving the object will ONLY return the parent object.  The children 
+          * will not be present in the object that is returned.
+          */
+         pWorkOrder=(PersistentFreightDueInWorkOrderImpl) 
+               super.save(pWorkOrder, ctx, null);
+         
+         // ******************** Journal Entry ********************
+         // ******************** Line Items ********************
+         // The workOrderIdentifier will be saved with the line items. 
+         workOrderIdentifier=pWorkOrder.getIdentifier();
+         lineItemDAO=new FreightDueInWorkOrderLineItemDAOImpl();
          for (int i=0; i < lineItems.size(); i++) {
             lineItem=lineItems.get(i);
             if (!(lineItem instanceof PersistentFreightDueInWorkOrderLineItem)){
-               // The work order line item is NOT persistent...
-               pLineItem=lineItemDAO.findInstance(lineItem,ctx);               
+               // The work order line item is not a persistent entity.
+               pLineItem=(PersistentFreightDueInWorkOrderLineItemImpl)
+                     lineItemDAO.findInstance(lineItem, ctx);
             } else {
-               lineItemIdentifier=((PersistentFreightDueInWorkOrderLineItem) 
-                     lineItem).getIdentifier();
-               if (lineItemIdentifier != null) {
-                  pLineItem=
-                        lineItemDAO.findByIdentifier(lineItemIdentifier, ctx);
-               } else {
-                  logger.warning(
-                        "The entity is persistent, but it hasn't been saved.");
-               } // END if (lineItemIdentifier != null)
+               logger.info(
+                  "The entity is a persistent one, but it has not been saved.");
             } // END if (!(lineItem instanceof PersistentFreightDueInWork...
             if (pLineItem == null) {
                // An existing line item was not found.
-               pLineItem=lineItemDAO.create();
+               pLineItem=(PersistentFreightDueInWorkOrderLineItemImpl)
+                     lineItemDAO.create();
             } // END if (pLineItem == null)
-            ((PersistentFreightDueInWorkOrderLineItemImpl) 
-                  pLineItem).populateFromObject(lineItem);
-            // Associate the workorder line item with the work order
+            // Populate the line item with data.
+            pLineItem.populateFromObject(lineItem);
+            // Associate the FreightDueInLineItem with the work order.
             pLineItem.setWorkOrderIdentifier(workOrderIdentifier);
             // Save the line item
-            pLineItem=lineItemDAO.save(pLineItem, ctx);
-            // Put the line item back in the list.
-            pWorkOrder.setLineItem(pLineItem.getLineItemNumber(),pLineItem);
-            pLineItem=null;
-            lineItem=null;            
+            pLineItem=(PersistentFreightDueInWorkOrderLineItemImpl)
+                  lineItemDAO.save(pLineItem, ctx);
+            // Add the saved line item back to the work order
+            pWorkOrder.addLineItem(pLineItem);
+            lineItem=null;
+            pLineItem=null;            
          } // END for (int i=0; i < lineItems.size(); i++)
-         // Remove FreightDueInWorkOrderLineItems no longer assocaited
-         lineItemsToDelete=((PersistentFreightDueInWorkOrderImpl) 
-               workOrder).getLineItemsToDelete();
+         // Remove FreightDueInWorkOrderLineItems no longer associated.
          for (FreightDueInWorkOrderLineItem item: lineItemsToDelete) {
-            lineItemDAO.delete(item, ctx);
+            if (item instanceof PersistentFreightDueInWorkOrderLineItem) {
+               pLineItem=(PersistentFreightDueInWorkOrderLineItemImpl) item;
+               lineItemIdentifier=pLineItem.getIdentifier();
+               lineItemDAO.deleteByIdentifier(lineItemIdentifier, ctx);
+            } // END if (item instanceof PersistentFreightDueInWorkOrderLine...            
          } // END for (FreightDueInWorkOrderLineItem item: lineItemsToDelete)
       } else {
           if (workOrder == null) {

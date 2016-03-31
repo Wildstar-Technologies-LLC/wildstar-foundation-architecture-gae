@@ -46,7 +46,6 @@ package com.wildstartech.gae.wfa.dao.logistics.ltl;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -141,9 +140,10 @@ implements PersistentQuote {
    private double insuranceCharges = 0;
    private double lineItemCharges = 0;
    private double valuation = 0;
+   private int creditCardExpirationMonth=0;
+   private int creditCardExpirationYear=0;
    private int numberOfFlights;
    private AdjustmentType adjustmentType = AdjustmentType.FixedAmount;
-   private Date creditCardExpiration=null;
    private List<QuoteLineItem> lineItems = null;
    private List<PersistentQuoteLineItem> lineItemsToDelete = null;
    private List<AccessorialCharge> accessorials = null;
@@ -263,6 +263,7 @@ implements PersistentQuote {
    @Override
    public String toPropertyString() {
       logger.entering(_CLASS, "toPropertyString()");
+      int tmpInt=0;
       AdjustmentType adjustmentType=null;
       NumberFormat cFmt = null;
       NumberFormat pFmt = null;
@@ -303,6 +304,49 @@ implements PersistentQuote {
       sb.append(", contactPhone=").append(getContactPhone());
       sb.append(", cratingRequired=").append(isCratingRequired());
       sb.append(", creditCardNumber=").append(getCreditCardNumber());
+      tmpInt=getCreditCardExpirationMonth();
+      sb.append(", creditCardExpirationMonth=");
+      switch(tmpInt) {
+          case 1:
+              sb.append("January");
+              break;
+          case 2:
+              sb.append("February");
+              break;
+          case 3:
+              sb.append("March");
+              break;
+          case 4:
+              sb.append("April");
+              break;
+          case 5:
+              sb.append("May");
+              break;
+          case 6:
+              sb.append("June");
+              break;
+          case 7:
+              sb.append("July");
+              break;
+          case 8:
+              sb.append("August");
+              break;
+          case 9:
+              sb.append("September");
+              break;
+          case 10:
+              sb.append("October");
+              break;
+          case 11:
+              sb.append("November");
+              break;
+          case 12:
+              sb.append("December");
+              break;
+          default:
+      } // END switch(tmpInt)
+      sb.append(", creditCardExpirationYear=");
+      sb.append(getCreditCardExpirationYear());
       sb.append(", creditCardType=").append(getCreditCardType());
       sb.append(", creditCardVerification=").append(getCreditCardVerification());;
       sb.append(", customerReferenceNote=").append(getCustomerReferenceNote());
@@ -606,8 +650,10 @@ implements PersistentQuote {
          cDAO=cDAOFactory.getDAO();
          pCard=cDAO.findByIdentifier(tmpStr, ctx);
          if (pCard != null) {
-            // creditCardExpiration
-            setCreditCardExpiration(pCard.getExpirationDate());
+            // creditCardExpirationMonth
+            setCreditCardExpirationMonth(pCard.getExpirationMonth());
+            // creditCardExpirationYear
+            setCreditCardExpirationYear(pCard.getExpirationYear());
             // creditCardName
             setCreditCardName(pCard.getCardHolderName());
             // creditCardNumber
@@ -820,7 +866,8 @@ implements PersistentQuote {
          setContactName(quote.getContactName());
          setContactPhone(quote.getContactPhone());
          setCratingRequired(quote.isCratingRequired());
-         setCreditCardExpiration(quote.getCreditCardExpiration());
+         setCreditCardExpirationMonth(quote.getCreditCardExpirationMonth());
+         setCreditCardExpirationYear(quote.getCreditCardExpirationYear());
          setCreditCardName(quote.getCreditCardName());
          setCreditCardNumber(quote.getCreditCardNumber());
          setCreditCardType(quote.getCreditCardType());
@@ -1342,19 +1389,56 @@ implements PersistentQuote {
       this.creditCardIdentifier=defaultValue(identifier);
       logger.exiting(_CLASS, "setCreditCardIdentifier(String)");
    }
-   //***** creditCardExpiration
+   //***** creditCardExpirationMonth
    @Override
-   public Date getCreditCardExpiration() {
-      logger.entering(_CLASS, "getCreditCardExpiration()");
-      logger.exiting(_CLASS, "getCreditCardExpiration()",
-            this.creditCardExpiration);
-      return this.creditCardExpiration;
+   public int getCreditCardExpirationMonth() {
+      logger.entering(_CLASS, "getCreditCardExpirationMonth()");
+      logger.exiting(_CLASS, "getCreditCardExpirationMonth()",
+            this.creditCardExpirationMonth);
+      return this.creditCardExpirationMonth;
    }
-   public void setCreditCardExpiration(Date expirationDate) {
-      logger.entering(_CLASS, "setCreditCardExpiration(Date)",expirationDate);
-      this.creditCardExpiration=expirationDate;
-      logger.exiting(_CLASS, "setCreditCardExpiration(String)");
+   public void setCreditCardExpirationMonth(int expirationMonth) {
+      logger.entering(_CLASS, "setCreditCardExpirationMonth(int)",
+              expirationMonth);
+      switch(expirationMonth) {
+          case 1:
+          case 2:
+          case 3:
+          case 4:
+          case 5:
+          case 6:
+          case 7:
+          case 8:
+          case 9:
+          case 10:
+          case 11:
+          case 12:
+              this.creditCardExpirationMonth=expirationMonth;
+              break;
+          default:
+              this.creditCardExpirationMonth=0;
+      } // END switch(expirationMonth)      
+      logger.exiting(_CLASS, "setCreditCardExpirationMonth(int)");
    }
+   @Override
+   public int getCreditCardExpirationYear() {
+      logger.entering(_CLASS, "getCreditCardExpirationYear()");
+      logger.exiting(_CLASS, "getCreditCardExpirationYear()",
+            this.creditCardExpirationYear);
+      return this.creditCardExpirationYear;
+   }
+   @Override
+   public void setCreditCardExpirationYear(int expirationYear) {
+      logger.entering(_CLASS, "setCreditCardExpirationYear(int)",
+              expirationYear);
+      if ((expirationYear >= 1950) && (expirationYear <= 2100)) {
+          this.creditCardExpirationYear=expirationYear;
+      } else {
+          this.creditCardExpirationYear=0;
+      } // END if ((expirationYear >= 1950) && (expirationYear <= 2100))
+      logger.exiting(_CLASS, "setCreditCardExpirationMonth(int)");
+   }
+   
    
    //***** creditCardName
    @Override

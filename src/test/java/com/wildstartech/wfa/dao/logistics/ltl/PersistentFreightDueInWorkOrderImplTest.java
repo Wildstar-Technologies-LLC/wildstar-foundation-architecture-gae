@@ -50,7 +50,7 @@ import com.wildstartech.wfa.logistics.ltl.FreightDueInWorkOrder;
 
 public class PersistentFreightDueInWorkOrderImplTest {
    private FreightDueInWorkOrderDAO dao=null;
-   private FreightDueInWorkOrderTestCase1 testCase=null;
+   private TestCaseFreightDueInWorkOrder1 testCase=null;
          
 
    public PersistentFreightDueInWorkOrderImplTest() {
@@ -60,7 +60,7 @@ public class PersistentFreightDueInWorkOrderImplTest {
       assert factory != null;
       this.dao=factory.getDAO();
       assert this.dao != null;
-      this.testCase=new FreightDueInWorkOrderTestCase1();
+      this.testCase=new TestCaseFreightDueInWorkOrder1();
       assert this.testCase != null;
    }
    //***** carrierName

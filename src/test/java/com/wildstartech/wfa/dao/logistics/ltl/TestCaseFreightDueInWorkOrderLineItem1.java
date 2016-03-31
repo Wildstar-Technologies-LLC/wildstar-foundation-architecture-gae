@@ -42,23 +42,16 @@
  *      derek.berube@wildstartech.com
  *      www.wildstartech.com
  */
-package com.wildstartech.wfa.dao;
+package com.wildstartech.wfa.dao.logistics.ltl;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-public class BaseTestCase {
-   //********** Utility methods
-   public Date parseDate(String parseableDate) {
-      Date returnDate=null;
-      DateFormat fmt=new SimpleDateFormat("MM/dd/yyyy hh:mm a");
-      try {
-         returnDate=fmt.parse(parseableDate);
-      } catch (ParseException ex) {
-         
-      } // END try/catch
-      return returnDate;
+public class TestCaseFreightDueInWorkOrderLineItem1
+extends TestCaseEditableCommodityLineItemBase {   
+   public TestCaseFreightDueInWorkOrderLineItem1() {
+      this.setDescription("Test Line Item for Freight Due In Work Order");
+      this.setLength(10);
+      this.setWidth(20);
+      this.setHeight(30);
+      this.setWeight(90);
+      this.setQuantity(1);
    }
 }

@@ -30,8 +30,14 @@ implements CreditCard {
          String cardHolderName,
          String issuingBankName,
          String verification,
-         Date expirationDate) {
-      super(accountNumber,brandName,issuingBankName,expirationDate);
+         int expirationMonth,
+         int expirationYear) {
+      super(
+              accountNumber,
+              brandName,
+              issuingBankName,
+              expirationMonth,
+              expirationYear);
       setCardHolderName(cardHolderName);
       setVerification(verification);
    }

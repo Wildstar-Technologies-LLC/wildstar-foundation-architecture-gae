@@ -46,8 +46,8 @@ package com.wildstartech.wfa.dao.logistics.ltl;
 
 import com.wildstartech.wfa.logistics.ltl.CommodityLineItem;
 
-public class CommodityLineItemBaseTestCase 
-extends LineItemBaseTestCase
+public class TestCaseCommodityLineItemBase 
+extends TestCaseLineItemBase
 implements CommodityLineItem {
    /*
     * The number of cubic feet of space occupied by commodity.
@@ -93,7 +93,7 @@ implements CommodityLineItem {
    /**
     * Default, no-argument constructor.
     */
-   public CommodityLineItemBaseTestCase() {
+   public TestCaseCommodityLineItemBase() {
       
    }
    

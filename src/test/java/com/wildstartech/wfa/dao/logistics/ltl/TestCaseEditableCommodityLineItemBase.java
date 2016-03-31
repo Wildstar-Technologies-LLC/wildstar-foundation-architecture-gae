@@ -42,71 +42,48 @@
  *      derek.berube@wildstartech.com
  *      www.wildstartech.com
  */
-package com.wildstartech.wfa.dao.ticketing;
+package com.wildstartech.wfa.dao.logistics.ltl;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.wildstartech.wfa.dao.BaseTestCase;
-import com.wildstartech.wfa.ticketing.BasicTicket;
-
-public class BasicTicketTestCase
-extends BaseTestCase 
-implements BasicTicket {
-   private String requestId="";
-   private String shortDescription="";
-   private String statusReason="";
-   private String statusState="";
-   private String title="";
+public class TestCaseEditableCommodityLineItemBase
+extends TestCaseCommodityLineItemBase {
+   /* 
+    * Indicates if the description can be edited.
+    */
+   private boolean customDescription=true;
+   /*
+    * Indicates if length, width and height can be edited.
+    */
+   private boolean customDimensions=true;
+   /*
+    * Indicates if the weight can be edited.
+    */
+   private boolean customWeight=true;
    
-   //********** accessor methods
-   //***** requestId
-   public String getRequestId() {
-      return this.requestId;
+   /**
+    * Default, no-argumnet constructor.
+    */
+   public TestCaseEditableCommodityLineItemBase() {
+      super();
    }
-   public void setRequestId(String requestId) {
-      this.requestId = (requestId);      
+   
+   //********** BEGIN: Accessor methods
+   public boolean isCustomDescription() {
+      return this.customDescription;
    }
-   //***** shortDescription
-   public String getShortDescription() {
-     return this.shortDescription;      
+   public void setCustomDescription(boolean customDescription) {
+      this.customDescription = customDescription;
    }
-   public void setShortDescription(String shortDescription) {
-      this.shortDescription = shortDescription;      
+   public boolean isCustomDimensions() {
+      return this.customDimensions;
    }
-   //***** statusReason
-   public List<String> getAvailableStatusReasons() {
-      List<String> statusReasons=null;
-      
-      statusReasons=new ArrayList<String>();
-      
-      return statusReasons;
+   public void setCustomDimensions(boolean customDimensions) {
+      this.customDimensions = customDimensions;
    }
-   public String getStatusReason() {
-      return this.statusReason;
+   public boolean isCustomWeight() {
+      return this.customWeight;
    }
-   public void setStatusReason(String statusReason) {
-      this.statusReason = statusReason;      
+   public void setCustomWeight(boolean customWeight) {
+      this.customWeight = customWeight;
    }
-   //***** statusState
-   public List<String> getAvailableStatusStates() {
-      List<String> statusStates=null;
-      
-      statusStates=new ArrayList<String>();
-      
-      return statusStates;
-   }
-   public String getStatusState() {
-      return this.statusState;
-   }
-   public void setStatusState(String statusState) {
-      this.statusState = statusState;
-   }
-   //***** title
-   public String getTitle() {
-      return this.title;
-   }
-   public void setTitle(String title) {
-      this.title = title;      
-   }
+   //********** END: Accessor Methods
 }

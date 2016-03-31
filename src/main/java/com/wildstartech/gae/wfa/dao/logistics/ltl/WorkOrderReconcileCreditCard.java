@@ -206,16 +206,26 @@ extends PersistentRuleImpl<PersistentWorkOrderImpl> {
       // brandName
       // Don't care about brand name when determining if card record is "blank"
       // cardHolderName
-      if (isEmpty) { isEmpty=isEmpty(card.getCardHolderName()); }
+      if (isEmpty) { 
+          isEmpty=isEmpty(card.getCardHolderName()); 
+      } // END if (isEmpty) 
       // description
       // Don't care about description.
-      // expirationDate
+      // expirationMonth
       if (isEmpty) { 
-         if (card.getExpirationDate() == null) { 
+         if (card.getExpirationMonth() == 0) { 
             isEmpty=true;
          } else{ 
             isEmpty=false;
-         } // END if (card.getExpirationDate() == null) 
+         } // END if (card.getExpirationMonth() == null) 
+      } // END if (isEmpty)
+      // expirationYear
+      if (isEmpty) { 
+         if (card.getExpirationYear() == 0) { 
+            isEmpty=true;
+         } else{ 
+            isEmpty=false;
+         } // END if (card.getExpirationYear() == null) 
       } // END if (isEmpty)
       // issuingBankName
       // dont' care about issuing bank name
@@ -230,6 +240,7 @@ extends PersistentRuleImpl<PersistentWorkOrderImpl> {
       logger.entering(_CLASS,"apply(PersistentWorkOrder)",pWorkOrder);
       boolean changeDetected=false;
       boolean result=false;
+      int tmpInt=0;
       PersistentCreditCard creditCard=null;
       CreditCardDAO dao=null;
       CreditCardDAOFactory factory=null;
@@ -285,14 +296,18 @@ extends PersistentRuleImpl<PersistentWorkOrderImpl> {
             changeDetected=true;
             creditCard.setCardHolderName(woProperty);
          } // END if (result)
-         // expirationDate
-         cardDate=creditCard.getExpirationDate();
-         workOrderDate=pWorkOrder.getCreditCardExpiration();
-         result=compareExpirationDate(cardDate,workOrderDate);
-         if (result) {
+         // expirationMonth
+         tmpInt=creditCard.getExpirationMonth();
+         if (tmpInt != pWorkOrder.getCreditCardExpirationMonth()) {
             changeDetected=true;
-            creditCard.setExpirationDate(workOrderDate);
-         } // END if (result)
+            creditCard.setExpirationMonth(tmpInt);
+         } // END if (tmpInt != pWorkOrder.getCreditCardExpirationMonth())
+         // expirationMonth
+         tmpInt=creditCard.getExpirationYear();
+         if (tmpInt != pWorkOrder.getCreditCardExpirationYear()) {
+            changeDetected=true;
+            creditCard.setExpirationYear(tmpInt);
+         } // END if (tmpInt != pWorkOrder.getCreditCardExpirationYera())
          // cardVerification
          cardProperty=creditCard.getVerification();
          woProperty=pWorkOrder.getCreditCardVerification();
@@ -313,7 +328,10 @@ extends PersistentRuleImpl<PersistentWorkOrderImpl> {
                creditCard=dao.save(creditCard, ctx);
                // Update the quote with information.
                pWorkOrder.setCreditCardIdentifier(creditCard.getIdentifier());
-               pWorkOrder.setCreditCardExpiration(creditCard.getExpirationDate());
+               pWorkOrder.setCreditCardExpirationMonth(
+                       creditCard.getExpirationMonth());
+               pWorkOrder.setCreditCardExpirationYear(
+                       creditCard.getExpirationYear());
                pWorkOrder.setCreditCardName(creditCard.getCardHolderName());
                pWorkOrder.setCreditCardNumber(creditCard.getAccountNumber());
                pWorkOrder.setCreditCardType(creditCard.getBrandName());

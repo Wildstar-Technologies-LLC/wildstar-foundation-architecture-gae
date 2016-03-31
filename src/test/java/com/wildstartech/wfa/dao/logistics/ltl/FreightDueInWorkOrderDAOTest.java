@@ -76,9 +76,9 @@ extends WildDAOTest {
       FreightDueInWorkOrderLineItem lineItem=null;
       FreightDueInWorkOrderDAO dao=null;
       FreightDueInWorkOrderDAOFactory factory=null;
-      FreightDueInWorkOrderTestCase1 testCase=null;
-      FreightDueInWorkOrderLineItemTestCase1 lineItemTestCase1=null;
-      FreightDueInWorkOrderLineItemTestCase2 lineItemTestCase2=null;
+      TestCaseFreightDueInWorkOrder1 testCase=null;
+      TestCaseFreightDueInWorkOrderLineItem1 lineItemTestCase1=null;
+      TestCaseFreightDueInWorkOrderLineItem2 lineItemTestCase2=null;
       PersistentFreightDueInWorkOrder pWorkOrder=null;
       String testString="";
       UserContext ctx=null;
@@ -92,7 +92,7 @@ extends WildDAOTest {
       assert dao != null;
       
       //***** setup the workOrder we will save
-      testCase=new FreightDueInWorkOrderTestCase1();
+      testCase=new TestCaseFreightDueInWorkOrder1();
       workOrder=dao.create();
       assert workOrder != null;
       assert workOrder instanceof FreightDueInWorkOrder;
@@ -117,7 +117,7 @@ extends WildDAOTest {
       workOrder.setReferenceIdentifier(testCase.getReferenceIdentifier());
       workOrder.setSpecialHandling(testCase.getSpecialHandling());
       //***** Create and test line item #1
-      lineItemTestCase1=new FreightDueInWorkOrderLineItemTestCase1();
+      lineItemTestCase1=new TestCaseFreightDueInWorkOrderLineItem1();
       lineItem=workOrder.createLineItem();
       lineItem.setDescription(lineItemTestCase1.getDescription());
       assert lineItem.getDescription().equalsIgnoreCase(
@@ -135,7 +135,7 @@ extends WildDAOTest {
       // Add the line first Item
       workOrder.addLineItem(lineItem);
       //***** Create and test line item #2
-      lineItemTestCase2=new FreightDueInWorkOrderLineItemTestCase2();
+      lineItemTestCase2=new TestCaseFreightDueInWorkOrderLineItem2();
       lineItem=workOrder.createLineItem();
       lineItem.setDescription(lineItemTestCase2.getDescription());
       assert lineItem.getDescription().equalsIgnoreCase(
@@ -215,7 +215,7 @@ extends WildDAOTest {
       int tmpInt=0;
       FreightDueInWorkOrderDAO dao=null;
       FreightDueInWorkOrderDAOFactory factory=null;
-      FreightDueInWorkOrderTestCase2 testCase2=null;
+      TestCaseFreightDueInWorkOrder2 testCase2=null;
       List<PersistentFreightDueInWorkOrder> workOrders=null;
       PersistentFreightDueInWorkOrder pWorkOrder=null;
       String tmpStr=null;
@@ -229,7 +229,7 @@ extends WildDAOTest {
       ctx=UserContextDAOFactory.authenticate(UserData.getAdminUserName(),
             UserData.getAdminPassword());
       pWorkOrder=dao.save(pWorkOrder, ctx);
-      testCase2=new FreightDueInWorkOrderTestCase2();
+      testCase2=new TestCaseFreightDueInWorkOrder2();
       pWorkOrder=this.workOrders.get("TESTCASE1");
       //***** lets'start testing.
       workOrderIdentifier=pWorkOrder.getIdentifier();

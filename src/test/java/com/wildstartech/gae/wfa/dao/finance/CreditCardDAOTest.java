@@ -36,6 +36,8 @@ public class CreditCardDAOTest extends WildDAOTest {
    
    @Test
    public void testSave() {
+      int savedInt=0;
+      int referencedInt=0;
       CreditCard creditCard=null;
       CreditCardDAO dao=null;
       CreditCardDAOFactory factory=null;
@@ -105,11 +107,14 @@ public class CreditCardDAOTest extends WildDAOTest {
       assert savedValue != null;
       assert savedValue.length() == referenceValue.length();
       assert savedValue.equalsIgnoreCase(referenceValue);
-      // Check expirationDate
-      savedDate=pCreditCard.getExpirationDate();
-      referenceDate=SampleCreditCardData.amex[0].getExpirationDate();
-      assert savedDate != null;
-      assert savedDate.compareTo(referenceDate) == 0;
+      // Check expirationMonth
+      savedInt=pCreditCard.getExpirationMonth();
+      referencedInt=SampleCreditCardData.amex[0].getExpirationMonth();
+      assert savedInt == referencedInt;
+      // Check expirationYear
+      savedInt=pCreditCard.getExpirationYear();
+      referencedInt=SampleCreditCardData.amex[0].getExpirationYear();
+      assert savedInt == referencedInt;
       // Check issuingBankName
       savedValue=pCreditCard.getIssuingBankName();
       referenceValue=SampleCreditCardData.amex[0].getIssuingBankName();

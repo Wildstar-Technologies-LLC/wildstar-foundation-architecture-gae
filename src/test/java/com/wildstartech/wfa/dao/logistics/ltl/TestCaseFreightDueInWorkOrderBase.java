@@ -49,9 +49,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import com.wildstartech.wfa.dao.BaseTestCase;
+import com.wildstartech.wfa.dao.TestCaseBase;
 
-public class FreightDueInWorkOrderBaseTestCase extends BaseTestCase {
+public class TestCaseFreightDueInWorkOrderBase extends TestCaseBase {
    private Date estimatedShipDate=null;
    private Date dateShipped=null;
    private String carrierName="";
@@ -67,7 +67,7 @@ public class FreightDueInWorkOrderBaseTestCase extends BaseTestCase {
    /**
     * Default no-argument test case.
     */
-   public FreightDueInWorkOrderBaseTestCase() {
+   public TestCaseFreightDueInWorkOrderBase() {
       
    }
    

@@ -68,6 +68,7 @@ import com.google.api.client.util.Base64;
 import com.google.appengine.api.datastore.Entity;
 import com.wildstartech.wfa.dao.UserContext;
 import com.wildstartech.wfa.finance.PaymentCard;
+import java.util.Objects;
 
 public class PersistentPaymentCardImpl<T extends PaymentCard> 
 extends PersistentPaymentTypeImpl<T>
@@ -96,7 +97,8 @@ implements PaymentCard {
    protected static final String _KIND=
          "com.wildstartech.wfa.finance.PaymentCard";
    
-   private Date expirationDate=null;
+   private int expirationYear=0;
+   private int expirationMonth=0;
    private String accountNumber="";
    private String brandName="";
    private String issuingBankName="";
@@ -300,53 +302,49 @@ implements PaymentCard {
       logger.exiting(_CLASS, "encrypt(String)",encryptedText);
       return encryptedText;
    }
-   @Override
-   public boolean equals(Object obj) {
-      if (this == obj)
-         return true;
-      if (!super.equals(obj))
-         return false;
-      if (getClass() != obj.getClass())
-         return false;
-      @SuppressWarnings("rawtypes")
-      PersistentPaymentCardImpl other = (PersistentPaymentCardImpl) obj;
-      if (accountNumber == null) {
-         if (other.accountNumber != null)
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 41 * hash + this.expirationYear;
+        hash = 41 * hash + this.expirationMonth;
+        hash = 41 * hash + Objects.hashCode(this.accountNumber);
+        hash = 41 * hash + Objects.hashCode(this.brandName);
+        hash = 41 * hash + Objects.hashCode(this.issuingBankName);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
             return false;
-      } else if (!accountNumber.equals(other.accountNumber))
-         return false;
-      if (brandName == null) {
-         if (other.brandName != null)
+        }
+        if (getClass() != obj.getClass()) {
             return false;
-      } else if (!brandName.equals(other.brandName))
-         return false;
-      if (expirationDate == null) {
-         if (other.expirationDate != null)
+        }
+        final PersistentPaymentCardImpl<?> other = (PersistentPaymentCardImpl<?>) obj;
+        if (this.expirationYear != other.expirationYear) {
             return false;
-      } else if (!expirationDate.equals(other.expirationDate))
-         return false;
-      if (issuingBankName == null) {
-         if (other.issuingBankName != null)
+        }
+        if (this.expirationMonth != other.expirationMonth) {
             return false;
-      } else if (!issuingBankName.equals(other.issuingBankName))
-         return false;
-      return true;
-   }
-   @Override
-   public int hashCode() {
-      final int prime = 31;
-      int result = super.hashCode();
-      result = prime * result
-            + ((accountNumber == null) ? 0 : accountNumber.hashCode());
-      result = prime * result
-            + ((brandName == null) ? 0 : brandName.hashCode());
-      result = prime * result
-            + ((expirationDate == null) ? 0 : expirationDate.hashCode());
-      result = prime * result
-            + ((issuingBankName == null) ? 0 : issuingBankName.hashCode());
-      return result;
-   }
-   /**
+        }
+        if (!Objects.equals(this.accountNumber, other.accountNumber)) {
+            return false;
+        }
+        if (!Objects.equals(this.brandName, other.brandName)) {
+            return false;
+        }
+        if (!Objects.equals(this.issuingBankName, other.issuingBankName)) {
+            return false;
+        }
+        return true;
+    }
+    
+    /**
     * Determines whether or not the specified user is authorized to view the 
     * full credit card information. 
     * 
@@ -420,7 +418,6 @@ implements PaymentCard {
    @Override 
    protected void populateEntity(Entity entity) {
       logger.entering(_CLASS, "populateEntity(Entity)",entity);
-      Date expirationDate=null;
       String accountNumber=null;
       String encryptedAccountNumber=null;;
       
@@ -434,11 +431,10 @@ implements PaymentCard {
          } // END if (!accountNumber.startsWith("*"))
          // brandName
          entity.setProperty("brandName",getBrandName());
-         // expirationDate
-         expirationDate=getExpirationDate();
-         if (expirationDate != null) {
-            entity.setProperty("expirationDate", expirationDate);
-         } // END if (expirationDate != null)
+         // expirationMonth
+         entity.setProperty("expirationMonth", getExpirationMonth());
+         // expirationYear
+         entity.setProperty("expirationYear", getExpirationYear());
          // issuingBankName
          entity.setProperty("issuingBankName", getIssuingBankName());
       } else {
@@ -492,8 +488,10 @@ implements PaymentCard {
          } // END if (isAuthorized(ctx))
          // brandName
          setBrandName(getPropertyAsString(entity,"brandName"));
-         // expirationDate
-         setExpirationDate(getPropertyAsDate(entity,"expirationDate"));
+         // expirationMonth
+         setExpirationMonth(getPropertyAsInteger(entity,"expirationMonth"));
+         // expirationYear
+         setExpirationYear(getPropertyAsInteger(entity,"expirationYear"));
          // issuingBankName
          setIssuingBankName(getPropertyAsString(entity,"issuingBankName"));         
       } else {
@@ -511,8 +509,10 @@ implements PaymentCard {
          setAccountNumber(paymentCard.getAccountNumber());
          // brandName
          setBrandName(paymentCard.getBrandName());
-         // expirationDate
-         setExpirationDate(paymentCard.getExpirationDate());
+         // expirationMonth
+         setExpirationMonth(paymentCard.getExpirationMonth());
+         // expirationYear
+         setExpirationYear(paymentCard.getExpirationYear());
          // issuingBankName
          setIssuingBankName(paymentCard.getIssuingBankName());
       } else {
@@ -531,8 +531,7 @@ implements PaymentCard {
    public String toPropertyString() {
       logger.entering(_CLASS, "PersistentPaymentTypeImpl()");
       int length=0;
-      Date expirationDate=null;
-      DateFormat fmt=null;
+      int tmpInt=0;
       String result="";
       String tmpStr=null;
       StringBuilder sb=null;
@@ -554,12 +553,49 @@ implements PaymentCard {
       // brandName
       sb.append(", brandName=").append(getBrandName());
       // expirationDate
-      sb.append(", expirationDate=");
-      expirationDate=getExpirationDate();
-      if (expirationDate != null) {
-         fmt=new SimpleDateFormat("MM / yy");
-         sb.append(fmt.format(expirationDate));
-      } // END if (expirationDate != null) 
+      sb.append(", expirationMonth=");
+      tmpInt=getExpirationMonth();
+      switch (tmpInt) {
+          case 1: 
+              sb.append("January");
+              break;
+          case 2: 
+              sb.append("February");
+              break;
+          case 3: 
+              sb.append("March");
+              break;
+          case 4: 
+              sb.append("April");
+              break;
+          case 5:
+              sb.append("May");
+              break;
+          case 6: 
+              sb.append("June");
+              break;
+          case 7:
+              sb.append("July");
+              break;
+          case 8: 
+              sb.append("August");
+              break;
+          case 9: 
+              sb.append("September");
+              break;
+          case 10: 
+              sb.append("October");
+              break;
+          case 11: 
+              sb.append("November");
+              break;
+          case 12: 
+              sb.append("December");
+              break;
+          default: 
+              sb.append("Not Specified");
+              break;  
+      }
       // issuingBank
       sb.append(", issuingBankName=").append(getIssuingBankName());
       result=sb.toString();
@@ -615,32 +651,47 @@ implements PaymentCard {
       this.brandName=defaultValue(brandName);
       logger.exiting(_CLASS, "setBrandName(String)");
    }
-   // expirationDate
+   // expirationMonth
    @Override
-   public Date getExpirationDate() {
-      logger.entering(_CLASS, "getExpirationDate()");
-      logger.exiting(_CLASS, "getExpirationDate()",this.expirationDate);
-      return this.expirationDate;
+   public int getExpirationMonth() {
+      logger.entering(_CLASS, "getExpirationMonth()");
+      logger.exiting(_CLASS, "getExpirationMonth()",this.expirationMonth);
+      return this.expirationMonth;
    }
    
-   public String getFormattedExpirationDate() {
-      logger.entering(_CLASS, "getFormattedExpirationDate()");
-      DateFormat fmt=null;
-      String formattedDate=null;
-      
-      if (this.expirationDate != null) {
-         fmt=new SimpleDateFormat("MM / yy");
-         formattedDate=fmt.format(this.expirationDate);
-      } // END if (this.expriationDate != null)
-      
-      logger.exiting(_CLASS, "getFormattedExpirationDate()",formattedDate);
-      return formattedDate;
-   }
    @Override
-   public void setExpirationDate(Date expirationDate) {
-      logger.entering(_CLASS, "setExpirationDate(Date)");
-      this.expirationDate=expirationDate;
-      logger.exiting(_CLASS, "setExpirationDate(Date)");
+   public void setExpirationMonth(int expirationMonth) {
+      logger.entering(_CLASS, "setExpirationMonth(int)");
+      if ((expirationMonth >= 1) && (expirationMonth <= 12)) {
+          this.expirationMonth=expirationMonth;
+      } else {
+          this.expirationMonth=0;
+      } // END if ((expirationMonth >= 1) && (expirationMonth <= 12))
+      logger.exiting(_CLASS, "expirationMonth(int)");
+   }
+   // expirationYear
+   @Override
+   public int getExpirationYear() {
+      logger.entering(_CLASS, "getExpirationYear()");
+      logger.exiting(_CLASS, "getExpirationYear()",this.expirationYear);
+      return this.expirationYear;
+   }
+   
+   @Override
+   public void setExpirationYear(int expirationYear) {
+      logger.entering(_CLASS, "setExpirationYear(int)");
+      if (
+            (
+                  (expirationYear >= PaymentCard.MIN_YEAR) && 
+                  (expirationYear <= PaymentCard.MAX_YEAR)
+            ) ||
+            (expirationYear == 0) 
+         ) {
+          this.expirationYear=expirationYear;
+      } else {
+          this.expirationYear=0;
+      } // END if (((expirationYear >= PaymentCard.MAX_YEAR) &&  ...
+      logger.exiting(_CLASS, "expirationYear(int)");
    }
    // issuingBankName
    @Override

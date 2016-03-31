@@ -2,7 +2,6 @@ package com.wildstartech.gae.wfa.dao.logistics.ltl;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -25,13 +24,14 @@ import com.wildstartech.wfa.dao.journal.PersistentJournalEntry;
 import com.wildstartech.wfa.dao.logistics.ltl.PersistentWorkOrder;
 import com.wildstartech.wfa.dao.logistics.ltl.WorkOrderLineItemDAO;
 import com.wildstartech.wfa.dao.logistics.ltl.WorkOrderLineItemDAOFactory;
+import com.wildstartech.wfa.finance.PaymentCard;
 import com.wildstartech.wfa.journal.JournalEntry;
 import com.wildstartech.wfa.location.DistanceMeasurement;
+import com.wildstartech.wfa.location.DistanceServiceProviderFactory;
 import com.wildstartech.wfa.location.DistanceMeasurement.UNITS;
 import com.wildstartech.wfa.location.address.City;
 import com.wildstartech.wfa.location.address.PostalCodeFactory;
 import com.wildstartech.wfa.location.spi.DistanceServiceProvider;
-import com.wildstartech.wfa.location.spi.DistanceServiceProviderFactory;
 import com.wildstartech.wfa.logistics.ltl.AccessorialCharge;
 import com.wildstartech.wfa.logistics.ltl.WorkOrder;
 import com.wildstartech.wfa.logistics.ltl.WorkOrderLineItem;
@@ -125,14 +125,15 @@ implements PersistentWorkOrder {
    private double lineItemCharges = 0.0;
    private double fuelSurcharge = 0;
    private double valuation = 0.0;
+   private int creditCardExpirationMonth=0;
+   private int creditCardExpirationYear=0;
    private int numberOfFlights = 0;
    private AdjustmentType adjustmentType = AdjustmentType.FixedAmount;
    private ArrayList<AccessorialCharge> accessorials = null;
    private ArrayList<WorkOrderLineItem> lineItems = null;
    private ArrayList<WorkOrderLineItem> lineItemsToDelete = null;
-   private Date creditCardExpiration=null;
-   private PersistentJournalEntryImpl newJournalEntry=null;
    private transient PriceModel priceModel = null;
+   private PersistentJournalEntryImpl newJournalEntry=null;
    private String billingCompanyName="";
    private String billingContactEmail="";
    private String billingContactName="";
@@ -457,8 +458,10 @@ implements PersistentWorkOrder {
             cDAO=cDAOFactory.getDAO();
             pCard=cDAO.findByIdentifier(tmpStr, ctx);
             if (pCard != null) {
-               // creditCardExpiration
-               setCreditCardExpiration(pCard.getExpirationDate());
+               // creditCardExpirationMonth
+               setCreditCardExpirationMonth(pCard.getExpirationMonth());
+               // creditCardExpirationMonth
+               setCreditCardExpirationYear(pCard.getExpirationYear());
                // creditCardName
                setCreditCardName(pCard.getCardHolderName());
                // creditCardNumber
@@ -672,7 +675,8 @@ implements PersistentWorkOrder {
          setContactName(workOrder.getContactName());
          setContactPhone(workOrder.getContactPhone());
          setCratingRequired(workOrder.isCratingRequired());
-         setCreditCardExpiration(workOrder.getCreditCardExpiration());
+         setCreditCardExpirationMonth(workOrder.getCreditCardExpirationMonth());
+         setCreditCardExpirationYear(workOrder.getCreditCardExpirationYear());
          setCreditCardName(workOrder.getCreditCardName());
          setCreditCardNumber(workOrder.getCreditCardNumber());
          setCreditCardType(workOrder.getCreditCardType());
@@ -1209,17 +1213,40 @@ implements PersistentWorkOrder {
       logger.exiting(_CLASS, "setCratingRequired(boolean)");
    }
    
-   //***** creditCardExpiration
-   public Date getCreditCardExpiration() {
-      logger.entering(_CLASS, "getCreditCardExpiration()");
-      logger.exiting(_CLASS, "getCreditCardExpiration()",
-            this.creditCardExpiration);
-      return this.creditCardExpiration;
+   //***** creditCardExpirationMonth
+   @Override
+   public int getCreditCardExpirationMonth() {
+      logger.entering(_CLASS, "getCreditCardExpirationMonth()");
+      logger.exiting(_CLASS, "getCreditCardExpirationMonth()",
+            this.creditCardExpirationMonth);
+      return this.creditCardExpirationMonth;
    }
-   public void setCreditCardExpiration(Date expirationDate) {
-      logger.entering(_CLASS, "setCreditCardExpiration(Date)",expirationDate);
-      this.creditCardExpiration=expirationDate;
-      logger.exiting(_CLASS, "setCreditCardExpiration(String)");
+   public void setCreditCardExpirationMonth(int expirationMonth) {
+      logger.entering(_CLASS, "setCreditCardExpirationMonth(int)",
+              expirationMonth);
+      this.creditCardExpirationMonth=expirationMonth;
+      logger.exiting(_CLASS, "setCreditCardExpirationMonth(int)");
+   }
+   //***** creditCardExpirationYear
+   @Override
+   public int getCreditCardExpirationYear() {
+      logger.entering(_CLASS, "getCreditCardExpirationYear()");
+      logger.exiting(_CLASS, "getCreditCardExpirationYear()",
+            this.creditCardExpirationYear);
+      return this.creditCardExpirationYear;
+   }
+   public void setCreditCardExpirationYear(int expirationYear) {
+      logger.entering(_CLASS, "setCreditCardExpirationYear(int)",
+              expirationYear);
+      if (
+              (expirationYear >= PaymentCard.MIN_YEAR) &&
+              (expirationYear <= PaymentCard.MAX_YEAR) 
+         ) {
+          this.creditCardExpirationYear=expirationYear;
+      } else {
+          this.creditCardExpirationYear=0;
+      } // END if ((expirationYear >= PaymentCard.MIN_YEAR) ...
+      logger.exiting(_CLASS, "setCreditCardExpirationYear(int)");
    }
    //***** creditCardIdentifier
    protected String getCreditCardIdentifier() {

@@ -207,13 +207,21 @@ extends PersistentRuleImpl<PersistentQuoteImpl> {
       if (isEmpty) { isEmpty=isEmpty(card.getCardHolderName()); }
       // description
       // Don't care about description.
-      // expirationDate
+      // expirationMonth
       if (isEmpty) { 
-         if (card.getExpirationDate() == null) { 
+         if (card.getExpirationMonth() == 0) { 
             isEmpty=true;
          } else{ 
             isEmpty=false;
-         } // END if (card.getExpirationDate() == null) 
+         } // END if (card.getExpirationMonth() == null) 
+      } // END if (isEmpty)
+      // expirationYear
+      if (isEmpty) { 
+         if (card.getExpirationYear() == 0) { 
+            isEmpty=true;
+         } else{ 
+            isEmpty=false;
+         } // END if (card.getExpirationYear() == null) 
       } // END if (isEmpty)
       // issuingBankName
       // dont' care about issuing bank name
@@ -228,6 +236,7 @@ extends PersistentRuleImpl<PersistentQuoteImpl> {
       logger.entering(_CLASS,"apply(PersistentQuote)",pQuote);
       boolean changeDetected=false;
       boolean result=false;
+      int tmpInt=0;
       PersistentCreditCard creditCard=null;
       CreditCardDAO dao=null;
       CreditCardDAOFactory factory=null;
@@ -283,14 +292,18 @@ extends PersistentRuleImpl<PersistentQuoteImpl> {
             changeDetected=true;
             creditCard.setCardHolderName(quoteProperty);
          } // END if (result)
-         // expirationDate
-         cardDate=creditCard.getExpirationDate();
-         quoteDate=pQuote.getCreditCardExpiration();
-         result=compareExpirationDate(cardDate,quoteDate);
-         if (result) {
-            changeDetected=true;
-            creditCard.setExpirationDate(quoteDate);
-         } // END if (result)
+         // expirationMonth
+         tmpInt=pQuote.getCreditCardExpirationMonth();
+         if (tmpInt != creditCard.getExpirationMonth()) {
+             changeDetected = true;
+             creditCard.setExpirationMonth(tmpInt);
+         } // END if (tmpInt != creditCard.getExpirationMonth())
+         // expirationYear
+         tmpInt=pQuote.getCreditCardExpirationYear();
+         if (tmpInt != creditCard.getExpirationYear()) {
+             changeDetected = true;
+             creditCard.setExpirationYear(tmpInt);
+         } // END if (tmpInt != creditCard.getExpirationYear())
          // cardVerification
          cardProperty=creditCard.getVerification();
          quoteProperty=pQuote.getCreditCardVerification();
@@ -311,7 +324,10 @@ extends PersistentRuleImpl<PersistentQuoteImpl> {
                creditCard=dao.save(creditCard, ctx);
                // Update the quote with information.
                pQuote.setCreditCardIdentifier(creditCard.getIdentifier());
-               pQuote.setCreditCardExpiration(creditCard.getExpirationDate());
+               pQuote.setCreditCardExpirationMonth(
+                       creditCard.getExpirationMonth());
+               pQuote.setCreditCardExpirationYear(
+                       creditCard.getExpirationYear());
                pQuote.setCreditCardName(creditCard.getCardHolderName());
                pQuote.setCreditCardNumber(creditCard.getAccountNumber());
                pQuote.setCreditCardType(creditCard.getBrandName());

@@ -2,7 +2,7 @@ package com.wildstartech.wfa.dao.logistics.ltl;
 
 import com.wildstartech.wfa.logistics.ltl.LineItem;
 
-public class LineItemBaseTestCase 
+public class TestCaseLineItemBase 
 implements LineItem {
    /*
     * The position of the quote line item on the associated quote. 
