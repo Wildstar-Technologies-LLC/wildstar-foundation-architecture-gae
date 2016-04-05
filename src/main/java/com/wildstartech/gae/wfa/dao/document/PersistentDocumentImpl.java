@@ -119,7 +119,7 @@ implements PersistentDocument {
          entity.setProperty("gcsObjectName", getGcsObjectName());
          entity.setProperty("name", getName());
          entity.setProperty("relatedIdentifier", getRelatedIdentifier());
-         entity.setProperty("relatedKind", getRelatedKind());
+         entity.setProperty("relatedType", getRelatedType());
          entity.setProperty("size", getSize());
       } else {
          logger.severe("The entity was null.");
@@ -138,7 +138,7 @@ implements PersistentDocument {
          setHash(getPropertyAsString(entity,"hash"));
          setName(getPropertyAsString(entity,"name"));
          setRelatedIdentifier(getPropertyAsString(entity,"relatedIdentifier"));
-         setRelatedKind(getPropertyAsString(entity,"relatedKind"));
+         setRelatedType(getPropertyAsString(entity,"relatedType"));
          setSize(getPropertyAsLong(entity,"size"));
       }
       logger.exiting(_CLASS, "populateFromEntity(Entity)");
@@ -153,13 +153,9 @@ implements PersistentDocument {
       if (document != null) {
          if (document instanceof PersistentDocument) {
             pDocument=(PersistentDocument) document;
+            setRelatedType(pDocument.getRelatedType());
             setRelatedIdentifier(pDocument.getRelatedIdentifier());
          } // END if (document instanceof PersistentDocument)
-         if (document instanceof PersistentDocumentImpl) {
-            setRelatedKind(
-                  ((PersistentDocumentImpl) document).getRelatedKind()
-            );
-         } // END if (document instanceof PersistentDocumentImpl)
          setContentType(document.getContentType());
          setHash(document.getHash());
          setName(document.getName());
@@ -266,17 +262,18 @@ implements PersistentDocument {
       logger.exiting(_CLASS, "setRelatedIdentifier(String)");
    }
 
-   // ***** relatedKind
-   public String getRelatedKind() {
-      logger.entering(_CLASS, "getRelatedKind()");
-      logger.exiting(_CLASS, "getRelatedKind()", this.relatedKind);
+   // ***** relatedType
+   @Override
+   public String getRelatedType() {
+      logger.entering(_CLASS, "getRelatedType()");
+      logger.exiting(_CLASS, "getRelatedType()", this.relatedKind);
       return this.relatedKind;
    }
-
-   public void setRelatedKind(String relatedKind) {
-      logger.entering(_CLASS, "setRelatedKind(String)", relatedKind);
-      this.relatedKind = defaultValue(relatedKind);
-      logger.exiting(_CLASS, "setRelatedKing()");
+   @Override
+   public void setRelatedType(String relatedType) {
+      logger.entering(_CLASS, "setRelatedType(String)", relatedType);
+      this.relatedKind = defaultValue(relatedType);
+      logger.exiting(_CLASS, "setRelatedType()");
    }
    
    //***** size 

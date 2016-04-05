@@ -95,12 +95,12 @@ implements DocumentDAO {
    
    @Override
    public List<PersistentDocument> findByRelatedIdentifier(
+         String type,
          String identifier,
-         String kind,
          UserContext ctx) {
       logger.entering(_CLASS, 
             "findByRelatedIdentifier(String,String,UserContext)",
-            new Object[] {identifier,kind,ctx});
+            new Object[] {identifier,type,ctx});
       List<Filter> filters=null;
       List<PersistentDocument> documents=null;
       Query query=null;
@@ -111,12 +111,12 @@ implements DocumentDAO {
          if (!isEmpty(identifier)) {
             query=new Query(getKind());
             filters=new ArrayList<Filter>();
-            if (!isEmpty(kind)) {
+            if (!isEmpty(type)) {
                filters.add(
                      new FilterPredicate(
-                        "relatedKind",
+                        "relatedType",
                         FilterOperator.EQUAL,
-                        kind)
+                        type)
                      );
                filters.add(
                      new FilterPredicate(
