@@ -117,8 +117,13 @@ public class PersistentJournalEntryImpl extends WildObjectImpl<JournalEntry>
    public boolean isEmpty() {
       logger.entering(_CLASS, "isEmpty()");
       boolean result = false;
-      if ((!isEmpty(description)) && (content != null)
-            && (content.length() > 0)) {
+      if (
+            (isEmpty(description)) && 
+            (
+                  (content == null) ||
+                  (content.length() > 0)
+            )
+         ) {
          result = true;
       } // END if (isEmpty(description)) && (isEmpty(content)) {
       logger.exiting(_CLASS, "isEmpty()", result);
