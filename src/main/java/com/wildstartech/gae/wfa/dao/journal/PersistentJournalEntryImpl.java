@@ -121,7 +121,7 @@ public class PersistentJournalEntryImpl extends WildObjectImpl<JournalEntry>
             (isEmpty(description)) && 
             (
                   (content == null) ||
-                  (content.length() > 0)
+                  (content.length() == 0)
             )
          ) {
          result = true;
