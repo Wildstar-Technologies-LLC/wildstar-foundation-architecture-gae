@@ -374,11 +374,7 @@ implements WildDAO<T, W> {
   public W delete(T object, UserContext ctx) throws DAOException {
     logger.entering(_CLASS, "delete(T,UserContext<Key>)", new Object[] {
         object, ctx });
-    long longId = 0l;
-    DatastoreService ds = null;
-    Key key = null;
     String identifier = null;
-    String kind = null;
     W wildObject = null;
 
     if (object != null) {
@@ -387,14 +383,7 @@ implements WildDAO<T, W> {
         // The object is not null, so let's see if it's been saved.
         identifier = wildObject.getIdentifier();
         if ((identifier != null) && (identifier.length() > 0)) {
-          // Get the "kind" used in persisting the object
-          kind = ((WildObjectImpl<?>) wildObject).getKind();
-          // Get the long value of the identifier.
-          longId = Long.valueOf(identifier);
-          // Create an App Engine Key
-          key = KeyFactory.createKey(kind, longId);
-          ds = DatastoreServiceFactory.getDatastoreService();
-          ds.delete(key);
+          wildObject=deleteByIdentifier(identifier,ctx);
         } else {
           logger.warning("No key, so object hasn't been saved.");
         } // END if ((identifier != null) && (identifier.length() > 0))
