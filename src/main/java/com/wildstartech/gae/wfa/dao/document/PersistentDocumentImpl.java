@@ -1,3 +1,47 @@
+/*
+ * Copyright (c) 2013 - 2016 Wildstar Technologies, LLC.
+ *
+ * This file is part of Wildstar Foundation Architecture.
+ *
+ * Wildstar Foundation Architecture is free software: you can redistribute it
+ * and/or modify it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation, either version 3 of the License,
+ * or (at your option) any later version.
+ *
+ * Wildstar Foundation Architecture is distributed in the hope that it will be
+ * useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with
+ * Wildstar Foundation Architecture.  If not, see 
+ * <http://www.gnu.org/licenses/>.
+ * 
+ * Linking this library statically or dynamically with other modules is making a
+ * combined work based on this library. Thus, the terms and conditions of the 
+ * GNU General Public License cover the whole combination.
+ * 
+ * As a special exception, the copyright holders of this library give you 
+ * permission to link this library with independent modules to produce an 
+ * executable, regardless of the license terms of these independent modules, 
+ * and to copy and distribute the resulting executable under terms of your 
+ * choice, provided that you also meet, for each linked independent module, the
+ * terms and conditions of the license of that module. An independent module is
+ * a module which is not derived from or based on this library. If you modify 
+ * this library, you may extend this exception to your version of the library, 
+ * but you are not obliged to do so. If you do not wish to do so, delete this 
+ * exception statement from your version.
+ * 
+ * If you need additional information or have any questions, please contact:
+ *
+ *      Wildstar Technologies, LLC.
+ *      63 The Greenway Loop
+ *      Panama City Beach, FL 32413
+ *      USA
+ *
+ *      derek.berube@wildstartech.com
+ *      www.wildstartech.com
+ */
 package com.wildstartech.gae.wfa.dao.document;
 
 import java.io.ByteArrayInputStream;
@@ -101,6 +145,63 @@ implements PersistentDocument {
       return objectName;
    }
    
+   /**
+    * Removes the content of the file.
+    * @return
+    */
+   public boolean deleteContent() {
+      logger.entering(_CLASS, "deleteContent()");
+      boolean result=false;
+      GcsFilename gcsFileName=null;
+      GcsService service=null;
+      String gcsObjectName="";
+      String gcsBucketName="";
+      StringBuilder msg=null;
+      
+      gcsObjectName=getGcsObjectName();
+      gcsBucketName=getGcsBucketName();
+      
+      if (
+            (!isEmpty(gcsObjectName)) && 
+            (!isEmpty(gcsBucketName))
+         ) {
+         service=GcsServiceFactory.createGcsService(
+               RetryParams.getDefaultInstance());
+         gcsFileName = new GcsFilename(gcsBucketName,gcsObjectName);
+         try {
+            result=service.delete(gcsFileName);
+            if (result) {
+               logger.log(
+                  Level.INFO,
+                  "The Google Cloud Storage object was removed.");
+            } else {
+               logger.log(
+                  Level.WARNING,
+                  "The Google Cloud Storage object was not removed.");
+            } // END if (!result)
+         } catch (IOException ex) {
+            msg=new StringBuilder(255);
+            msg.append("An IOException was thrown while attempting to remove ");
+            msg.append("the object with a gcsObjectName of \"");
+            msg.append(gcsObjectName);
+            msg.append("\" from the Google Cloud Storage bucke named \"");
+            msg.append(gcsBucketName);
+            msg.append(".\"");
+            logger.log(Level.WARNING, msg.toString(), ex);
+         } // END try/catch
+      } else {
+         if (isEmpty(gcsBucketName)) {
+            logger.warning("No value stored in the gcsBucketName property.");
+         } // END if (isEmpty(gcsBucketName))
+         if (isEmpty(gcsObjectName)) {
+            logger.warning("No value stored in the gcsObjectName property.");
+         } // END if (isEmpty(gcsObjectName))
+         
+      }
+       
+      logger.exiting(_CLASS, "deleteContent()",result);
+      return result;
+   }
    @Override
    public String getKind() {
       logger.entering(_CLASS, "getKind()");

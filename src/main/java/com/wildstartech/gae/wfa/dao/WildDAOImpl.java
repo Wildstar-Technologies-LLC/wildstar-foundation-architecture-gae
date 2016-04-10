@@ -1,20 +1,20 @@
 /*
- * Copyright (c) 2013 - 2015 Wildstar Technologies, LLC.
+ * Copyright (c) 2013 - 2016 Wildstar Technologies, LLC.
  *
- * This file is part of Wildstar Foundation Architecture for Google App Engine.
+ * This file is part of Wildstar Foundation Architecture.
  *
- * Wildstar Foundation Architecture for Google App Engine is free software: you
- * can redistribute it and/or modify it under the terms of the GNU General 
- * Public License as published by the Free Software Foundation, either version
- * 3 of the License, or (at your option) any later version.
+ * Wildstar Foundation Architecture is free software: you can redistribute it
+ * and/or modify it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation, either version 3 of the License,
+ * or (at your option) any later version.
  *
- * Wildstar Foundation Architecture for Google App Engine is distributed in the
- * hope that it will be useful, but WITHOUT ANY WARRANTY; without even the 
- * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * See the GNU General Public License for more details.
+ * Wildstar Foundation Architecture is distributed in the hope that it will be
+ * useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License along with
- * Wildstar Foundation Architecture for Google App Engine.  If not, see 
+ * Wildstar Foundation Architecture.  If not, see 
  * <http://www.gnu.org/licenses/>.
  * 
  * Linking this library statically or dynamically with other modules is making a
@@ -41,8 +41,7 @@
  *
  *      derek.berube@wildstartech.com
  *      www.wildstartech.com
- */
-package com.wildstartech.gae.wfa.dao;
+ */package com.wildstartech.gae.wfa.dao;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -409,15 +408,15 @@ implements WildDAO<T, W> {
         (identifier.length() > 0) &&
         (ctx != null)) {
       wildObject=findByIdentifier(identifier,ctx);
-      
       if (wildObject != null) {
-        kind=((WildObjectImpl<?>) wildObject).getKind();
-        ds=this.getDatastore();
-        id=Long.valueOf(identifier);
-        key=KeyFactory.createKey(kind,id);
-        // Remove the object by key
-        ds.delete(key);
-      } // END if (wildObject != null)
+         kind=((WildObjectImpl<?>) wildObject).getKind();
+         ds=this.getDatastore();
+         id=Long.valueOf(identifier);
+         key=KeyFactory.createKey(kind,id);
+         // Remove the object by key
+         ds.delete(key);
+       } // END if (wildObject != null)
+      
     } // END if ((identifier != null) && (identifier.length() > 0) && ...
     logger.exiting(_CLASS,"deleteByIdentifier(String,UserContext)",wildObject);
     return wildObject;
@@ -605,7 +604,6 @@ implements WildDAO<T, W> {
     Entity entity = null;
     Key key = null;
     MemcacheService memcache = null;
-    NamespaceManager namespaceMgr=null;
     String kind = null;
     W persistentObject = null;
     

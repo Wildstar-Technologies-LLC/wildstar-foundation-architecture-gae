@@ -1,20 +1,20 @@
 /*
- * Copyright (c) 2015 Wildstar Technologies, LLC.
+ * Copyright (c) 2013 - 2016 Wildstar Technologies, LLC.
  *
- * This file is part of Wildstar Enterprise Foundation Architecture.
+ * This file is part of Wildstar Foundation Architecture.
  *
- * Wildstar Enterprise Foundation Architecture is free software: you can 
- * redistribute it and/or modify it under the terms of the GNU General Public 
- * License as published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
+ * Wildstar Foundation Architecture is free software: you can redistribute it
+ * and/or modify it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation, either version 3 of the License,
+ * or (at your option) any later version.
  *
- * Wildstar Enterprise Foundation Architecture is distributed in the hope that
- * it will be useful, but WITHOUT ANY WARRANTY; without even the implied 
- * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Wildstar Foundation Architecture is distributed in the hope that it will be
+ * useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License along with
- * Wildstar Enterprise Foundation Architecture.  If not, see 
+ * Wildstar Foundation Architecture.  If not, see 
  * <http://www.gnu.org/licenses/>.
  * 
  * Linking this library statically or dynamically with other modules is making a
