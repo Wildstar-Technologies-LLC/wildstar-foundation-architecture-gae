@@ -42,18 +42,45 @@
  *      derek.berube@wildstartech.com
  *      www.wildstartech.com
  */
-package com.wildstartech.wfa.dao.logistics.ltl;
+package com.wildstartech.gae.wfa.dao.logistics.ltl;
 
-import com.wildstartech.wfa.logistics.ltl.MockFreightDueInWorkOrderLineItem;
 
-public class TestCaseFreightDueInWorkOrderLineItem2
-extends MockFreightDueInWorkOrderLineItem {   
-   public TestCaseFreightDueInWorkOrderLineItem2() {
-      this.setDescription("Second Freight Due In Work Order Line Item");
-      this.setLength(15);
-      this.setWidth(25);
-      this.setHeight(35);
-      this.setWeight(59);
-      this.setQuantity(1);
+import java.util.logging.Logger;
+
+import com.wildstartech.wfa.dao.logistics.ltl.PersistentReceiverWorkOrderLineItem;
+import com.wildstartech.wfa.logistics.ltl.ReceiverWorkOrderLineItem;
+
+public class PersistentReceiverWorkOrderLineItemImpl
+extends PersistentEditableCommodityLineItemImpl<ReceiverWorkOrderLineItem>
+implements PersistentReceiverWorkOrderLineItem {
+   /** Used in object serializaiton. */
+   private static final long serialVersionUID = -1506383620683576337L;
+   private static final String _CLASS=
+         PersistentReceiverWorkOrderLineItemImpl.class.getName();
+   private static final Logger logger=Logger.getLogger(_CLASS);
+   protected static final String _KIND=
+         "com.wildstartech.wfa.logistics.ltl.ReceiverWorkOrderLineItem";
+   
+   private String workOrderIdentifier="";
+   @Override
+   public String getWorkOrderIdentifier() {
+      logger.entering(_CLASS, "getWorkOrderIdentifier()");
+      logger.exiting(_CLASS, "getWorkOrderIdentifier()",
+            this.workOrderIdentifier);
+      return this.workOrderIdentifier;
+   }
+   @Override
+   public void setWorkOrderIdentifier(String identifier) {
+      logger.entering(_CLASS, "setWorkOrderIdentifier(String)",identifier);
+      this.workOrderIdentifier=defaultValue(identifier);
+      logger.exiting(_CLASS, "setWorkOrderIdentifier(String)");
+   }
+   
+   @Override
+   public String getKind() {
+      logger.entering(_CLASS, "getKind()");
+      logger.exiting(_CLASS, "getKind()",
+            PersistentReceiverWorkOrderLineItemImpl._KIND);
+      return PersistentReceiverWorkOrderLineItemImpl._KIND;
    }
 }

@@ -44,8 +44,10 @@
  */
 package com.wildstartech.wfa.dao.logistics.ltl;
 
+import com.wildstartech.wfa.logistics.ltl.MockEditableCommodityLineItem;
+
 public class TestCaseFreightDueInWorkOrderLineItem1
-extends TestCaseEditableCommodityLineItemBase {   
+extends MockEditableCommodityLineItem {   
    public TestCaseFreightDueInWorkOrderLineItem1() {
       this.setDescription("Test Line Item for Freight Due In Work Order");
       this.setLength(10);

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 - 2016 Wildstar Technologies, LLC.
+ * Copyright (c) 2001 - 2016 Wildstar Technologies, LLC.
  *
  * This file is part of Wildstar Foundation Architecture.
  *
@@ -44,46 +44,55 @@
  */
 package com.wildstartech.wfa.dao.logistics.ltl;
 
-public class TestCaseEditableCommodityLineItemBase
-extends TestCaseCommodityLineItemBase {
-   /* 
-    * Indicates if the description can be edited.
+import java.util.ArrayList;
+import java.util.List;
+
+import com.wildstartech.wfa.logistics.ltl.MockReceiverWorkOrder;
+
+public class TestCaseReceiverWorkOrderBase 
+extends MockReceiverWorkOrder {
+   /**
+    * The list of possible values for the menu attached to the 'Status State' 
+    * field on a form.
     */
-   private boolean customDescription=true;
-   /*
-    * Indicates if length, width and height can be edited.
-    */
-   private boolean customDimensions=true;
-   /*
-    * Indicates if the weight can be edited.
-    */
-   private boolean customWeight=true;
+   public final static List<String> _statusStates=
+         new ArrayList<String>();
+   static {
+      _statusStates.add("New");
+      _statusStates.add("Assigned");
+      _statusStates.add("Pending");
+      _statusStates.add("Resolved");
+      _statusStates.add("Closed");
+   }
+   
+   public final static List<String> _resolvedClosedStatusReasons=
+         new ArrayList<String>();
+   static {
+      _resolvedClosedStatusReasons.add("Complete");
+      _resolvedClosedStatusReasons.add("Canceled");
+   }
    
    /**
-    * Default, no-argumnet constructor.
+    * Returns a list of acceptable values for the 'Status Reason' field.
+    * @return
     */
-   public TestCaseEditableCommodityLineItemBase() {
-      super();
+   public List<String> getAvailableStatusReasons() {
+      String statusState=null;
+      
+      statusState=getStatusState();
+      switch(statusState) {
+         case("Resolved"):
+         case("Closed"):
+            return TestCaseReceiverWorkOrderBase._resolvedClosedStatusReasons;            
+         default:
+            return new ArrayList<String>();            
+      }
    }
-   
-   //********** BEGIN: Accessor methods
-   public boolean isCustomDescription() {
-      return this.customDescription;
-   }
-   public void setCustomDescription(boolean customDescription) {
-      this.customDescription = customDescription;
-   }
-   public boolean isCustomDimensions() {
-      return this.customDimensions;
-   }
-   public void setCustomDimensions(boolean customDimensions) {
-      this.customDimensions = customDimensions;
-   }
-   public boolean isCustomWeight() {
-      return this.customWeight;
-   }
-   public void setCustomWeight(boolean customWeight) {
-      this.customWeight = customWeight;
-   }
-   //********** END: Accessor Methods
+   /**
+    * Returns a list of acceptable values for the 'Status State' field.
+    */
+   @Override
+   public List<String> getAvailableStatusStates() {
+      return TestCaseReceiverWorkOrderBase._statusStates;
+   }   
 }

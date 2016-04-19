@@ -42,25 +42,62 @@
  *      derek.berube@wildstartech.com
  *      www.wildstartech.com
  */
-package com.wildstartech.wfa.dao.logistics.ltl;
+package com.wildstartech.gae.wfa.dao.logistics.ltl;
 
-import com.wildstartech.wfa.logistics.ltl.LineItem;
+import java.util.logging.Logger;
 
-public class TestCaseLineItemBase 
-implements LineItem {
-   /*
-    * The position of the quote line item on the associated quote. 
-    */
-   private int lineItemNumber=0;
+import com.wildstartech.gae.wfa.dao.WildDAOImpl;
+import com.wildstartech.wfa.dao.DAOException;
+import com.wildstartech.wfa.dao.UserContext;
+import com.wildstartech.wfa.dao.logistics.ltl.PersistentReceiverWorkOrder;
+import com.wildstartech.wfa.dao.logistics.ltl.ReceiverWorkOrderDAO;
+import com.wildstartech.wfa.logistics.ltl.ReceiverWorkOrder;
+
+public class ReceiverWorkOrderDAOImpl
+extends WildDAOImpl<ReceiverWorkOrder, PersistentReceiverWorkOrder>
+implements ReceiverWorkOrderDAO {
+   private static String _CLASS=ReceiverWorkOrderDAOImpl.class.getName();
+   private static Logger logger=Logger.getLogger(_CLASS);
    
-   //***** lineItemNumber
    @Override
-   public final int getLineItemNumber() {
-      return this.lineItemNumber;
+   public PersistentReceiverWorkOrder findInstance(ReceiverWorkOrder workOrder,
+         UserContext ctx) throws DAOException {
+      logger.entering(_CLASS, "findInstance(ReceiverWorkOrder,UserContext)",
+            new Object[] {workOrder,ctx});
+      PersistentReceiverWorkOrder pWO=null;
+      
+      logger.entering(_CLASS, "findInstance(ReceiverWorkOrder,UserContext)",
+            pWO);
+      return pWO;
    }
+   
    @Override
-   public final void setLineItemNumber(int lineItemNumber) {
-      this.lineItemNumber = lineItemNumber;
+   public PersistentReceiverWorkOrder create() {
+      logger.entering(_CLASS, "create()");
+      PersistentReceiverWorkOrder workOrder=null;
+      workOrder=new PersistentReceiverWorkOrderImpl();
+      logger.exiting(_CLASS, "create()",workOrder);
+      return workOrder;
    }
-
+   
+   @Override
+   public PersistentReceiverWorkOrder create(ReceiverWorkOrder workOrder,
+         UserContext ctx) {
+      logger.entering(_CLASS, "create(ReceiverWorkOrder,UserContext)",
+            new Object[] {workOrder,ctx});
+      PersistentReceiverWorkOrderImpl pWO=null;
+      
+      pWO=new PersistentReceiverWorkOrderImpl();
+      pWO.populateFromObject(workOrder);
+      
+      logger.exiting(_CLASS, "create(ReceiverWorkOrder,UserContext)",pWO);
+      return pWO;
+   }
+   
+   @Override
+   protected String getKind() {
+      logger.entering(_CLASS, "getKind()");
+      logger.exiting(_CLASS, "getKind()",PersistentReceiverWorkOrderImpl._KIND);
+      return PersistentReceiverWorkOrderImpl._KIND;
+   }
 }

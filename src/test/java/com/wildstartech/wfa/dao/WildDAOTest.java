@@ -44,6 +44,8 @@
  */
 package com.wildstartech.wfa.dao;
 
+import java.util.Date;
+
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
@@ -82,5 +84,31 @@ public class WildDAOTest {
   @AfterSuite
   public void tearDown() {
       helper.tearDown();
+  }
+  
+  public boolean isEqual(String source, String target) {
+     boolean result=false;
+     
+     if (
+           (source != null) && 
+           (target != null) &&
+           source.equals(target)) {
+        result=true;        
+     }
+     return result;
+  }
+  public boolean isEqual(Date source, Date target) {
+     boolean result=false;
+     long sourceTime=0;
+     long targetTime=0;
+     
+     if ((source != null) && (target != null)) {
+        sourceTime=source.getTime();
+        targetTime=target.getTime();
+        if (sourceTime == targetTime) {
+           result=true;
+        } // END if (sourceTime == targetTime)
+     } // END if ((source != null) && (target != null))
+     return result;
   }
 }

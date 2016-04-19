@@ -44,8 +44,10 @@
  */
 package com.wildstartech.wfa.dao.logistics.ltl;
 
+import com.wildstartech.wfa.logistics.ltl.MockFreightDueInWorkOrder;
+
 public class TestCaseFreightDueInWorkOrder2 
-extends TestCaseFreightDueInWorkOrderBase {
+extends MockFreightDueInWorkOrder {
    
    public TestCaseFreightDueInWorkOrder2() {
       setEstimatedShipDate("10/13/2014 10:13 AM");
@@ -59,7 +61,5 @@ extends TestCaseFreightDueInWorkOrderBase {
       setManufacturerName("Foo Inc.");
       setReferenceIdentifier("PO987654321");
       setSpecialHandling("You just cannot get away from special handling.");
-   }
-   
-   
+   }  
 }
