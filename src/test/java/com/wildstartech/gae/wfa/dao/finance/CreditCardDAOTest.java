@@ -44,22 +44,20 @@
  */
 package com.wildstartech.gae.wfa.dao.finance;
 
-import java.util.Date;
-
 import org.testng.annotations.Test;
 
 import com.wildstartech.gae.wfa.UserData;
+import com.wildstartech.gae.wfa.dao.DAOTest;
 import com.wildstartech.wfa.dao.UserContext;
 import com.wildstartech.wfa.dao.UserContextDAOFactory;
 import com.wildstartech.wfa.dao.WildDAO;
-import com.wildstartech.wfa.dao.WildDAOTest;
 import com.wildstartech.wfa.dao.finance.CreditCardDAO;
 import com.wildstartech.wfa.dao.finance.CreditCardDAOFactory;
 import com.wildstartech.wfa.dao.finance.PersistentCreditCard;
 import com.wildstartech.wfa.finance.CreditCard;
 import com.wildstartech.wfa.finance.SampleCreditCardData;
 
-public class CreditCardDAOTest extends WildDAOTest {
+public class CreditCardDAOTest extends DAOTest {
    
    @Test
    public void testCreate() {
@@ -85,8 +83,6 @@ public class CreditCardDAOTest extends WildDAOTest {
       CreditCard creditCard=null;
       CreditCardDAO dao=null;
       CreditCardDAOFactory factory=null;
-      Date referenceDate=null;
-      Date savedDate=null;
       PersistentCreditCard pCreditCard=null;
       String identifier="";
       String referenceValue="";

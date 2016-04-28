@@ -44,9 +44,11 @@
  */
 package com.wildstartech.gae.wfa.dao.logistics.ltl;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
-import com.wildstartech.gae.wfa.dao.WildDAOImpl;
+import com.wildstartech.gae.wfa.dao.ticketing.BasicTicketDAOImpl;
 import com.wildstartech.wfa.dao.DAOException;
 import com.wildstartech.wfa.dao.UserContext;
 import com.wildstartech.wfa.dao.logistics.ltl.PersistentReceiverWorkOrder;
@@ -54,7 +56,7 @@ import com.wildstartech.wfa.dao.logistics.ltl.ReceiverWorkOrderDAO;
 import com.wildstartech.wfa.logistics.ltl.ReceiverWorkOrder;
 
 public class ReceiverWorkOrderDAOImpl
-extends WildDAOImpl<ReceiverWorkOrder, PersistentReceiverWorkOrder>
+extends BasicTicketDAOImpl<ReceiverWorkOrder, PersistentReceiverWorkOrder>
 implements ReceiverWorkOrderDAO {
    private static String _CLASS=ReceiverWorkOrderDAOImpl.class.getName();
    private static Logger logger=Logger.getLogger(_CLASS);
@@ -99,5 +101,31 @@ implements ReceiverWorkOrderDAO {
       logger.entering(_CLASS, "getKind()");
       logger.exiting(_CLASS, "getKind()",PersistentReceiverWorkOrderImpl._KIND);
       return PersistentReceiverWorkOrderImpl._KIND;
+   }
+
+   @Override
+   public List<PersistentReceiverWorkOrder> findActionable(UserContext ctx)
+         throws DAOException {
+      logger.entering(_CLASS, "findActionable(UserContext)");
+      List<PersistentReceiverWorkOrder> workOrders=null;
+      
+      if (workOrders == null) {
+         workOrders=new ArrayList<PersistentReceiverWorkOrder>();
+      } // END if (workOrders == null)       
+      logger.exiting(_CLASS, "findActionable(UserContext)",workOrders);
+      return workOrders;
+   }
+
+   @Override
+   public List<PersistentReceiverWorkOrder> findAllOpen(UserContext ctx)
+         throws DAOException {
+      logger.entering(_CLASS, "findAllOpen(UserContext)");
+      List<PersistentReceiverWorkOrder> workOrders=null;
+      
+      if (workOrders == null) {
+         workOrders=new ArrayList<PersistentReceiverWorkOrder>();
+      } // END if (workOrders == null)       
+      logger.exiting(_CLASS, "findAllOpen(UserContext)",workOrders);
+      return workOrders;
    }
 }

@@ -122,6 +122,12 @@
     	<artifactId>wfa-enterprise</artifactId>
     	<version>0.2</version>
     </dependency>
+	<dependency>
+		<groupId>com.wildstartech.wfa</groupId>
+		<artifactId>ack</artifactId>
+		<version>0.1-SNAPSHOT</version>
+		<scope>test</scope>
+	</dependency>
   </dependencies>
   <organization>
   	<name>Wildstar Technologies, LLC.</name>
