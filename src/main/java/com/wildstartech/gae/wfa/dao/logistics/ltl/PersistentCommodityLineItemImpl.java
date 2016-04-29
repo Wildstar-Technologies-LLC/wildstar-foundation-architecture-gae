@@ -81,11 +81,7 @@ extends PersistentLineItemImpl<T> implements CommodityLineItem {
    /*
     * A count of the number of the same item.
     */
-   private int quantity=1;
-   /*
-    * A free-form text description of the item.
-    */
-   private String description = "";
+   private int quantity=1;  
    /* */
    private String packagingType = "";
    /* */
@@ -101,7 +97,6 @@ extends PersistentLineItemImpl<T> implements CommodityLineItem {
    }
    
    //********** Utility methods
-   
    @Override
    public boolean equals(Object obj) {
       if (this == obj)
@@ -110,16 +105,20 @@ extends PersistentLineItemImpl<T> implements CommodityLineItem {
          return false;
       if (getClass() != obj.getClass())
          return false;
-      PersistentCommodityLineItemImpl other = 
-            (PersistentCommodityLineItemImpl) obj;
-      if (description == null) {
-         if (other.description != null)
-            return false;
-      } else if (!description.equals(other.description))
-         return false;
+      PersistentCommodityLineItemImpl other = (PersistentCommodityLineItemImpl) obj;
       if (height != other.height)
          return false;
       if (length != other.length)
+         return false;
+      if (packagingType == null) {
+         if (other.packagingType != null)
+            return false;
+      } else if (!packagingType.equals(other.packagingType))
+         return false;
+      if (productId == null) {
+         if (other.productId != null)
+            return false;
+      } else if (!productId.equals(other.productId))
          return false;
       if (quantity != other.quantity)
          return false;
@@ -130,17 +129,16 @@ extends PersistentLineItemImpl<T> implements CommodityLineItem {
       return true;
    }
    
-   /**
-    * Calculate the hashcode for the PersistentAccessorialCharge
-    */
    @Override
    public int hashCode() {
       final int prime = 31;
       int result = super.hashCode();
-      result = prime * result
-            + ((description == null) ? 0 : description.hashCode());
       result = prime * result + height;
       result = prime * result + length;
+      result = prime * result
+            + ((packagingType == null) ? 0 : packagingType.hashCode());
+      result = prime * result
+            + ((productId == null) ? 0 : productId.hashCode());
       result = prime * result + quantity;
       result = prime * result + weight;
       result = prime * result + width;
@@ -160,7 +158,6 @@ extends PersistentLineItemImpl<T> implements CommodityLineItem {
      logger.entering(_CLASS,"populateEntity(Entity)",entity);
      if (entity != null) {
        super.populateEntity(entity);
-       entity.setProperty("description",getDescription());
        entity.setProperty("height",getHeight());
        entity.setProperty("length",getLength());
        entity.setProperty("packagingType", getPackagingType());
@@ -181,8 +178,6 @@ extends PersistentLineItemImpl<T> implements CommodityLineItem {
          new Object[] {entity, ctx});
      if (entity != null) {
        super.populateFromEntity(entity, ctx);
-       // description
-       setDescription(getPropertyAsString(entity,"description"));
        // height
        setHeight(getPropertyAsInteger(entity,"height"));
        // length
@@ -208,8 +203,6 @@ extends PersistentLineItemImpl<T> implements CommodityLineItem {
      logger.entering(_CLASS,"populateFromObject(T)",commodityLineItem);
      if (commodityLineItem != null) {
        super.populateFromObject(commodityLineItem);
-       // description
-       setDescription(commodityLineItem.getDescription());
        // height
        setHeight(commodityLineItem.getHeight());
        // length
@@ -240,7 +233,6 @@ extends PersistentLineItemImpl<T> implements CommodityLineItem {
       sb=new StringBuilder(returnValue.length() + 1024);
       sb.append(returnValue);
       if (sb.length() > 0) sb.append(", ");
-      sb.append("description=").append(getDescription()).append(", ");
       sb.append("length=").append(getHeight()).append(", ");
       sb.append("width=").append(getWidth()).append(", ");
       sb.append("height=").append(getHeight()).append(", ");
@@ -268,7 +260,7 @@ extends PersistentLineItemImpl<T> implements CommodityLineItem {
      return result;
    }
 
- //***** accessor methods
+   //***** accessor methods
    
    //***** cube
    /**
@@ -304,21 +296,7 @@ extends PersistentLineItemImpl<T> implements CommodityLineItem {
      total=(this.length*this.width*this.height*this.quantity) / 1728;
      logger.entering(_CLASS,"getTotalCube()",total);
      return total;
-   }
-   
-   //***** description
-   @Override
-   public final String getDescription() {
-     logger.entering(_CLASS,"getDescription()");
-     logger.exiting(_CLASS,"getDescription()",this.description);
-     return this.description;
-   }
-   @Override
-   public final void setDescription(String description) {
-     logger.entering(_CLASS,"setDescription(String)",description);
-     this.description=defaultValue(description);
-     logger.exiting(_CLASS,"setDescription(String)");
-   }
+   }   
    
    //***** height
    @Override
@@ -450,5 +428,5 @@ extends PersistentLineItemImpl<T> implements CommodityLineItem {
        this.width=width;
      } // END if (this.width < 1)
      logger.exiting(_CLASS,"setWidth(int)");
-   }
+   }   
 }

@@ -69,6 +69,11 @@ implements PersistentLineItem {
     */
    private int lineItemNumber=1;
    
+   /*
+    * A free-form text description of the item.
+    */
+   private String description = "";
+   
    /**
     * Default, no-argumnet constructor.
     */
@@ -77,28 +82,37 @@ implements PersistentLineItem {
       logger.entering(_CLASS,"PersistentLineItemImpl()");
       logger.exiting(_CLASS,"PersistentLineItemImpl()");
    }
+   
    //********** Utility Methods
+   @Override
+   public boolean equals(Object obj) {
+      if (this == obj)
+         return true;
+      if (!super.equals(obj))
+         return false;
+      if (getClass() != obj.getClass())
+         return false;
+      PersistentLineItemImpl other = (PersistentLineItemImpl) obj;
+      if (description == null) {
+         if (other.description != null)
+            return false;
+      } else if (!description.equals(other.description))
+         return false;
+      if (lineItemNumber != other.lineItemNumber)
+         return false;
+      return true;
+   } 
+
    @Override
    public int hashCode() {
       final int prime = 31;
       int result = super.hashCode();
+      result = prime * result
+            + ((description == null) ? 0 : description.hashCode());
       result = prime * result + lineItemNumber;
       return result;
    }
-   
-   @Override
-   public boolean equals(Object object) {
-      if (this == object)
-         return true;
-      if (!super.equals(object))
-         return false;
-      if (getClass() != object.getClass())
-         return false;
-      PersistentLineItemImpl other = (PersistentLineItemImpl) object;
-      if (lineItemNumber != other.lineItemNumber)
-         return false;
-      return true;
-   }
+ 
    
    //***** populateEntity
    /**
@@ -114,7 +128,8 @@ implements PersistentLineItem {
       logger.entering(_CLASS,"populateEntity(Entity)",entity);
       if (entity != null) {
          super.populateEntity(entity);
-         entity.setProperty("lineItemNumber", getLineItemNumber());
+         entity.setProperty("description", getDescription());
+         entity.setProperty("lineItemNumber", getLineItemNumber());        
       } else {
          logger.severe("The Entity parameter was null.");
       } // END if (entity != null)
@@ -126,6 +141,7 @@ implements PersistentLineItem {
           new Object[] {entity,ctx});
      if (entity != null) {
         super.populateFromEntity(entity, ctx);
+        setDescription(getPropertyAsString(entity,"description"));
         setLineItemNumber(getPropertyAsInteger(entity,"lineItemNumber"));
      } else {
         logger.fine("The entity object is null.");
@@ -138,6 +154,7 @@ implements PersistentLineItem {
       logger.entering(_CLASS, "populateFromObject(LineItem)",lineItem);
       if (lineItem != null) {
          super.populateFromObject(lineItem);
+         setDescription(lineItem.getDescription());
          setLineItemNumber(lineItem.getLineItemNumber());
       } else {
          logger.fine("The lineItem parameter is null.");
@@ -157,6 +174,7 @@ implements PersistentLineItem {
       if (sb.length() > 0) {
          sb.append(", ");
       } // END if (sb.length() > 0)
+      sb.append("description=\"").append(getDescription()).append("\",");
       sb.append("lineItemNumber=\"").append(getLineItemNumber()).append("\"");
       returnValue=sb.toString();
       logger.exiting(_CLASS, "toPropertyString()",returnValue);
@@ -180,8 +198,20 @@ implements PersistentLineItem {
     }  
    
    //********** Accessor Methods
-   
-   //*****
+   //***** description
+   @Override
+   public final String getDescription() {
+     logger.entering(_CLASS,"getDescription()");
+     logger.exiting(_CLASS,"getDescription()",this.description);
+     return this.description;
+   }
+   @Override
+   public final void setDescription(String description) {
+     logger.entering(_CLASS,"setDescription(String)",description);
+     this.description=defaultValue(description);
+     logger.exiting(_CLASS,"setDescription(String)");
+   }
+   //***** lineItemNumber
    @Override 
    public final int getLineItemNumber() {
      logger.entering(_CLASS, "getLineItemNumber()");
@@ -200,5 +230,5 @@ implements PersistentLineItem {
       logger.entering(_CLASS, "getKind()");
       logger.exiting(_CLASS, "getKind()",PersistentLineItemImpl._KIND);
       return PersistentLineItemImpl._KIND;
-   }   
+   }
 }
