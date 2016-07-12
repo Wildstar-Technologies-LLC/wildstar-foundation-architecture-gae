@@ -79,24 +79,21 @@ implements PersistentReceiverWorkOrder {
    private List<ReceiverWorkOrderLineItem> lineItems=null;
    private List<ReceiverWorkOrderLineItem> lineItemsToDelete=null;
    private String billOfLadingNumber="";
-   private String carrier="";
+   private String depot="";
+   private String inboundCarrier="";
    private String purchaseOrderNumber="";
    private String salesOrderNumber="";
-   
-   
+      
    /** 
     * Default, no-argument constructor.
     */
    public PersistentReceiverWorkOrderImpl() {
-      logger.entering(_CLASS, "PersistentReceiverWorkOrderImpl()");
-      
-      // Check the lineItem list
-      this.lineItems=new ArrayList<ReceiverWorkOrderLineItem>();
-      
+      logger.entering(_CLASS, "PersistentReceiverWorkOrderImpl()");      
+      init();
       logger.exiting(_CLASS,"PersistentReceiverWorkOrderImpl()");
    }
    // ***** Utility methods
-   
+      
    @Override
    public String getKind() {
       logger.entering(_CLASS, "getKind()");
@@ -104,14 +101,24 @@ implements PersistentReceiverWorkOrder {
             PersistentReceiverWorkOrderImpl._KIND);
       return PersistentReceiverWorkOrderImpl._KIND;
    }
-   
+   /**
+    * Initialization routine.
+    */
+   private void init() {
+	  logger.entering(_CLASS, "init()");
+      this.lineItems=new ArrayList<ReceiverWorkOrderLineItem>();
+      this.lineItemsToDelete=new ArrayList<ReceiverWorkOrderLineItem>();
+      this.newJournalEntry=new PersistentJournalEntryImpl();
+	  logger.exiting(_CLASS, "init()");
+   }
    @Override
    protected void populateEntity(Entity entity) {
       logger.entering(_CLASS, "populateEntity(Entity)", entity);
       if (entity != null) {
          super.populateEntity(entity);
          entity.setProperty("billOfLadingNumber", getBillOfLadingNumber());
-         entity.setProperty("carrier", getCarrier());
+         entity.setProperty("depot",getDepot());
+         entity.setProperty("inboundCarrier", getInboundCarrier());
          entity.setProperty("dateReceived", getDateReceived());
          entity.setProperty("purchaseOrderNumber", getPurchaseOrderNumber());
          entity.setProperty("salesOrderNumber", getSalesOrderNumber());         
@@ -124,15 +131,27 @@ implements PersistentReceiverWorkOrder {
    @Override
    protected void populateFromEntity(Entity entity,UserContext ctx) {
       logger.entering(_CLASS, "populateFromEntity(Entity)", entity);
+      List<PersistentReceiverWorkOrderLineItem> items=null;
+      ReceiverWorkOrderLineItemDAOImpl itemDAO=null;
+      String identifier="";
+      
       if (entity != null) {
          super.populateFromEntity(entity, ctx);
          setBillOfLadingNumber(
                getPropertyAsString(entity,"billOfLadingNumber"));
-         setCarrier(getPropertyAsString(entity,"carrier"));
+         setDepot(getPropertyAsString(entity,"depot"));
+         setInboundCarrier(getPropertyAsString(entity,"inboundCarrier"));
          setDateReceived(getPropertyAsDate(entity,"dateReceived"));
          setPurchaseOrderNumber(
                getPropertyAsString(entity,"purchaseOrderNumber"));
          setSalesOrderNumber(getPropertyAsString(entity,"salesOrderNumber"));
+         // Get the line items.
+         identifier=getIdentifier();
+         itemDAO=new ReceiverWorkOrderLineItemDAOImpl();
+         items=itemDAO.findByWorkOrderId(identifier,ctx);
+         for (PersistentReceiverWorkOrderLineItem item: items) {
+        	 addLineItem(item);
+         } // END for (PersistentReceiverWorkOrderLineItem item: items)
       } else {
          logger.severe("The entity passed to the method was null.");
       } // END if (entity != null)
@@ -153,10 +172,13 @@ implements PersistentReceiverWorkOrder {
       if (workOrder != null) {
          super.populateFromObject(workOrder);
          setBillOfLadingNumber(workOrder.getBillOfLadingNumber());
-         setCarrier(workOrder.getCarrier());
+         setDepot(workOrder.getDepot());
+         setInboundCarrier(workOrder.getInboundCarrier());
          setDateReceived(workOrder.getDateReceived());
          setPurchaseOrderNumber(workOrder.getPurchaseOrderNumber());
          setSalesOrderNumber(workOrder.getSalesOrderNumber());
+         setNewJournalEntry(workOrder.getNewJournalEntry());
+         
          //********************************************************************
          //* Line Item Synchronization
          /* Build a list of identifiers for records that are already in the
@@ -221,22 +243,36 @@ implements PersistentReceiverWorkOrder {
       } // END if (workOrder != null)
       
       logger.exiting(_CLASS, "populateFromObject(ReceiverWorkOrder)");
+   }   
+   
+   /**
+    * Update the contents of the current object from the specified object.
+    * @param workOrder The work order to use as a reference when populating the
+    * current work order.
+    */
+   public void updateFromObject(ReceiverWorkOrder receiver) {
+      logger.entering(_CLASS, 
+            "updateFromObject(ReceiverWorkOrder)",
+            receiver);
+      populateFromObject(receiver);
+      logger.exiting(_CLASS,"updateFromObject(ReceiverWorkOrder)");
    }
-   //***** 
+   
+   //********** Accessor Methods
    
    //***** carrier
    @Override
-   public String getCarrier() {
-      logger.entering(_CLASS, "getCarrier()");
-      logger.exiting(_CLASS, "getCarrier()",this.carrier);
-      return this.carrier;
+   public String getInboundCarrier() {
+      logger.entering(_CLASS, "getInboundCarrier()");
+      logger.exiting(_CLASS, "getInboundCarrier()",this.inboundCarrier);
+      return this.inboundCarrier;
    }
 
    @Override
-   public void setCarrier(String carrier) {
-      logger.entering(_CLASS, "setCarrier(String)",carrier);
-      this.carrier=defaultValue(carrier);
-      logger.entering(_CLASS, "setCarrier(String)");
+   public void setInboundCarrier(String carrier) {
+      logger.entering(_CLASS, "setInboundCarrier(String)",carrier);
+      this.inboundCarrier=defaultValue(carrier);
+      logger.entering(_CLASS, "setInboundCarrier(String)");
    }
 
    //***** billOfLadingNumber
@@ -268,7 +304,20 @@ implements PersistentReceiverWorkOrder {
       this.dateReceived=dateReceived;
       logger.exiting(_CLASS, "setDateReceived(Date)");
    }
-   
+   //***** depot
+   @Override
+   public String getDepot() {
+      logger.entering(_CLASS, "getDepot()");
+      logger.exiting(_CLASS, "getDepot()",this.depot);
+      return this.depot;
+   }
+
+   @Override
+   public void setDepot(String depot) {
+      logger.entering(_CLASS, "setDepot(String)",depot);
+      this.depot=depot;
+      logger.exiting(_CLASS, "setDepot(String)");
+   }
    //***** lineItems
    @Override
    public List<ReceiverWorkOrderLineItem> getLineItems() {
@@ -280,6 +329,17 @@ implements PersistentReceiverWorkOrder {
       logger.exiting(_CLASS, "getLineItems()",lineItems);
       return lineItems;
    }
+   
+   /**
+    * Returns a list of line items that should be removed when the object is 
+    * saved.
+    * @return
+    */
+   protected List<ReceiverWorkOrderLineItem> getLineItemsToDelete() {
+	   logger.entering(_CLASS, "getLineItemsToDelete()");
+	   logger.exiting(_CLASS, "getLineItemsToDelete()",this.lineItemsToDelete);
+	   return this.lineItemsToDelete;
+   }
 
    @Override
    public ReceiverWorkOrderLineItem addLineItem(
@@ -289,8 +349,6 @@ implements PersistentReceiverWorkOrder {
       int size=0;
       PersistentReceiverWorkOrderLineItemImpl pLineItem=null;
       PersistentReceiverWorkOrderLineItemImpl tmpLineItem=null;
-      String id="";
-      String tmpId="";
       
       if (item != null) {
          // The lineItem is NOT null, so let's see about adding it.
@@ -306,18 +364,12 @@ implements PersistentReceiverWorkOrder {
           * passed is already in the list
           */
          size=this.lineItems.size();
-         id=pLineItem.getIdentifier();
          for (int pos = 0; pos < size; pos++) {
             tmpLineItem=(PersistentReceiverWorkOrderLineItemImpl) 
                   this.lineItems.get(pos);
-            tmpId=tmpLineItem.getIdentifier();
             if (
                   (tmpLineItem.equals(pLineItem)) ||
-                  (
-                        (!isEmpty(id)) &&
-                        (!isEmpty(tmpId)) &&
-                        (tmpId.equals(id))
-                  )
+                  (tmpLineItem.isNonPersistentEquivalent(pLineItem))
                ) {
                /* Replace the item in the list with the specified persistent
                 * object. */

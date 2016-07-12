@@ -42,19 +42,66 @@
  *      derek.berube@wildstartech.com
  *      www.wildstartech.com
  */
-package com.wildstartech.gae.wfa.dao;
+package com.wildstartech.gae.wfa.dao.logistics;
 
 import java.util.logging.Logger;
 
-import com.wildstartech.gae.DatastoreTest;
+import com.wildstartech.gae.wfa.dao.WildDAOImpl;
+import com.wildstartech.wfa.dao.DAOException;
+import com.wildstartech.wfa.dao.UserContext;
+import com.wildstartech.wfa.dao.logistics.PersistentWarehouseLocation;
+import com.wildstartech.wfa.dao.logistics.WarehouseLocationDAO;
+import com.wildstartech.wfa.logistics.WarehouseLocation;
 
-public abstract class DAOTest extends DatastoreTest {
-   private static final String _CLASS=DatastoreTest.class.getName();
+public class WarehouseLocationDAOImpl
+ extends WildDAOImpl<WarehouseLocation, PersistentWarehouseLocation>
+ implements WarehouseLocationDAO {
+   private static final String _CLASS=WarehouseLocationDAOImpl.class.getName();
    private static final Logger logger=Logger.getLogger(_CLASS);
-  
-   public DAOTest() {
+   
+   public WarehouseLocationDAOImpl() {
       super();
-      logger.entering(_CLASS, "DAOTest()");
-      logger.exiting(_CLASS, "DAOTest()");
-   } 
+      logger.entering(_CLASS, "WarehosueLocationDAOImpl()");
+      logger.exiting(_CLASS, "WarehosueLocationDAOImpl()");
+   }
+   
+   @Override
+   public PersistentWarehouseLocation findInstance(WarehouseLocation object,
+         UserContext ctx) throws DAOException {
+      // TODO Auto-generated method stub
+      return null;
+   }
+
+   @Override
+   public PersistentWarehouseLocation create() {
+      logger.entering(_CLASS,"create()");
+      PersistentWarehouseLocation location=null;
+      location=new PersistentWarehouseLocationImpl();
+      logger.entering(_CLASS,"create()",location);
+      return location;
+   }
+
+   @Override
+   public PersistentWarehouseLocation create(
+         WarehouseLocation location,
+         UserContext ctx) {
+      logger.entering(_CLASS, "create(WarehouseLocation,UserContext)",
+            new Object[] {location,ctx});
+      PersistentWarehouseLocationImpl newLocation=null;
+      
+      newLocation=new PersistentWarehouseLocationImpl();
+      newLocation.populateFromObject(location);
+      
+      logger.entering(_CLASS, "create(WarehouseLocation,UserContext)",
+            newLocation);
+      return newLocation;
+   }
+
+   @Override
+   protected String getKind() {
+      logger.entering(_CLASS, "getKind()");
+      logger.exiting(_CLASS, "getKind()",PersistentWarehouseLocationImpl._KIND);
+      return PersistentWarehouseLocationImpl._KIND;
+   }
+   
 }

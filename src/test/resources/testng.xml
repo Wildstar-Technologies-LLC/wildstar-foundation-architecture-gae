@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Suite" parallel="false" preserve-order="true">
+  <listeners>
+    <listener class-name="com.wildstartech.gae.wfa.dao.DataStoreTestClassListener" />    
+  </listeners>
+  <test name="wfa.country">
+    <classes>
+        <class name="com.wildstartech.wfa.country.TestCountryFactory"/>
+    </classes>
+  </test>
+  <test name="wfa.finance" parallel="false" preserve-order="true">
+    <classes>
+        <class name="com.wildstartech.wfa.finance.PaymentCardTest"/>
+        <class name="com.wildstartech.wfa.finance.CreditCardTest"/>
+    </classes>
+  </test>
+  <test name="wfa.location" parallel="false" preserve-order="true">
+    <classes>
+        <class name="com.wildstartech.wfa.location.GeoPointTest"/>
+    </classes>
+  </test>
+  <test name="wfa.logistics">
+    <classes>
+       <class name="com.wildstartech.wfa.logistics.ltl.LineItemComparatorTest"/>
+       <class name="com.wildstartech.wfa.logistics.ltl.CommodityLineItemComparatorTest"/>
+    </classes>
+  </test>
+  <test name="wfa.ticketing">
+    <classes>
+       <class name="com.wildstartech.wfa.ticketing.RequestIdGeneratorTest"/>
+    </classes>
+  </test>
+  <test name="gae.Test" parallel="false" preserve-order="true">
+    <classes>
+      <class name="com.wildstartech.gae.wfa.LocalHighRepDatastoreTest"/>
+      <class name="com.wildstartech.gae.wfa.dao.PasswordEncryptorTest"/>      
+    </classes>
+  </test>
+  <test name="wfa.dao" parallel="false" preserve-order="true">
+    <classes>
+      <class name="com.wildstartech.wfa.dao.UserDataTest"/>
+      <class name="com.wildstartech.wfa.dao.WildDAOTestCase"/>
+      <class name="com.wildstartech.wfa.dao.UserDAOTest"/>
+    </classes>      
+  </test>
+  <test name="wfa.dao.finance" parallel="false" preserve-order="false">
+    <classes>
+        <class name="com.wildstartech.wfa.dao.finance.CreditCardDAOTest"/>
+    </classes>
+  </test>
+  <test name="wfa.dao.journal" parallel="false" preserve-order="true">
+    <classes>
+        <class name="com.wildstartech.wfa.dao.journal.JournalDAOTest"/>
+    </classes>
+  </test>
+  <test name="wfa.dao.logistics" parallel="false" preserve-order="true">
+    <classes>
+        <class name="com.wildstartech.wfa.dao.logistics.WarehouseLocationDAOTest"/>
+    </classes>
+  </test>
+  <test name="wfa.dao.logistics.ltl.Test">
+    <classes>
+      <!-- 
+      <class name="com.wildstartech.wfa.dao.logistics.ltl.AccessorialDAOTest"/>
+       -->
+      <class name="com.wildstartech.wfa.dao.logistics.ltl.QuoteDAOTest"/>
+    </classes>      
+  </test>
+  <test name="wfa.dao.ticketing">
+    <classes>
+        <class name="com.wildstartech.wfa.dao.ticketing.BasicTicketDAOTest"/>
+    </classes>
+  </test>
+</suite>

@@ -1,10 +1,17 @@
 package com.wildstartech.gae.wfa.dao.logistics.ltl;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
+import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.Filter;
+import com.google.appengine.api.datastore.Query.FilterOperator;
+import com.wildstartech.gae.wfa.dao.QueryWrapper;
 import com.wildstartech.gae.wfa.dao.WildDAOImpl;
 import com.wildstartech.wfa.dao.DAOException;
 import com.wildstartech.wfa.dao.UserContext;
+import com.wildstartech.wfa.dao.logistics.ltl.PersistentQuoteLineItem;
 import com.wildstartech.wfa.dao.logistics.ltl.PersistentReceiverWorkOrderLineItem;
 import com.wildstartech.wfa.dao.logistics.ltl.ReceiverWorkOrderLineItemDAO;
 import com.wildstartech.wfa.logistics.ltl.ReceiverWorkOrderLineItem;
@@ -59,4 +66,53 @@ implements ReceiverWorkOrderLineItemDAO {
             PersistentReceiverWorkOrderLineItemImpl._KIND);
       return PersistentReceiverWorkOrderLineItemImpl._KIND;
    }
+
+	@Override
+	public List<PersistentReceiverWorkOrderLineItem> findByWorkOrderId(
+			String workOrderId, UserContext ctx) {
+		logger.entering(_CLASS, "findByWorkOrderId(String,UserContext)", 
+        new Object[] {workOrderId,ctx});
+        List<PersistentReceiverWorkOrderLineItem> lineItemList=null;
+        Query query=null;
+        QueryWrapper qw=null;
+        Filter filter=null;
+        String kind=null;
+        
+        if (
+        		(
+        				(workOrderId != null) && 
+        				(workOrderId.length() !=0)
+    			) && (ctx != null)
+           ) {
+          kind=PersistentReceiverWorkOrderLineItemImpl._KIND;
+          query=new Query(kind);
+          filter=new Query.FilterPredicate(
+              "workOrderIdentifier",
+              FilterOperator.EQUAL,
+              workOrderId);
+          query.setFilter(filter);
+          qw=new QueryWrapper(query);
+          lineItemList=findByQuery(qw,ctx);
+        } // END if (((workOrderId != null) && (workOrderId.length() !=0)) ...        
+        /**********
+         * The above code should be removed once quote line items are all 
+         * assigned.
+         */       
+        // Let's check to see if the list of items were returned.
+        if (lineItemList == null) {
+          // Either the quoteId or ctx were null, so return an empty list.
+          lineItemList=
+        		  new ArrayList<PersistentReceiverWorkOrderLineItem>();
+          if (workOrderId == null) {
+        	  logger.warning("The workOrderId is null.");
+          } // END if (workOrderId == null)
+          if ((workOrderId != null) && (workOrderId.length() == 0))
+            logger.warning("The quoteId is a zero-length string.");
+          if (ctx == null) logger.warning("The UserContext is null.");
+        } // END if ((quoteId != null) && (ctx != null))
+        logger.exiting(_CLASS, "findByWorkOrderId(String)",lineItemList);
+        return lineItemList;
+	}
+   
+   
 }

@@ -54,7 +54,9 @@ import com.wildstartech.wfa.dao.UserContext;
 import com.wildstartech.wfa.dao.WildObject;
 import com.wildstartech.wfa.dao.logistics.ltl.pricemodels.PersistentCubeDistancePriceModel;
 import com.wildstartech.wfa.dao.logistics.ltl.pricemodels.PersistentPriceModel;
+import com.wildstartech.wfa.logistics.ltl.QuickQuote;
 import com.wildstartech.wfa.logistics.ltl.Quote;
+import com.wildstartech.wfa.logistics.ltl.SimpleQuote;
 import com.wildstartech.wfa.logistics.ltl.WorkOrder;
 import com.wildstartech.wfa.logistics.ltl.pricemodels.CubeDistancePriceModel;
 import com.wildstartech.wfa.logistics.ltl.pricemodels.PriceModel;
@@ -263,7 +265,7 @@ implements PersistentCubeDistancePriceModel {
   }
 
   @Override
-  public double calculateTotalCharges(Quote quote) {
+  public double calculateTotalCharges(QuickQuote quote) {
     logger.entering(_CLASS,"calculateCharge(Quote)",quote);
     double charges=0;
     double distance=0;
@@ -278,6 +280,25 @@ implements PersistentCubeDistancePriceModel {
     logger.exiting(_CLASS,"calculateCharge(Quote)",charges);
     return charges;
   }
+  
+  @Override
+  public double calculateTotalCharges(SimpleQuote quote) {
+	  logger.entering(_CLASS,"calculateCharge(SimpleQuote)",quote);
+	  double charges=0;
+	  charges=calculateTotalCharges((QuickQuote) quote);
+	  logger.exiting(_CLASS,"calculateCharge(SimpleQuote)",charges);
+	  return charges;
+  }
+  
+  @Override
+  public double calculateTotalCharges(Quote quote) {
+	  logger.entering(_CLASS,"calculateCharge(Quote)",quote);
+	  double charges=0;
+	  charges=calculateTotalCharges((QuickQuote) quote);
+	  logger.exiting(_CLASS,"calculateCharge(Quote)",charges);
+	  return charges;
+  }
+  
   
   @Override
   public double calculateTotalCharges(WorkOrder workOrder) {
