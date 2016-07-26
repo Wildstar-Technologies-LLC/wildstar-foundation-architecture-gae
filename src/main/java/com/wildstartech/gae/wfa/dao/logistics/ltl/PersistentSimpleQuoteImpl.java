@@ -122,6 +122,7 @@ implements PersistentSimpleQuote {
 			} // END if (tmpStr == null)		
 			if (tmpStr.length() <= 500) {
 				entity.setProperty("notes", tmpStr);
+			   
 			} else {
 				entity.setProperty("notes", new Text(tmpStr));
 			} // END if (tmpStr.length() <= 500
@@ -179,6 +180,9 @@ implements PersistentSimpleQuote {
 			// destinationCompanyName
 			setDestinationCompanyName(
 					getPropertyAsString(entity,"destinationCompanyName"));
+			// destinationContactEmail
+			setDestinationContactEmail(
+			      getPropertyAsString(entity,"destinationContactEmail"));
 			// destinationContactName
 			setDestinationContactName(
 					getPropertyAsString(entity,"destinationContactName"));
@@ -252,6 +256,7 @@ implements PersistentSimpleQuote {
 			setDestinationContactEmail(quote.getDestinationContactEmail());
 			setDestinationContactName(quote.getDestinationContactName());
 			setDestinationContactPhone(quote.getDestinationContactPhone());
+			setDestinationResidential(quote.isDestinationResidential());
 			setDestinationState(quote.getDestinationState());
 			setDestinationStreetAddress(quote.getDestinationStreetAddress());
 			setNotes(quote.getNotes());
@@ -261,6 +266,7 @@ implements PersistentSimpleQuote {
 			setOriginContactEmail(quote.getOriginContactEmail());
 			setOriginContactName(quote.getOriginContactName());
 			setOriginContactPhone(quote.getOriginContactPhone());
+			setOriginResidential(quote.isOriginResidential());
 			setOriginState(quote.getOriginState());
 			setOriginStreetAddress(quote.getOriginStreetAddress());
 			setPackagingRequired(quote.isPackagingRequired());

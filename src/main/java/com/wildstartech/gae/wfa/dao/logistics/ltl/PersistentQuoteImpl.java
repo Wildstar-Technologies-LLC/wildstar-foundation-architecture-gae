@@ -240,6 +240,8 @@ implements PersistentQuote {
 		logger.entering(_CLASS, "populateEntity(Entity)", entity);
 		if (entity != null) {
 			super.populateEntity(entity);
+			// accessorialTotal
+			entity.setProperty("accessorialTotal",getAccessorialTotal());
 			// billingCity
 			entity.setProperty("billingCity", getBillingCity());
 			// billingCompanyName
@@ -287,6 +289,8 @@ implements PersistentQuote {
 		 * objects in the object graph.
 		 */
 		super.populateFromEntity(entity, ctx);
+		// accessorialTotal
+      setAccessorialTotal(getPropertyAsFloat(entity,"accessorialTotal"));
 		// billingCity
 		setBillingCity(getPropertyAsString(entity, "billingCity"));
 		// billingCompanyName
