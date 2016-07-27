@@ -86,16 +86,17 @@
  *      derek.berube@wildstartech.com
  *      www.wildstartech.com
  */
-package com.wildstartech.gae.wfa.dao;
+package com.wildstartech.gae.wfa.dao.group;
 
 import java.util.List;
 import java.util.logging.Logger;
 
+import com.wildstartech.gae.wfa.dao.WildDAOImpl;
 import com.wildstartech.wfa.dao.DAOException;
-import com.wildstartech.wfa.dao.GroupDAO;
-import com.wildstartech.wfa.dao.PersistentGroup;
 import com.wildstartech.wfa.dao.Query;
 import com.wildstartech.wfa.dao.SortCriterion;
+import com.wildstartech.wfa.dao.group.GroupDAO;
+import com.wildstartech.wfa.dao.group.PersistentGroup;
 import com.wildstartech.wfa.dao.user.UserContext;
 import com.wildstartech.wfa.group.Group;
 

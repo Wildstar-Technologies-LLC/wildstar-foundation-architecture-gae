@@ -50,7 +50,7 @@ import java.util.logging.Logger;
 
 import com.google.appengine.api.datastore.Entity;
 import com.wildstartech.gae.wfa.dao.WildObjectImpl;
-import com.wildstartech.wfa.dao.PersistentGroup;
+import com.wildstartech.wfa.dao.group.PersistentGroup;
 import com.wildstartech.wfa.dao.user.PersistentUser;
 import com.wildstartech.wfa.dao.user.UserContext;
 import com.wildstartech.wfa.group.Group;
