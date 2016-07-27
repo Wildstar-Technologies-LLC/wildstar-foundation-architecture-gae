@@ -51,9 +51,9 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
 import com.wildstartech.efa.jsf.Constants;
-import com.wildstartech.wfa.dao.UserContext;
 import com.wildstartech.wfa.dao.WildObject;
 import com.wildstartech.wfa.dao.rules.PersistentRule;
+import com.wildstartech.wfa.dao.user.UserContext;
 
 public abstract class PersistentRuleImpl<W extends WildObject> 
 implements PersistentRule<W> {

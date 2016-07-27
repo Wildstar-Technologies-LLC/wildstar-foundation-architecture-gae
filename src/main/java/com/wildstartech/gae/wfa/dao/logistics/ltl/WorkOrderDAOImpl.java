@@ -58,12 +58,12 @@ import com.wildstartech.gae.wfa.dao.journal.JournalDAOImpl;
 import com.wildstartech.gae.wfa.dao.journal.PersistentJournalEntryImpl;
 import com.wildstartech.gae.wfa.dao.ticketing.BasicTicketDAOImpl;
 import com.wildstartech.wfa.dao.DAOException;
-import com.wildstartech.wfa.dao.UserContext;
 import com.wildstartech.wfa.dao.logistics.ltl.PersistentWorkOrder;
 import com.wildstartech.wfa.dao.logistics.ltl.PersistentWorkOrderLineItem;
 import com.wildstartech.wfa.dao.logistics.ltl.WorkOrderDAO;
 import com.wildstartech.wfa.dao.logistics.ltl.WorkOrderLineItemDAO;
 import com.wildstartech.wfa.dao.logistics.ltl.WorkOrderLineItemDAOFactory;
+import com.wildstartech.wfa.dao.user.UserContext;
 import com.wildstartech.wfa.logistics.ltl.WorkOrder;
 import com.wildstartech.wfa.logistics.ltl.WorkOrderLineItem;
 

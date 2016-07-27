@@ -47,8 +47,8 @@ package com.wildstartech.gae.wfa.dao.finance;
 import java.util.logging.Logger;
 
 import com.google.appengine.api.datastore.Entity;
-import com.wildstartech.wfa.dao.UserContext;
 import com.wildstartech.wfa.dao.finance.PersistentCreditCard;
+import com.wildstartech.wfa.dao.user.UserContext;
 import com.wildstartech.wfa.finance.CreditCard;
 
 public class PersistentCreditCardImpl 

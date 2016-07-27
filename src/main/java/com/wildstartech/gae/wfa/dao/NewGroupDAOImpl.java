@@ -96,7 +96,7 @@ import com.wildstartech.wfa.dao.GroupDAO;
 import com.wildstartech.wfa.dao.PersistentGroup;
 import com.wildstartech.wfa.dao.Query;
 import com.wildstartech.wfa.dao.SortCriterion;
-import com.wildstartech.wfa.dao.UserContext;
+import com.wildstartech.wfa.dao.user.UserContext;
 import com.wildstartech.wfa.group.Group;
 
 public class NewGroupDAOImpl 

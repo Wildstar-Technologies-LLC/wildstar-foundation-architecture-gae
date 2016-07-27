@@ -42,7 +42,7 @@
  *      derek.berube@wildstartech.com
  *      www.wildstartech.com
  */
-package com.wildstartech.gae.wfa.dao;
+package com.wildstartech.gae.wfa.dao.user;
 
 import java.util.List;
 import java.util.logging.Logger;
@@ -53,9 +53,12 @@ import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.google.appengine.api.memcache.MemcacheService;
 import com.google.appengine.api.memcache.MemcacheServiceFactory;
+import com.wildstartech.gae.wfa.dao.MemcacheKeyGenerator;
+import com.wildstartech.gae.wfa.dao.QueryWrapper;
+import com.wildstartech.gae.wfa.dao.WildDAOImpl;
 import com.wildstartech.wfa.dao.DAOException;
-import com.wildstartech.wfa.dao.UserContext;
-import com.wildstartech.wfa.dao.UserContextDAO;
+import com.wildstartech.wfa.dao.user.UserContext;
+import com.wildstartech.wfa.dao.user.UserContextDAO;
 
 public class UserContextDAOImpl 
 extends WildDAOImpl<UserContext, UserContext> 
@@ -122,6 +125,14 @@ implements UserContextDAO {
     UserContextImpl foundContext = null;
     logger.exiting(_CLASS, "findInstance(UserContext)", foundContext);
     return foundContext;
+  }
+  
+  protected static UserContext getUserContextAdmin() {
+     logger.entering(_CLASS, "getUserContextAdmin()");
+     UserContext ctx=null;
+     ctx=UserContextDAOImpl.getAdminContext();
+     logger.exiting(_CLASS, "getUserContextAdmin()",ctx);
+     return ctx;     
   }
 
   @Override

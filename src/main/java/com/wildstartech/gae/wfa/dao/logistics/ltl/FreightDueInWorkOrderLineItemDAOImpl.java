@@ -58,9 +58,9 @@ import com.wildstartech.gae.wfa.dao.location.PersistentPostalCodeDistanceImpl;
 import com.wildstartech.wfa.logistics.ltl.FreightDueInWorkOrderLineItem;
 import com.wildstartech.wfa.logistics.ltl.LineItemComparator;
 import com.wildstartech.wfa.dao.DAOException;
-import com.wildstartech.wfa.dao.UserContext;
 import com.wildstartech.wfa.dao.logistics.ltl.FreightDueInWorkOrderLineItemDAO;
 import com.wildstartech.wfa.dao.logistics.ltl.PersistentFreightDueInWorkOrderLineItem;
+import com.wildstartech.wfa.dao.user.UserContext;
 
 public class FreightDueInWorkOrderLineItemDAOImpl 
 extends WildDAOImpl<FreightDueInWorkOrderLineItem, 

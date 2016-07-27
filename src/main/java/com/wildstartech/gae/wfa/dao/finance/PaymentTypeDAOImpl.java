@@ -48,9 +48,9 @@ import java.util.logging.Logger;
 
 import com.wildstartech.gae.wfa.dao.WildDAOImpl;
 import com.wildstartech.wfa.dao.DAOException;
-import com.wildstartech.wfa.dao.UserContext;
 import com.wildstartech.wfa.dao.finance.PaymentTypeDAO;
 import com.wildstartech.wfa.dao.finance.PersistentPaymentType;
+import com.wildstartech.wfa.dao.user.UserContext;
 import com.wildstartech.wfa.finance.PaymentType;
 
 public class PaymentTypeDAOImpl<T extends PaymentType> 

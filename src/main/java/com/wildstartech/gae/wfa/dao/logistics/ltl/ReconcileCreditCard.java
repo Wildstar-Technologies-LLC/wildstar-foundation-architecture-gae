@@ -48,10 +48,10 @@ import java.util.Date;
 import java.util.logging.Logger;
 
 import com.wildstartech.gae.wfa.dao.PersistentRuleImpl;
-import com.wildstartech.wfa.dao.UserContext;
 import com.wildstartech.wfa.dao.finance.CreditCardDAO;
 import com.wildstartech.wfa.dao.finance.CreditCardDAOFactory;
 import com.wildstartech.wfa.dao.finance.PersistentCreditCard;
+import com.wildstartech.wfa.dao.user.UserContext;
 import com.wildstartech.wfa.finance.CreditCard;
 
 public class ReconcileCreditCard

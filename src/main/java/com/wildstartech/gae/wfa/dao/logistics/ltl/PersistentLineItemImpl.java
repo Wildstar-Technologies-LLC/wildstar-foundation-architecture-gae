@@ -44,8 +44,8 @@
  */
 package com.wildstartech.gae.wfa.dao.logistics.ltl;
 
-import com.wildstartech.wfa.dao.UserContext;
 import com.wildstartech.wfa.dao.logistics.ltl.PersistentLineItem;
+import com.wildstartech.wfa.dao.user.UserContext;
 import com.wildstartech.wfa.logistics.ltl.LineItem;
 
 import java.util.logging.Logger;

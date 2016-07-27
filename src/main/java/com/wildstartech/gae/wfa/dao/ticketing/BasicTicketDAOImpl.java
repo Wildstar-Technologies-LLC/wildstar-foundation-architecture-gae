@@ -58,9 +58,9 @@ import com.wildstartech.gae.wfa.dao.QueryWrapper;
 import com.wildstartech.gae.wfa.dao.WildDAOImpl;
 import com.wildstartech.gae.wfa.dao.WildObjectImpl;
 import com.wildstartech.wfa.dao.DAOException;
-import com.wildstartech.wfa.dao.UserContext;
 import com.wildstartech.wfa.dao.ticketing.BasicTicketDAO;
 import com.wildstartech.wfa.dao.ticketing.PersistentBasicTicket;
+import com.wildstartech.wfa.dao.user.UserContext;
 import com.wildstartech.wfa.ticketing.BasicTicket;
 
 public abstract class BasicTicketDAOImpl<T extends BasicTicket, W extends PersistentBasicTicket<T>>

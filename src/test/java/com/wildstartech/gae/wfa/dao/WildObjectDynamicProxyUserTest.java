@@ -46,7 +46,7 @@ package com.wildstartech.gae.wfa.dao;
 
 import org.testng.annotations.Test;
 
-import com.wildstartech.wfa.dao.PersistentUser;
+import com.wildstartech.wfa.dao.user.PersistentUser;
 
 public class WildObjectDynamicProxyUserTest
 extends WildObjectProxyFactory<PersistentUser> {

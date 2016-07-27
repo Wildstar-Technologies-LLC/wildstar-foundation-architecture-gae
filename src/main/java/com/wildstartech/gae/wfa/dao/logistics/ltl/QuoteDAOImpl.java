@@ -63,12 +63,12 @@ import com.wildstartech.gae.wfa.dao.WildDAOImpl;
 import com.wildstartech.gae.wfa.dao.journal.JournalDAOImpl;
 import com.wildstartech.gae.wfa.dao.journal.PersistentJournalEntryImpl;
 import com.wildstartech.wfa.dao.DAOException;
-import com.wildstartech.wfa.dao.UserContext;
 import com.wildstartech.wfa.dao.logistics.ltl.PersistentQuote;
 import com.wildstartech.wfa.dao.logistics.ltl.PersistentQuoteLineItem;
 import com.wildstartech.wfa.dao.logistics.ltl.QuoteDAO;
 import com.wildstartech.wfa.dao.logistics.ltl.QuoteLineItemDAO;
 import com.wildstartech.wfa.dao.logistics.ltl.QuoteLineItemDAOFactory;
+import com.wildstartech.wfa.dao.user.UserContext;
 import com.wildstartech.wfa.logistics.ltl.Quote;
 import com.wildstartech.wfa.logistics.ltl.QuoteLineItem;
 

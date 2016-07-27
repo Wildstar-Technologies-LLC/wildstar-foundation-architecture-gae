@@ -56,12 +56,12 @@ import java.util.logging.Logger;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.Text;
 import com.wildstartech.gae.wfa.dao.ticketing.PersistentBasicTicketImpl;
-import com.wildstartech.wfa.dao.UserContext;
 import com.wildstartech.wfa.dao.WildObject;
 import com.wildstartech.wfa.dao.logistics.ltl.FreightDueInWorkOrderLineItemDAO;
 import com.wildstartech.wfa.dao.logistics.ltl.FreightDueInWorkOrderLineItemDAOFactory;
 import com.wildstartech.wfa.dao.logistics.ltl.PersistentFreightDueInWorkOrder;
 import com.wildstartech.wfa.dao.logistics.ltl.PersistentFreightDueInWorkOrderLineItem;
+import com.wildstartech.wfa.dao.user.UserContext;
 import com.wildstartech.wfa.logistics.ltl.FreightDueInWorkOrder;
 import com.wildstartech.wfa.logistics.ltl.FreightDueInWorkOrderLineItem;
 

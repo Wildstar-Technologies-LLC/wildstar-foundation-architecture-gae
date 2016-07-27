@@ -48,9 +48,9 @@ import java.util.logging.Logger;
 
 import com.wildstartech.gae.wfa.dao.WildDAOImpl;
 import com.wildstartech.wfa.dao.DAOException;
-import com.wildstartech.wfa.dao.UserContext;
 import com.wildstartech.wfa.dao.finance.CreditCardDAO;
 import com.wildstartech.wfa.dao.finance.PersistentCreditCard;
+import com.wildstartech.wfa.dao.user.UserContext;
 import com.wildstartech.wfa.finance.CreditCard;
 
 public class CreditCardDAOImpl 

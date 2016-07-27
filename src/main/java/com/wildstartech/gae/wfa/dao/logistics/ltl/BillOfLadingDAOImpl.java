@@ -48,9 +48,9 @@ import java.util.logging.Logger;
 
 import com.wildstartech.gae.wfa.dao.WildDAOImpl;
 import com.wildstartech.wfa.dao.DAOException;
-import com.wildstartech.wfa.dao.UserContext;
 import com.wildstartech.wfa.dao.logistics.ltl.BillOfLadingDAO;
 import com.wildstartech.wfa.dao.logistics.ltl.PersistentBillOfLading;
+import com.wildstartech.wfa.dao.user.UserContext;
 import com.wildstartech.wfa.logistics.ltl.BillOfLading;
 
 public class BillOfLadingDAOImpl 

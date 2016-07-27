@@ -60,9 +60,9 @@ import com.wildstartech.wfa.dao.DAOException;
 import com.wildstartech.wfa.dao.Property;
 import com.wildstartech.wfa.dao.SortCriterion;
 import com.wildstartech.wfa.dao.SortCriterion.ORDER;
-import com.wildstartech.wfa.dao.UserContext;
 import com.wildstartech.wfa.dao.journal.JournalDAO;
 import com.wildstartech.wfa.dao.journal.PersistentJournalEntry;
+import com.wildstartech.wfa.dao.user.UserContext;
 import com.wildstartech.wfa.journal.JournalEntry;
 
 public class JournalDAOImpl 

@@ -66,14 +66,15 @@ import com.google.appengine.api.datastore.PropertyProjection;
 import com.google.appengine.api.datastore.Transaction;
 import com.google.appengine.api.memcache.MemcacheService;
 import com.google.appengine.api.memcache.MemcacheServiceFactory;
+import com.wildstartech.gae.wfa.dao.user.UserContextImpl;
 import com.wildstartech.wfa.dao.DAOException;
 import com.wildstartech.wfa.dao.Property;
 import com.wildstartech.wfa.dao.Query;
 import com.wildstartech.wfa.dao.SortCriterion;
-import com.wildstartech.wfa.dao.PersistentUser;
-import com.wildstartech.wfa.dao.UserContext;
 import com.wildstartech.wfa.dao.WildDAO;
 import com.wildstartech.wfa.dao.WildObject;
+import com.wildstartech.wfa.dao.user.PersistentUser;
+import com.wildstartech.wfa.dao.user.UserContext;
 
 /**
  * Google Datastore implementation of the <code>WildDAO</code> interface.

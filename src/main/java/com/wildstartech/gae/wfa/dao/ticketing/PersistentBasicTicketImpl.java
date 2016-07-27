@@ -55,8 +55,8 @@ import java.util.logging.Logger;
 
 import com.google.appengine.api.datastore.Entity;
 import com.wildstartech.gae.wfa.dao.WildObjectImpl;
-import com.wildstartech.wfa.dao.UserContext;
 import com.wildstartech.wfa.dao.ticketing.PersistentBasicTicket;
+import com.wildstartech.wfa.dao.user.UserContext;
 import com.wildstartech.wfa.ticketing.BasicTicket;
 
 public class PersistentBasicTicketImpl<T extends BasicTicket> 

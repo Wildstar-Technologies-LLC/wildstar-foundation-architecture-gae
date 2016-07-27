@@ -67,8 +67,8 @@ import com.google.appengine.tools.cloudstorage.GcsService;
 import com.google.appengine.tools.cloudstorage.GcsServiceFactory;
 import com.google.appengine.tools.cloudstorage.RetryParams;
 import com.wildstartech.gae.wfa.dao.WildObjectImpl;
-import com.wildstartech.wfa.dao.UserContext;
 import com.wildstartech.wfa.dao.document.PersistentDocument;
+import com.wildstartech.wfa.dao.user.UserContext;
 import com.wildstartech.wfa.document.Document;
 import com.wildstartech.wfa.document.DocumentNameTooLongException;
 

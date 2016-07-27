@@ -9,12 +9,12 @@ import org.testng.ITestClass;
 
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
-import com.wildstartech.wfa.dao.PersistentUser;
-import com.wildstartech.wfa.dao.UserContext;
-import com.wildstartech.wfa.dao.UserContextDAOFactory;
-import com.wildstartech.wfa.dao.UserDAO;
-import com.wildstartech.wfa.dao.UserDAOFactory;
 import com.wildstartech.wfa.dao.UserData;
+import com.wildstartech.wfa.dao.user.PersistentUser;
+import com.wildstartech.wfa.dao.user.UserContext;
+import com.wildstartech.wfa.dao.user.UserContextDAOFactory;
+import com.wildstartech.wfa.dao.user.UserDAO;
+import com.wildstartech.wfa.dao.user.UserDAOFactory;
 import com.wildstartech.wfa.user.PasswordTooLongException;
 import com.wildstartech.wfa.user.UserNameTooLongException;
 

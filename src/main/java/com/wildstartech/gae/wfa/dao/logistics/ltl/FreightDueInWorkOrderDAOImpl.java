@@ -49,12 +49,12 @@ import java.util.logging.Logger;
 
 import com.wildstartech.gae.wfa.dao.ticketing.BasicTicketDAOImpl;
 import com.wildstartech.wfa.dao.DAOException;
-import com.wildstartech.wfa.dao.UserContext;
 import com.wildstartech.wfa.dao.logistics.ltl.FreightDueInWorkOrderDAO;
 import com.wildstartech.wfa.dao.logistics.ltl.FreightDueInWorkOrderLineItemDAO;
 import com.wildstartech.wfa.dao.logistics.ltl.FreightDueInWorkOrderLineItemDAOFactory;
 import com.wildstartech.wfa.dao.logistics.ltl.PersistentFreightDueInWorkOrder;
 import com.wildstartech.wfa.dao.logistics.ltl.PersistentFreightDueInWorkOrderLineItem;
+import com.wildstartech.wfa.dao.user.UserContext;
 import com.wildstartech.wfa.logistics.ltl.FreightDueInWorkOrder;
 import com.wildstartech.wfa.logistics.ltl.FreightDueInWorkOrderLineItem;
 

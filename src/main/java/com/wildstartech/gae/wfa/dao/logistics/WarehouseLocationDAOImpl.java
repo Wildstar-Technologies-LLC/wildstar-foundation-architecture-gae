@@ -48,9 +48,9 @@ import java.util.logging.Logger;
 
 import com.wildstartech.gae.wfa.dao.WildDAOImpl;
 import com.wildstartech.wfa.dao.DAOException;
-import com.wildstartech.wfa.dao.UserContext;
 import com.wildstartech.wfa.dao.logistics.PersistentWarehouseLocation;
 import com.wildstartech.wfa.dao.logistics.WarehouseLocationDAO;
+import com.wildstartech.wfa.dao.user.UserContext;
 import com.wildstartech.wfa.logistics.WarehouseLocation;
 
 public class WarehouseLocationDAOImpl

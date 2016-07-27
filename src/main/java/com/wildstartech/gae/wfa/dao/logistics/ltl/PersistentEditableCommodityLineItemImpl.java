@@ -47,7 +47,7 @@ package com.wildstartech.gae.wfa.dao.logistics.ltl;
 import java.util.logging.Logger;
 
 import com.google.appengine.api.datastore.Entity;
-import com.wildstartech.wfa.dao.UserContext;
+import com.wildstartech.wfa.dao.user.UserContext;
 import com.wildstartech.wfa.logistics.ltl.EditableCommodityLineItem;
 
 public class PersistentEditableCommodityLineItemImpl<T extends EditableCommodityLineItem> 

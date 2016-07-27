@@ -48,8 +48,8 @@ import java.util.logging.Logger;
 
 import com.google.appengine.api.datastore.Entity;
 import com.wildstartech.gae.wfa.dao.WildObjectImpl;
-import com.wildstartech.wfa.dao.UserContext;
 import com.wildstartech.wfa.dao.logistics.ltl.pricemodels.PersistentPriceModel;
+import com.wildstartech.wfa.dao.user.UserContext;
 import com.wildstartech.wfa.logistics.ltl.pricemodels.PriceModel;
 
 public abstract class PersistentPriceModelImpl 

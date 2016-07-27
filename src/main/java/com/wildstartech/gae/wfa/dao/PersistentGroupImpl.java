@@ -50,12 +50,12 @@ import java.util.logging.Logger;
 
 import com.google.appengine.api.datastore.Entity;
 import com.wildstartech.wfa.dao.PersistentGroup;
-import com.wildstartech.wfa.dao.UserContext;
+import com.wildstartech.wfa.dao.user.UserContext;
 import com.wildstartech.wfa.group.Group;
 import com.wildstartech.wfa.group.GroupNameTooLongException;
 import com.wildstartech.wfa.user.User;
 
-class PersistentGroupImpl 
+public class PersistentGroupImpl 
 extends WildObjectImpl<Group> 
 implements PersistentGroup {
 	/** Used in object serialization. */

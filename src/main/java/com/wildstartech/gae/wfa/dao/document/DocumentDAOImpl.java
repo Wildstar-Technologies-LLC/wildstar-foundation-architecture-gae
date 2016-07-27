@@ -55,9 +55,9 @@ import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.wildstartech.gae.wfa.dao.QueryWrapper;
 import com.wildstartech.gae.wfa.dao.WildDAOImpl;
 import com.wildstartech.wfa.dao.DAOException;
-import com.wildstartech.wfa.dao.UserContext;
 import com.wildstartech.wfa.dao.document.DocumentDAO;
 import com.wildstartech.wfa.dao.document.PersistentDocument;
+import com.wildstartech.wfa.dao.user.UserContext;
 import com.wildstartech.wfa.document.Document;
 
 public class DocumentDAOImpl 

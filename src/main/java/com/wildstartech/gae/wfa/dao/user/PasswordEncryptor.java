@@ -41,7 +41,7 @@
  *
  *      derek.berube@wildstartech.com
  *      www.wildstartech.com
- */package com.wildstartech.gae.wfa.dao;
+ */package com.wildstartech.gae.wfa.dao.user;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.codec.digest.MessageDigestAlgorithms;

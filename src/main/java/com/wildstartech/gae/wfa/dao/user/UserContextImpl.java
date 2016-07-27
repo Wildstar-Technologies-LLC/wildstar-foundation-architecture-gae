@@ -41,7 +41,7 @@
  *
  *      derek.berube@wildstartech.com
  *      www.wildstartech.com
- */package com.wildstartech.gae.wfa.dao;
+ */package com.wildstartech.gae.wfa.dao.user;
 
 import java.text.DateFormat;
 import java.text.NumberFormat;
@@ -53,8 +53,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.google.appengine.api.datastore.Entity;
-import com.wildstartech.wfa.dao.PersistentUser;
-import com.wildstartech.wfa.dao.UserContext;
+import com.wildstartech.gae.wfa.dao.WildObjectImpl;
+import com.wildstartech.wfa.dao.user.PersistentUser;
+import com.wildstartech.wfa.dao.user.UserContext;
 
 public class UserContextImpl extends WildObjectImpl<UserContext>
       implements UserContext {
@@ -198,7 +199,7 @@ public class UserContextImpl extends WildObjectImpl<UserContext>
             && ((this.password != null) && (this.password.length() > 0))) {
          logger.finest("Username and password are specified.");
          // Return a reference to the adminContext
-         adminContext = UserDAOImpl.getAdminContext();
+         adminContext = UserContextDAOImpl.getUserContextAdmin();
          if (adminContext != null) {
             logger.finest("adminContext is not null.");
             if ((this.userName.compareTo(adminContext.getUserName()) == 0)

@@ -56,9 +56,9 @@ import com.google.appengine.api.datastore.Query.SortDirection;
 import com.wildstartech.gae.wfa.dao.QueryWrapper;
 import com.wildstartech.gae.wfa.dao.WildDAOImpl;
 import com.wildstartech.wfa.dao.DAOException;
-import com.wildstartech.wfa.dao.UserContext;
 import com.wildstartech.wfa.dao.logistics.ltl.PersistentWorkOrderLineItem;
 import com.wildstartech.wfa.dao.logistics.ltl.WorkOrderLineItemDAO;
+import com.wildstartech.wfa.dao.user.UserContext;
 import com.wildstartech.wfa.logistics.ltl.LineItemComparator;
 import com.wildstartech.wfa.logistics.ltl.WorkOrderLineItem;
 

@@ -48,7 +48,7 @@ import java.util.logging.Logger;
 
 import com.google.appengine.api.datastore.Entity;
 import com.wildstartech.gae.wfa.dao.WildObjectImpl;
-import com.wildstartech.wfa.dao.UserContext;
+import com.wildstartech.wfa.dao.user.UserContext;
 import com.wildstartech.wfa.finance.PaymentType;
 
 public class PersistentPaymentTypeImpl<T extends PaymentType>

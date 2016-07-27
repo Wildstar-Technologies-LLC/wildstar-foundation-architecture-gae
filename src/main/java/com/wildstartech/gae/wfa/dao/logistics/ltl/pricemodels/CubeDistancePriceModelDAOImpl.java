@@ -49,9 +49,9 @@ import java.util.logging.Logger;
 
 import com.wildstartech.gae.wfa.dao.WildDAOImpl;
 import com.wildstartech.wfa.dao.DAOException;
-import com.wildstartech.wfa.dao.UserContext;
 import com.wildstartech.wfa.dao.logistics.ltl.pricemodels.CubeDistancePriceModelDAO;
 import com.wildstartech.wfa.dao.logistics.ltl.pricemodels.PersistentCubeDistancePriceModel;
+import com.wildstartech.wfa.dao.user.UserContext;
 import com.wildstartech.wfa.logistics.ltl.pricemodels.CubeDistancePriceModel;
 
 public class CubeDistancePriceModelDAOImpl 

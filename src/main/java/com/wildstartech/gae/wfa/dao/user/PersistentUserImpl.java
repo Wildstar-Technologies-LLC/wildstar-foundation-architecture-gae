@@ -41,7 +41,7 @@
  *
  *      derek.berube@wildstartech.com
  *      www.wildstartech.com
- */package com.wildstartech.gae.wfa.dao;
+ */package com.wildstartech.gae.wfa.dao.user;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -49,9 +49,10 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import com.google.appengine.api.datastore.Entity;
+import com.wildstartech.gae.wfa.dao.WildObjectImpl;
 import com.wildstartech.wfa.dao.PersistentGroup;
-import com.wildstartech.wfa.dao.PersistentUser;
-import com.wildstartech.wfa.dao.UserContext;
+import com.wildstartech.wfa.dao.user.PersistentUser;
+import com.wildstartech.wfa.dao.user.UserContext;
 import com.wildstartech.wfa.group.Group;
 import com.wildstartech.wfa.user.PasswordTooLongException;
 import com.wildstartech.wfa.user.User;

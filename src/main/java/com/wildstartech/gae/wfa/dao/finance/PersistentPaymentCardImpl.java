@@ -66,7 +66,7 @@ import javax.crypto.spec.SecretKeySpec;
 
 import com.google.api.client.util.Base64;
 import com.google.appengine.api.datastore.Entity;
-import com.wildstartech.wfa.dao.UserContext;
+import com.wildstartech.wfa.dao.user.UserContext;
 import com.wildstartech.wfa.finance.PaymentCard;
 import java.util.Objects;
 

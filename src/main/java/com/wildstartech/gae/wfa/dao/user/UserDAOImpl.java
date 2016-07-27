@@ -41,7 +41,7 @@
  *
  *      derek.berube@wildstartech.com
  *      www.wildstartech.com
- */package com.wildstartech.gae.wfa.dao;
+ */package com.wildstartech.gae.wfa.dao.user;
 
 import java.util.List;
 import java.util.logging.Logger;
@@ -53,15 +53,18 @@ import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.memcache.MemcacheService;
 import com.google.appengine.api.memcache.MemcacheServiceFactory;
+import com.wildstartech.gae.wfa.dao.MemcacheKeyGenerator;
+import com.wildstartech.gae.wfa.dao.PersistentGroupImpl;
+import com.wildstartech.gae.wfa.dao.WildDAOImpl;
 import com.wildstartech.wfa.EmailAddress;
 import com.wildstartech.wfa.dao.DAOException;
 import com.wildstartech.wfa.dao.PersistentGroup;
 import com.wildstartech.wfa.dao.GroupDAO;
 import com.wildstartech.wfa.dao.GroupDAOFactory;
-import com.wildstartech.wfa.dao.PersistentUser;
-import com.wildstartech.wfa.dao.UserContext;
-import com.wildstartech.wfa.dao.UserDAO;
 import com.wildstartech.wfa.dao.WildObject;
+import com.wildstartech.wfa.dao.user.PersistentUser;
+import com.wildstartech.wfa.dao.user.UserContext;
+import com.wildstartech.wfa.dao.user.UserDAO;
 import com.wildstartech.wfa.group.Group;
 import com.wildstartech.wfa.user.User;
 
@@ -252,7 +255,7 @@ public class UserDAOImpl extends WildDAOImpl<User, PersistentUser>
     * Save the specified User object
     * 
     * @see com.wildstartech.gae.wfa.dao.WildDAOImpl#save(java.lang.Object,
-    *      com.wildstartech.wfa.dao.UserContext)
+    *      com.wildstartech.wfa.dao.user.UserContext)
     */
    public PersistentUser save(User user, UserContext ctx) {
       logger.entering(_CLASS, "save(User,UserContext)",

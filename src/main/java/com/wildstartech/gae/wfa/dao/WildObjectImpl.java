@@ -55,8 +55,8 @@ import java.util.logging.Logger;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.Text;
-import com.wildstartech.wfa.dao.UserContext;
 import com.wildstartech.wfa.dao.WildObject;
+import com.wildstartech.wfa.dao.user.UserContext;
 /**
  * This object provides the base foundation for all entites that are stored
  * in a persistent data store using the Wildstar Foundation Architecture Data 

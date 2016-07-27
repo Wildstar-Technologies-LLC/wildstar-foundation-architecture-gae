@@ -56,9 +56,9 @@ import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.wildstartech.gae.wfa.dao.QueryWrapper;
 import com.wildstartech.gae.wfa.dao.WildDAOImpl;
 import com.wildstartech.wfa.dao.DAOException;
-import com.wildstartech.wfa.dao.UserContext;
 import com.wildstartech.wfa.dao.logistics.ltl.PersistentQuoteLineItem;
 import com.wildstartech.wfa.dao.logistics.ltl.QuoteLineItemDAO;
+import com.wildstartech.wfa.dao.user.UserContext;
 import com.wildstartech.wfa.logistics.ltl.QuoteLineItem;
 
 public class QuoteLineItemDAOImpl 

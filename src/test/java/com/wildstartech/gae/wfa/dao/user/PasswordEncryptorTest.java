@@ -42,9 +42,11 @@
  *      derek.berube@wildstartech.com
  *      www.wildstartech.com
  */
-package com.wildstartech.gae.wfa.dao;
+package com.wildstartech.gae.wfa.dao.user;
 
 import org.testng.annotations.Test;
+
+import com.wildstartech.gae.wfa.dao.user.PasswordEncryptor;
 
 public class PasswordEncryptorTest {
 

@@ -3,9 +3,9 @@ package com.wildstartech.gae.wfa.dao.logistics.ltl;
 import java.util.logging.Logger;
 
 import com.wildstartech.wfa.dao.DAOException;
-import com.wildstartech.wfa.dao.UserContext;
 import com.wildstartech.wfa.dao.logistics.ltl.PersistentSimpleQuote;
 import com.wildstartech.wfa.dao.logistics.ltl.SimpleQuoteDAO;
+import com.wildstartech.wfa.dao.user.UserContext;
 import com.wildstartech.wfa.logistics.ltl.SimpleQuote;
 
 public class SimpleQuoteDAOImpl 

@@ -52,9 +52,9 @@ import java.util.logging.Logger;
 
 import com.wildstartech.wfa.dao.PersistenceRule;
 import com.wildstartech.wfa.dao.PersistenceRuleSet;
-import com.wildstartech.wfa.dao.UserContext;
 import com.wildstartech.wfa.dao.WildDAO;
 import com.wildstartech.wfa.dao.WildObject;
+import com.wildstartech.wfa.dao.user.UserContext;
 import com.wildstartech.wfa.rules.Result;
 
 /**

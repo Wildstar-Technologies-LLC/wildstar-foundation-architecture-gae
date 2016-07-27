@@ -54,7 +54,6 @@ import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 
 import com.google.appengine.api.datastore.Entity;
-import com.wildstartech.wfa.dao.UserContext;
 import com.wildstartech.wfa.dao.WildObject;
 import com.wildstartech.wfa.dao.finance.CreditCardDAO;
 import com.wildstartech.wfa.dao.finance.CreditCardDAOFactory;
@@ -63,6 +62,7 @@ import com.wildstartech.wfa.dao.logistics.ltl.PersistentQuote;
 import com.wildstartech.wfa.dao.logistics.ltl.PersistentQuoteLineItem;
 import com.wildstartech.wfa.dao.logistics.ltl.QuoteLineItemDAO;
 import com.wildstartech.wfa.dao.logistics.ltl.QuoteLineItemDAOFactory;
+import com.wildstartech.wfa.dao.user.UserContext;
 import com.wildstartech.wfa.logistics.ltl.AccessorialCharge;
 import com.wildstartech.wfa.logistics.ltl.Quote;
 import com.wildstartech.wfa.logistics.ltl.QuoteLineItem;
