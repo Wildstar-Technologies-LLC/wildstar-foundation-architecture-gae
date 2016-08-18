@@ -128,10 +128,10 @@ implements UserContextDAO {
   }
   
   protected static UserContext getUserContextAdmin() {
-     logger.entering(_CLASS, "getUserContextAdmin()");
+     //logger.entering(_CLASS, "getUserContextAdmin()");
      UserContext ctx=null;
      ctx=UserContextDAOImpl.getAdminContext();
-     logger.exiting(_CLASS, "getUserContextAdmin()",ctx);
+     //logger.exiting(_CLASS, "getUserContextAdmin()",ctx);
      return ctx;     
   }
 

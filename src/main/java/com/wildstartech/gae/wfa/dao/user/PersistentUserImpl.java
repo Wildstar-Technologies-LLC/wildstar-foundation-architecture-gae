@@ -46,6 +46,7 @@
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.google.appengine.api.datastore.Entity;
@@ -366,12 +367,32 @@ implements PersistentUser {
   @Override
   public void removeGroup(Group group) {
     // TODO Auto-generated method stub
-    
   }
 
   @Override
   public void populateFromObject(User obj) {
-    // TODO Auto-generated method stub
-    
+    logger.entering(_CLASS,"populateFromObject(User)",obj);
+    updateFromObject(obj);
+    logger.exiting(_CLASS,"populateFromObject(User)",obj);
   }
+  
+  @Override
+  public void updateFromObject(User source) {
+     logger.entering(_CLASS,"updateFromObject(User)",source);
+     if (source != null) {
+        try {
+           setName(source.getName());
+        } catch (UserNameTooLongException ex) {
+           logger.log(Level.WARNING, "Error Updating Name", ex);
+        } // END try/catch
+        try {
+           setPassword(source.getPassword());
+        } catch (PasswordTooLongException ex) {
+           logger.log(Level.WARNING, "Error Updating Password", ex);
+        } // END try/catch
+     } else {
+        logger.warning("The specified User object is null.");
+     } // END if (source != null)
+     logger.exiting(_CLASS,"updateFromObject(User)",source);
+   }
 }

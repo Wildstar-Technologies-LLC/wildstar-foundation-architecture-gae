@@ -264,6 +264,7 @@ public class UserDAOImpl extends WildDAOImpl<User, PersistentUser>
       GroupDAO gDao = null;
       GroupDAOFactory gFactory = null;
       List<Group> groups = null;
+      MemcacheService memcache = null;
       PersistentUser savedUser = null;
 
       /*
@@ -271,6 +272,15 @@ public class UserDAOImpl extends WildDAOImpl<User, PersistentUser>
        * persistence requirements for saving a user record.
        */
       savedUser = super.save(user, ctx);
+      
+      // Put the user back into memcache.
+      memcache = MemcacheServiceFactory.getMemcacheService();
+      memcache.put(
+            MemcacheKeyGenerator.getKey(
+                  PersistentUserImpl._KIND,
+                  user.getName()
+            ), 
+            user);
       /*
        * Now lets manage the process of saving information on the groups that
        * are related to the user account.
