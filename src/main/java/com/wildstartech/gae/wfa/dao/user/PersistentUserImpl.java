@@ -41,7 +41,8 @@
  *
  *      derek.berube@wildstartech.com
  *      www.wildstartech.com
- */package com.wildstartech.gae.wfa.dao.user;
+ */
+package com.wildstartech.gae.wfa.dao.user;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -113,6 +114,24 @@ implements PersistentUser {
 		logger.exiting(_CLASS,"UserImpl()");
 	}
 	
+	/***** Utility Methods *****/
+	/**
+    * Comparison.
+    * @param user
+    * @return
+    */
+   public int compareTo(User user) {
+      logger.entering(_CLASS,"compareTo(User)",user);
+      int result=Integer.MIN_VALUE;
+      String otherName=null;
+      if (user != null) {
+         otherName=user.getName();
+         result=this.name.compareTo(otherName);
+      } // END if (user != null)
+      logger.exiting(_CLASS,"compareTo(User)",result);
+      return result;
+   }
+   
 	protected void populateEntity(Entity entity) {
 		logger.entering(_CLASS,"populateEntity(Entity)");
 		PasswordEncryptor pe=null;
@@ -163,6 +182,7 @@ implements PersistentUser {
 		} // END if (entity != null) 
 		logger.exiting(_CLASS,"populateFromEntity(Entity)");
 	}
+	
 	/**
 	 * Populate the current object from the template specified.
 	 */
@@ -170,6 +190,7 @@ implements PersistentUser {
 	  logger.entering(_CLASS, "populateFromObject(User)",user);
 	  logger.exiting(_CLASS, "populateFromObject(User)");
 	}
+	
 	/**
 	 * Utility method used to roast the password.
 	 * @param password
@@ -205,22 +226,57 @@ implements PersistentUser {
 		logger.exiting(_CLASS,"roastPassword(String)",roasted);
 		return roasted;
 	}
+	
 	/**
-	 * Comparison.
-	 * @param user
-	 * @return
-	 */
-	public int compareTo(User user) {
-		logger.entering(_CLASS,"compareTo(User)",user);
-		int result=Integer.MIN_VALUE;
-		String otherName=null;
-		if (user != null) {
-			otherName=user.getName();
-			result=this.name.compareTo(otherName);
-		} // END if (user != null)
-		logger.exiting(_CLASS,"compareTo(User)",result);
-		return result;
-	}
+    * Returns a string representation consisting of object properties.
+    */
+   public String toPropertyString() {
+      logger.entering(_CLASS, "toPropertyString()");
+      String tmpStr="";
+      String returnValue=null;
+      StringBuilder sb=null;
+      
+      sb=new StringBuilder(1024);
+      sb.append(super.toPropertyString());
+      sb.append(",name=\"").append(getName()).append("\", ");
+      sb.append("federated=\"").append(isFederated()).append("\",");
+      sb.append("password=\"");
+      tmpStr=getPassword();
+      if (isEmpty(tmpStr)) {
+         sb.append("null");
+      } else {
+         sb.append("** encrypted **");
+      } // END if (isEmpty(tmpStr))
+      //***** newPassword
+      sb.append(",newPassword=\"");
+      if (isEmpty(this.newPassword)) {
+         sb.append("null");
+      } else {
+         sb.append("** encrypted **");
+      } // END if (isEmpty(tmpStr))
+      returnValue=sb.toString();
+      
+      logger.exiting(_CLASS, "toPropertyString()",returnValue);
+      return returnValue;
+   }
+   
+   /**
+    * Returns a string representation of the object.
+    */
+   public String toString() {
+     logger.entering(_CLASS,"toString()");
+     String result=null;
+     StringBuilder sb=null;
+     
+     sb=new StringBuilder(256);
+     sb.append("PersistentUserImpl [");
+     sb.append(toPropertyString());
+     sb.append("]");
+     result=sb.toString();
+     logger.exiting(_CLASS,"toString()",result);
+     return result;
+   }  
+	
 	//*************** Accessor Methods
 	//***** federated
 	public boolean isFederated() {

@@ -61,7 +61,8 @@ implements PaymentTypeDAO<PaymentType, PersistentPaymentType<T>> {
    
    @Override
    public PersistentPaymentType<T> create() {
-      // TODO Auto-generated method stub
+      PersistentPaymentType<T> paymentType;     
+      
       return null;
    }
 

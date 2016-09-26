@@ -45,18 +45,25 @@
 package com.wildstartech.gae.wfa.dao;
 
 import java.io.Serializable;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.text.DateFormat;
+import java.text.MessageFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.apache.commons.validator.routines.InetAddressValidator;
+
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.Text;
+import com.wildstartech.wfa.Localization;
 import com.wildstartech.wfa.dao.WildObject;
 import com.wildstartech.wfa.dao.user.UserContext;
+
 /**
  * This object provides the base foundation for all entites that are stored
  * in a persistent data store using the Wildstar Foundation Architecture Data 
@@ -108,7 +115,16 @@ implements Serializable, WildObject {
 	private static final long serialVersionUID = 5495762087091689261L;
 	private static final String _CLASS=WildObjectImpl.class.getName();
 	private static final Logger logger=Logger.getLogger(_CLASS);
-	
+	private static final String MSG_ENTITY_NULL_VALUE=
+	      "The Entity parameter was null.";
+	private static final String MSG_PROPERTY_NOT_FOUND=
+	      "The specified property, {0}, was not found.";
+	private static final String MSG_PROPERTY_NOT_RIGHT_TYPE=
+	      "The specified property, {0}, is not an object of type {1}.";
+	private static final String MSG_INVALID_DATEFORMAT=
+	      "Unable to parse the property using specified DateFormat, {0}.";
+	private static final String MSG_INVALID_DATATYPE=
+	      "Unable to parse the value {0} from property, {0}, as a(n) {1}.";
 	/* The date/time the object was originally created. */
 	private Date dateCreated=null;
 	/* The date/time the object was last modified. */
@@ -140,62 +156,98 @@ implements Serializable, WildObject {
 		logger.exiting(_CLASS,"WildObjectImpl()");
 	}
 	
-	
-	/**
-	 * Returns a formatted date or an empty string.
-	 */
-	public String getFormattedDate(Date date) {
-	   logger.entering(_CLASS,"getFormattedDate(Date)",date);
-	   DateFormat fmt=null;
-	   String returnValue="";
-	   if (date != null) {
-	      fmt=getDateFormatter();
-	      returnValue=fmt.format(date);
-	   } // END if (date != null)
-	   logger.entering(_CLASS,"getFormattedDate(Date)",returnValue);
-	   return returnValue;
-	}
-	
-	/**
-	 * Returns a string representation consisting of object properties.
-	 */
-	public String toPropertyString() {
-	   logger.entering(_CLASS, "toPropertyString()");
-	   String returnValue=null;
-	   StringBuilder sb=null;
-	   
-	   sb=new StringBuilder(1024);
-	   sb.append("identifier=\"").append(getIdentifier()).append("\", ");
-	   sb.append("createdBy=\"").append(getCreatedBy()).append("\", ");
-	   sb.append("dateCreated=\"").append(
-	         getFormattedDate(getDateCreated())).append("\", ");
-	   sb.append("modifiedBy=\"").append(getModifiedBy()).append("\", ");
-	   sb.append("dateModified=\"").append(
-            getFormattedDate(getDateModified()));      
-	   returnValue=sb.toString();
-	   
-	   logger.exiting(_CLASS, "toPropertyString()",returnValue);
-	   return returnValue;
-	}
-	
-	/**
-	 * Returns a string representation of the object.
-	 */
-	public String toString() {
-	  logger.entering(_CLASS,"toString()");
-	  String result=null;
-	  StringBuilder sb=null;
-	  
-	  sb=new StringBuilder(256);
-	  sb.append("WildObjectImpl[");
-	  sb.append(toPropertyString());
-	  sb.append("]");
-     result=sb.toString();
-	  logger.exiting(_CLASS,"toString()",result);
-	  return result;
-	}
-	
-	//********** Utility methods
+	//********** Abstract Methods
+	//***** kind
+   /**
+    * Used by the DAO to identify the type of entity used to store data. 
+    * @return
+    */
+   public abstract String getKind();
+	//********** Utility Methods
+   public Date defaultValue(Date value) {
+      logger.entering(_CLASS, "defaultValue(Date)",value);
+      Date returnValue=null;
+      returnValue=defaultValue(value,new Date());
+      logger.exiting(_CLASS, "defaultValue(Date)",returnValue);
+      return returnValue;
+   }
+   
+   public Date defaultValue(Date value, Date defaultValue) {
+      logger.entering(_CLASS, "defaultValue(Date,Date)",value);
+      Date returnValue=null;
+      if (value == null) {
+         if (defaultValue != null) {
+            returnValue=defaultValue;
+         } else {
+            returnValue=new Date();
+         } // END if (defaultValue != null) 
+      } else {
+         returnValue=value;
+      } // END if (value == null)
+      logger.exiting(_CLASS, "defaultValue(Date,Date)",returnValue);
+      return returnValue;
+   }
+   
+   public String defaultValue(String value) {
+     logger.entering(_CLASS,"defaultValue(String)",value);
+     String newValue=null;
+     newValue=defaultValue(value,"");
+     logger.exiting(_CLASS,"defaultValue(String)",newValue);
+     return newValue;
+   }
+   
+   public String defaultValue(String value, String defaultValue) {
+      logger.entering(_CLASS,"defaultValue(String,String)",
+            new Object[] {value, defaultValue});
+      String returnValue=defaultValue;
+      
+      if (value != null) {
+         returnValue=value;
+      } // END if (value != null)
+      
+      logger.entering(_CLASS,"defaultValue(String,String)",returnValue);
+      return returnValue;
+   }
+   @SuppressWarnings("rawtypes")
+   @Override
+   public boolean equals(Object obj) {
+      logger.entering(_CLASS, "equals(Object)",obj);
+      boolean returnValue=false;
+      WildObjectImpl other=null;
+      
+      if (this == obj) {
+         returnValue=true;
+      } else if ((obj != null) && (getClass() == obj.getClass())) {
+         other = (WildObjectImpl) obj;
+         if (createdBy == null) {
+            if (other.createdBy != null)
+               return false;
+         } else if (!createdBy.equals(other.createdBy))
+            return false;
+         if (dateCreated == null) {
+            if (other.dateCreated != null)
+               return false;
+         } else if (!dateCreated.equals(other.dateCreated))
+            return false;
+         if (dateModified == null) {
+            if (other.dateModified != null)
+               return false;
+         } else if (!dateModified.equals(other.dateModified))
+            return false;
+         if (identifier == null) {
+            if (other.identifier != null)
+               return false;
+         } else if (!identifier.equals(other.identifier))
+            return false;
+         if (modifiedBy == null) {
+            if (other.modifiedBy != null)
+               return false;
+         } else if (!modifiedBy.equals(other.modifiedBy))
+            return false;
+      } // END if (this == obj)
+      return returnValue;
+   }
+   
 	public DateFormat getDateFormatter() {
 	   logger.entering(_CLASS, "getDateFormatter()");
 	   DateFormat fmt=null;
@@ -205,24 +257,44 @@ implements Serializable, WildObject {
 	}
 	
 	/**
-    * Utility method to return whether or not the specified string value is a
-    * {@code null} value or a zero-length {@code String}.
-    * 
-    * @param value The value to be tested.
-    * @return {@code true} if the value passed is either {@code null} or a 
-    * zero-length {@code String} otherwise, {@code false}.
+    * Returns a formatted date or an empty string.
     */
-   public boolean isEmpty(String value) {
-      logger.entering(_CLASS, "isEmpty(String)",value);
-      boolean result=false;
-      if ((value == null) || (value.length() == 0)) {
-         result=true;
-      } // END if ((value == null) || (value.length() == 0))
-      logger.exiting(_CLASS, "isEmpty(String)",result);
-      return result;
+   public String getFormattedDate(Date date) {
+      logger.entering(_CLASS,"getFormattedDate(Date)",date);
+      DateFormat fmt=null;
+      String returnValue="";
+      if (date != null) {
+         fmt=getDateFormatter();
+         returnValue=fmt.format(date);
+      } // END if (date != null)
+      logger.entering(_CLASS,"getFormattedDate(Date)",returnValue);
+      return returnValue;
    }
    
-	/**
+   /**
+    * Returns localized message.
+    * 
+    * @param resourceId
+    *           Identifies the specific message in the resource bundle that
+    *           should be returned.
+    * 
+    * @Param params The values that should be passed to the
+    *        {@code MessageFormat} object to customize the message template
+    */
+   @Override
+   public String getLocalizedMessage(String resourceId, Object[] params) {
+      logger.entering(_CLASS, "getMessage(String,Object[])", new Object[] { resourceId, params });
+      String baseName="";
+      String msg = "";
+
+      baseName=getResourceBundleBaseName();
+      msg = Localization.getString(baseName, resourceId, params);
+
+      logger.exiting(_CLASS, "getMessage(String,Object[])", msg);
+      return msg;
+   }
+   
+   /**
 	 * 
 	 * @param entity
 	 * @param propName
@@ -295,17 +367,24 @@ implements Serializable, WildObject {
 	  logger.entering(_CLASS, "getPropertyAsBoolean(Entity,String,boolean)",
 	      new Object[] {entity, propName, defaultValue});
 	  boolean value=defaultValue;
+	  MessageFormat msgFmt=null;
 	  Object obj=null;
+	  String msg=null;
 	  
       obj=getProperty(entity,propName);
       if (obj != null) {
         if (obj instanceof Boolean) {
           value=(Boolean) obj;
         } else {
-          logger.warning("The specified property is not a Boolean object.");
+           msgFmt=new MessageFormat(MSG_PROPERTY_NOT_RIGHT_TYPE);
+           msg=msgFmt.format(new Object[] {propName,"Boolean"});
+           logger.warning(msg);
         } // END if (obj instanceof Boolean)
       } else {
-        value=defaultValue;
+         msgFmt=new MessageFormat(MSG_PROPERTY_NOT_FOUND);
+         msg=msgFmt.format(new Object[]{propName});
+         logger.finest(msg); 
+         value=defaultValue;
       } // END if (obj != null)
       
 	  logger.exiting(_CLASS," getPropertyAsBoolean(Entity,String,boolean)",
@@ -349,8 +428,10 @@ implements Serializable, WildObject {
 	   logger.entering(_CLASS, "getPropertyAsDate(Entity,String,DateFormat)",
 	         new Object[] {entity, propName, dateFormat});
 	   Date result=null;
+	   MessageFormat msgFmt=null;
 	   Object obj=null;
 	   String tmpStr=null;
+	   String msg=null;
 	   
 	   if (dateFormat != null) {
 	      obj=getProperty(entity,propName);
@@ -360,12 +441,15 @@ implements Serializable, WildObject {
 	            try {
                   result=dateFormat.parse(tmpStr);
                } catch (ParseException ex) {
-                  logger.log(
-                     Level.SEVERE,
-                     "Unable to parse the property using specified DateFormat.",
-                     ex);
+                  msgFmt=new MessageFormat(MSG_INVALID_DATEFORMAT);
+                  msg=msgFmt.format(new Object[]{propName});
+                  logger.warning(msg);
                } // END try/catch
 	         } // END if (obj instanceof String)
+	      } else {
+	         msgFmt=new MessageFormat(MSG_PROPERTY_NOT_FOUND);
+	         msg=msgFmt.format(new Object[]{propName});
+	         logger.finest(msg);
 	      } // END if (obj != null)
 	   } // END if (dateFormat != null)
 	   
@@ -392,17 +476,25 @@ implements Serializable, WildObject {
 	  logger.entering(_CLASS, "getPropertyAsDate(Entity,String,Date)",
           new Object[] {entity, propName,defaultDate});
       Date value=null;
+      MessageFormat msgFmt=null;
       Object obj=null;
+      String msg=null;
+      
       obj=getProperty(entity,propName);
       if (obj != null) {
         if (obj instanceof Date) {
           value=(Date) obj;
         } else {
-          logger.warning("The specified property is not a Date object.");
-          value=defaultDate;
+           msgFmt=new MessageFormat(MSG_PROPERTY_NOT_RIGHT_TYPE);
+           msg=msgFmt.format(new Object[] {propName,"Date"});
+           logger.warning(msg);
+           value=defaultDate;
         } // END if (obj instanceof Date)
       } else {
-        value=defaultDate;
+         msgFmt=new MessageFormat(MSG_PROPERTY_NOT_FOUND);
+         msg=msgFmt.format(new Object[] {propName});
+         logger.finest(msg);
+         value=defaultDate;
       } // END if (obj != null)
       logger.exiting(_CLASS, "getPropertyAsDate(Entity,String)",value);
       return value;	  
@@ -446,7 +538,9 @@ implements Serializable, WildObject {
       logger.entering(_CLASS,"getPropertyAsDouble(Entity,String,double)",
           new Object[] {entity,propName,defaultValue});
       double value=Long.MIN_VALUE;
+      MessageFormat msgFmt=null;
       Object obj=null;
+      String msg=null;
       
       obj=getProperty(entity,propName);
       if (obj != null) {
@@ -462,13 +556,16 @@ implements Serializable, WildObject {
           try {
             value=Double.parseDouble((String) obj);
           } catch (NumberFormatException ex) {
-            logger.warning("String value could not be parsed as a Double.");
+             msgFmt=new MessageFormat(MSG_PROPERTY_NOT_RIGHT_TYPE);
+             msg=msgFmt.format(new Object[] {propName,"Double"});
+             logger.finest(msg);
+             value=defaultValue;
           } // END try/catch          
         } // END if (obj instanceof ...
       } else {
-        if (logger.isLoggable(Level.FINEST)) {
-          logger.finest("No entity property labeled, "+propName+" was found.");
-        } // END if (logger.isLoggable(Level.FINEST))
+         msgFmt=new MessageFormat(MSG_PROPERTY_NOT_FOUND);
+         msg=msgFmt.format(new Object[]{propName});
+         logger.finest(msg);         
       } // END if (obj != null)   
       logger.exiting(_CLASS,"getPropertyAsDouble(Entity,String)",value);
       return value;
@@ -513,7 +610,9 @@ implements Serializable, WildObject {
       logger.entering(_CLASS,"getPropertyAsFloat(Entity,String,float)",
           new Object[] {entity,propName,defaultValue});
       float value=Long.MIN_VALUE;
+      MessageFormat msgFmt=null;
       Object obj=null;
+      String msg=null;
       
       obj=getProperty(entity,propName);
       if (obj != null) {
@@ -529,13 +628,17 @@ implements Serializable, WildObject {
           try {
             value=Float.parseFloat((String) obj);
           } catch (NumberFormatException ex) {
-            logger.warning("String value could not be parsed as a Float.");            
+             msgFmt=new MessageFormat(MSG_PROPERTY_NOT_RIGHT_TYPE);
+             msg=msgFmt.format(new Object[] {propName,"Float"});
+             logger.finest(msg);
+             value=defaultValue;
           } // END try/catch          
         } // END if (obj instanceof ...
       } else {
-        if (logger.isLoggable(Level.FINEST)) {
-          logger.finest("No entity property labeled, "+propName+" was found.");
-        } // END if (logger.isLoggable(Level.FINEST))
+         msgFmt=new MessageFormat(MSG_PROPERTY_NOT_FOUND);
+         msg=msgFmt.format(new Object[]{propName});
+         logger.finest(msg);
+         value=defaultValue;
       } // END if (obj != null)      
       logger.exiting(_CLASS,"getPropertyAsFloat(Entity,String)",value);
       return value;
@@ -576,7 +679,9 @@ implements Serializable, WildObject {
 	  logger.entering(_CLASS,"getPropertyAsInteger(Entity,String,int)",
           new Object[] {entity,propName,defaultValue});
 	  int value=defaultValue;
+	  MessageFormat msgFmt=null;
 	  Object obj=null;
+	  String msg=null;
 	  
 	  obj=getProperty(entity,propName);
 	  if (obj != null) {
@@ -592,16 +697,58 @@ implements Serializable, WildObject {
 	      try {
             value=Integer.parseInt((String) obj);
           } catch (NumberFormatException ex) {
-            logger.warning("String value could not be parsed as an Integer.");
+             msgFmt=new MessageFormat(MSG_INVALID_DATATYPE);
+             msg=msgFmt.format(new Object[] {obj,propName,"Integer"});
+             logger.finest(msg);
           } // END try/catch
 	    } // END if (obj instanceof ...
 	  } else {
-	    if (logger.isLoggable(Level.FINEST)) {
-	      logger.finest("No entity property labeled, "+propName+" was found.");
-	    } // END if (logger.isLoggable(Level.FINEST))
+	     msgFmt=new MessageFormat(MSG_PROPERTY_NOT_FOUND);
+	     msg=msgFmt.format(new Object[]{propName});
+	     logger.finest(msg);
 	  } // END if (obj != null)	  
 	  logger.exiting(_CLASS,"getPropertyAsInteger(Entity,String)",value);
       return value;
+	}
+	protected InetAddress getPropertyAsInetAddress(
+	      Entity entity, String propName) {
+	   logger.entering(_CLASS, "getPropertyAsInetAddress(Entity,String)",
+	         new Object[] {entity, propName});
+	   InetAddress address=null;
+	   InetAddressValidator validator=null;
+	   MessageFormat msgFmt=null;
+	   Object obj=null;
+	   String msg=null;
+	   String tmpStr="";
+	   
+	   obj=entity.getProperty(propName);
+	   if (obj != null) {
+	      if (obj instanceof String) {
+	         tmpStr=(String) obj;
+	         validator=InetAddressValidator.getInstance();
+	         if (validator.isValid(tmpStr)) {
+	            try {
+                  address=InetAddress.getByName(tmpStr);
+               } catch (UnknownHostException ex) {
+                  logger.log(
+                        Level.WARNING, 
+                        "This should not happen.", 
+                        ex);
+               } // END try/catch
+	         } else {
+	            msgFmt=new MessageFormat(MSG_INVALID_DATATYPE);
+	            msg=msgFmt.format(new Object[] {obj,propName,"InetAddress"});
+	            logger.finest(msg);
+	         } // END if (validator.isValid(tmpStr)
+	      } else {
+	         msgFmt=new MessageFormat(MSG_INVALID_DATATYPE);
+	         msg=msgFmt.format(new Object[] {obj,propName,"String"});
+	      } // END if (!(obj instanceof String))
+	   } // END if (obj != null)
+	   
+	   logger.exiting(_CLASS, "getPropertyAsInetAddress(Entity,String)",
+	         address);
+	   return address;
 	}
 	/**
      * Returns the value of the specified property as an @{code long}.
@@ -642,6 +789,8 @@ implements Serializable, WildObject {
       logger.entering(_CLASS,"getPropertyAsLong(Entity,String)",
           new Object[] {entity,propName});
       long value=Long.MIN_VALUE;
+      MessageFormat msgFmt=null;
+      String msg=null;
       Object obj=null;
       
       value=defaultValue;
@@ -659,7 +808,9 @@ implements Serializable, WildObject {
           try {
             value=Long.parseLong((String)obj);
           } catch (NumberFormatException ex) {
-            logger.warning("String value could not be parsed as an Long.");
+             msgFmt=new MessageFormat(MSG_INVALID_DATATYPE);
+             msg=msgFmt.format(new Object[] {obj,propName,"Long"});
+             logger.finest(msg);
           } // END try/catch
         } // END if (obj instanceof ...
       } // END if (obj != null)   
@@ -706,7 +857,9 @@ implements Serializable, WildObject {
       logger.entering(_CLASS,"getPropertyAsShort(Entity,String)",
           new Object[] {entity,propName});
       short value=defaultValue;
+      MessageFormat msgFmt=null;
       Object obj=null;
+      String msg=null;
       
       obj=getProperty(entity,propName);
       if (obj != null) {
@@ -722,7 +875,9 @@ implements Serializable, WildObject {
           try {
             value=Short.parseShort((String)obj);
           } catch (NumberFormatException ex) {
-            logger.warning("String value could not be parsed as an Long.");
+             msgFmt=new MessageFormat(MSG_INVALID_DATATYPE);
+             msg=msgFmt.format(new Object[] {obj,propName,"Short"});
+             logger.finest(msg);
           } // END try/catch
         } // END if (obj instanceof ...
       } // END if (obj != null)   
@@ -758,6 +913,150 @@ implements Serializable, WildObject {
 	  logger.exiting(_CLASS,"getPropertyAsString(Entity,String)",value);
 	  return value;
 	}
+	
+	/**
+    * Returns the {@code baseName} for the {@code ResourceBundle} that should
+    * be used when localizing messages. 
+    * @return A string value that will be used by the 
+    * {@code getLocalizedMessage} method to return the requested loalized
+    * resource.
+    */
+	@Override
+	public String getResourceBundleBaseName() {
+	   logger.entering(_CLASS, "getResourceBundleBaseName()");
+	   logger.exiting(_CLASS, "getResourceBundleBaseName()",
+	         WildObject.RESOURCE_BUNDLE);
+	   return WildObject.RESOURCE_BUNDLE;
+	}
+	
+	//***** hashCode
+   @Override
+   public int hashCode() {
+      final int prime = 31;
+      int result = 1;
+      result = prime * result
+            + ((createdBy == null) ? 0 : createdBy.hashCode());
+      result = prime * result
+            + ((dateCreated == null) ? 0 : dateCreated.hashCode());
+      result = prime * result
+            + ((dateModified == null) ? 0 : dateModified.hashCode());
+      result = prime * result
+            + ((identifier == null) ? 0 : identifier.hashCode());
+      result = prime * result
+            + ((modifiedBy == null) ? 0 : modifiedBy.hashCode());
+      return result;
+   }
+   
+   /**
+    * Utility method to return whether or not the specified string value is a
+    * {@code null} value or a zero-length {@code String}.
+    * 
+    * @param value The value to be tested.
+    * @return {@code true} if the value passed is either {@code null} or a 
+    * zero-length {@code String} otherwise, {@code false}.
+    */
+   public boolean isEmpty(String value) {
+      logger.entering(_CLASS, "isEmpty(String)",value);
+      boolean result=false;
+      if ((value == null) || (value.length() == 0)) {
+         result=true;
+      } // END if ((value == null) || (value.length() == 0))
+      logger.exiting(_CLASS, "isEmpty(String)",result);
+      return result;
+   }
+   
+   //***** populateEntity
+   /**
+    * Populate the specified entity with information from the current object.
+    * 
+    * <p>The default implementation of this method will not actually 
+    * populate any information in the specified entity object as the main
+    * properties contained in this object are properties that are immutable
+    * such as @{code dateCreated} and @{code createdBy} or properties
+    * that are going to be updated by the @{code DAO} such as 
+    * @{code dateModified} and @{code modifiedBy}.</p>
+    * 
+    * @param entity The instance of the @{code Entity} class from the 
+    * @{code com.google.appengine.api.datastore.Entity} package.
+    */
+   protected void populateEntity(Entity entity) {
+      logger.entering(_CLASS,"populateEntity(Entity)",entity);
+      if (entity == null) {
+         logger.severe(MSG_ENTITY_NULL_VALUE);
+      } // END if (entity != null)
+      logger.exiting(_CLASS,"populateEntity(Entity)");
+   }
+   
+   protected void populateFromEntity(Entity entity, UserContext ctx) {
+     logger.entering(_CLASS,"populateFromEntity(Entity,UserContext)",
+          new Object[] {entity,ctx});
+     
+     if (entity != null) {
+        setIdentifier(entity.getKey());
+        setCreatedBy(getPropertyAsString(entity,"createdBy"));
+        setDateCreated(getPropertyAsDate(entity,"dateCreated"));
+        setDateModified(getPropertyAsDate(entity,"dateModified"));
+        setModifiedBy(getPropertyAsString(entity,"modifiedBy"));        
+     } else {
+        logger.severe(MSG_ENTITY_NULL_VALUE);
+     } // END if (entity != null)
+     logger.exiting(_CLASS,"populateFromEntity(Entity,UserContext)");
+   }  
+   
+   public void populateFromObject(T object) {
+      logger.entering(_CLASS, "populateFromObject(T)",object);
+      WildObject wObject=null;
+      
+      if ((object != null) && (object instanceof WildObject)) {
+         wObject=(WildObject) object;
+         setIdentifier(wObject.getIdentifier());
+         setCreatedBy(wObject.getCreatedBy());
+         setDateCreated(wObject.getDateCreated());
+         setDateModified(wObject.getDateModified());
+      } // END if (object instanceof WildObject)
+      
+      logger.exiting(_CLASS, "populateFromObject(T)");
+   }   
+   
+   /**
+    * Returns a string representation consisting of object properties.
+    */
+   public String toPropertyString() {
+      logger.entering(_CLASS, "toPropertyString()");
+      String returnValue=null;
+      StringBuilder sb=null;
+      
+      sb=new StringBuilder(1024);
+      sb.append("identifier=\"").append(getIdentifier()).append("\", ");
+      sb.append("createdBy=\"").append(getCreatedBy()).append("\", ");
+      sb.append("dateCreated=\"").append(
+            getFormattedDate(getDateCreated())).append("\", ");
+      sb.append("modifiedBy=\"").append(getModifiedBy()).append("\", ");
+      sb.append("dateModified=\"").append(
+            getFormattedDate(getDateModified()));      
+      returnValue=sb.toString();
+      
+      logger.exiting(_CLASS, "toPropertyString()",returnValue);
+      return returnValue;
+   }
+   
+   /**
+    * Returns a string representation of the object.
+    */
+   public String toString() {
+     logger.entering(_CLASS,"toString()");
+     String result=null;
+     StringBuilder sb=null;
+     
+     sb=new StringBuilder(256);
+     sb.append("WildObjectImpl[");
+     sb.append(toPropertyString());
+     sb.append("]");
+     result=sb.toString();
+     logger.exiting(_CLASS,"toString()",result);
+     return result;
+   }   
+   
 	//********** Accessor Methods
 	//***** createdBy
 	public final String getCreatedBy() {
@@ -826,166 +1125,5 @@ implements Serializable, WildObject {
 			setIdentifier(String.valueOf(keyValue));
 		} // END if (key != null)
 		logger.exiting(_CLASS,"setIdentifier(Key key)");
-	}
-	//********** Utility Methods
-	@SuppressWarnings("rawtypes")
-   @Override
-   public boolean equals(Object obj) {
-	   logger.entering(_CLASS, "equals(Object)",obj);
-	   boolean returnValue=false;
-	   WildObjectImpl other=null;
-	   
-	   if (this == obj) {
-         returnValue=true;
-	   } else if ((obj != null) && (getClass() == obj.getClass())) {
-	      other = (WildObjectImpl) obj;
-	      if (createdBy == null) {
-	         if (other.createdBy != null)
-	            return false;
-	      } else if (!createdBy.equals(other.createdBy))
-	         return false;
-	      if (dateCreated == null) {
-	         if (other.dateCreated != null)
-	            return false;
-	      } else if (!dateCreated.equals(other.dateCreated))
-	         return false;
-	      if (dateModified == null) {
-	         if (other.dateModified != null)
-	            return false;
-	      } else if (!dateModified.equals(other.dateModified))
-	         return false;
-	      if (identifier == null) {
-	         if (other.identifier != null)
-	            return false;
-	      } else if (!identifier.equals(other.identifier))
-	         return false;
-	      if (modifiedBy == null) {
-	         if (other.modifiedBy != null)
-	            return false;
-	      } else if (!modifiedBy.equals(other.modifiedBy))
-	         return false;
-	   } // END if (this == obj)
-      return returnValue;
-   }
-	
-	public Date defaultValue(Date value) {
-	   logger.entering(_CLASS, "defaultValue(Date)",value);
-	   Date returnValue=null;
-	   returnValue=defaultValue(value,new Date());
-	   logger.exiting(_CLASS, "defaultValue(Date)",returnValue);
-	   return returnValue;
-	}
-	
-	public Date defaultValue(Date value, Date defaultValue) {
-	   logger.entering(_CLASS, "defaultValue(Date,Date)",value);
-      Date returnValue=null;
-      if (value == null) {
-         if (defaultValue != null) {
-            returnValue=defaultValue;
-         } else {
-            returnValue=new Date();
-         } // END if (defaultValue != null) 
-      } else {
-         returnValue=value;
-      } // END if (value == null)
-      logger.exiting(_CLASS, "defaultValue(Date,Date)",returnValue);
-      return returnValue;
-	}
-	
-	public String defaultValue(String value) {
-	  logger.entering(_CLASS,"defaultValue(String)",value);
-	  String newValue=null;
-	  newValue=defaultValue(value,"");
-	  logger.exiting(_CLASS,"defaultValue(String)",newValue);
-	  return newValue;
-	}
-	
-	public String defaultValue(String value, String defaultValue) {
-		logger.entering(_CLASS,"defaultValue(String,String)",
-				new Object[] {value, defaultValue});
-		String returnValue=defaultValue;
-		
-		if (value != null) {
-			returnValue=value;
-		} // END if (value != null)
-		
-		logger.entering(_CLASS,"defaultValue(String,String)",returnValue);
-		return returnValue;
-	}
-	//***** hashCode
-	@Override
-   public int hashCode() {
-      final int prime = 31;
-      int result = 1;
-      result = prime * result
-            + ((createdBy == null) ? 0 : createdBy.hashCode());
-      result = prime * result
-            + ((dateCreated == null) ? 0 : dateCreated.hashCode());
-      result = prime * result
-            + ((dateModified == null) ? 0 : dateModified.hashCode());
-      result = prime * result
-            + ((identifier == null) ? 0 : identifier.hashCode());
-      result = prime * result
-            + ((modifiedBy == null) ? 0 : modifiedBy.hashCode());
-      return result;
-   }
-	//***** kind
-	/**
-	 * Used by the DAO to identify the type of entity used to store data. 
-	 * @return
-	 */
-	public abstract String getKind();
-	
-	//***** populateEntity
-	/**
-	 * Populate the specified entity with information from the current object.
-	 * 
-	 * <p>The default implementation of this method will not actually 
-	 * populate any information in the specified entity object as the main
-	 * properties contained in this object are properties that are immutable
-	 * such as @{code dateCreated} and @{code createdBy} or properties
-	 * that are going to be updated by the @{code DAO} such as 
-	 * @{code dateModified} and @{code modifiedBy}.</p>
-	 * 
-	 * @param entity The instance of the @{code Entity} class from the 
-	 * @{code com.google.appengine.api.datastore.Entity} package.
-	 */
-	protected void populateEntity(Entity entity) {
-		logger.entering(_CLASS,"populateEntity(Entity)",entity);
-		if (entity == null) {
-			logger.severe("The Entity parameter was null.");
-		} // END if (entity != null)
-		logger.exiting(_CLASS,"populateEntity(Entity)");
-	}
-	
-	protected void populateFromEntity(Entity entity, UserContext ctx) {
-	  logger.entering(_CLASS,"populateFromEntity(Entity,UserContext)",
-          new Object[] {entity,ctx});
-	  
-	  if (entity != null) {
-	     setIdentifier(entity.getKey());
-        setCreatedBy(getPropertyAsString(entity,"createdBy"));
-        setDateCreated(getPropertyAsDate(entity,"dateCreated"));
-        setDateModified(getPropertyAsDate(entity,"dateModified"));
-        setModifiedBy(getPropertyAsString(entity,"modifiedBy"));        
-     } else {
-        logger.severe("The Entity parameter was null.");
-     } // END if (entity != null)
-	  logger.exiting(_CLASS,"populateFromEntity(Entity,UserContext)");
-	}	
-	
-	public void populateFromObject(T object) {
-	   logger.entering(_CLASS, "populateFromObject(T)",object);
-	   WildObject wObject=null;
-	   
-	   if ((object != null) && (object instanceof WildObject)) {
-	      wObject=(WildObject) object;
-	      setIdentifier(wObject.getIdentifier());
-	      setCreatedBy(wObject.getCreatedBy());
-	      setDateCreated(wObject.getDateCreated());
-	      setDateModified(wObject.getDateModified());
-	   } // END if (object instanceof WildObject)
-	   
-	   logger.exiting(_CLASS, "populateFromObject(T)");
 	}
 }

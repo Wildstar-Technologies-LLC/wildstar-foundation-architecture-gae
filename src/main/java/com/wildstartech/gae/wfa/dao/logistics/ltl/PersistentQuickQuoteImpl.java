@@ -116,6 +116,7 @@ implements PersistentQuickQuote {
 	@Override
 	protected void populateEntity(Entity entity) {
 		logger.entering(_CLASS, "populateEntity(Entity)", entity);
+		AdjustmentType adjustmentType=null;
 		PriceModel pm = null;
 		String tmpStr = null;
 
@@ -124,14 +125,17 @@ implements PersistentQuickQuote {
 			// adjustmentAmount
 			entity.setProperty("adjustmentAmount", getAdjustmentAmount());
 			// adjustmentType
-			switch (getAdjustmentType()) {
-			case FixedAmount:
-				entity.setProperty("adjustmentType", ADJUSTMENT_TYPE_FIXED_AMOUNT);
-				break;
-			default:
-				entity.setProperty("adjustmentType", ADJUSTMENT_TYPE_PERCENTAGE);
-			} // END switch(getAdjustmentType())
-				// amount
+			adjustmentType=getAdjustmentType();
+			if (adjustmentType != null) {
+   			switch (adjustmentType) {
+   			case FixedAmount:
+   				entity.setProperty("adjustmentType", ADJUSTMENT_TYPE_FIXED_AMOUNT);
+   				break;
+   			default:
+   				entity.setProperty("adjustmentType", ADJUSTMENT_TYPE_PERCENTAGE);
+   			} // END switch(getAdjustmentType())
+			} // END if (adjustmentType != null)
+   		// amount
 			entity.setProperty("amount", getAmount());
 			// contactCompanyName
 			entity.setProperty("contactCompanyName", getContactCompanyName());

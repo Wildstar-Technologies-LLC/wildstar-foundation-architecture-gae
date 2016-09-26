@@ -106,81 +106,6 @@ public class UserContextImpl extends WildObjectImpl<UserContext>
 
    // ******** Utility Methods
    /**
-    * Populate the Entity with information from the current object.
-    */
-   @Override
-   protected void populateEntity(Entity entity) {
-      logger.entering(_CLASS, "populateEntity(Entity)");
-      super.populateEntity(entity);
-      entity.setProperty("username", this.user.getName());
-      logger.exiting(_CLASS, "populateEntity(Entity)");
-   }
-
-   /**
-    * Populate the current object with information contained in the Entity.
-    */
-   @Override
-   protected void populateFromEntity(Entity entity, UserContext ctx) {
-      logger.entering(_CLASS, "populateFromEntity(Entity,UserContext)",
-            new Object[] { entity, ctx });
-      Object obj = null;
-      String username = null;
-      PersistentUser user = null;
-      UserDAOImpl dao = null;
-
-      if (entity != null) {
-         // Call the requisite superclass methods.
-         super.populateFromEntity(entity, ctx);
-         // Get the value of the username property
-         obj = entity.getProperty("username");
-         if ((obj != null) && (obj instanceof String)) {
-            username = (String) obj;
-            // Using the username property, look up the user object
-            dao = new UserDAOImpl();
-            user = dao.findByEmailAddress(username, ctx);
-            if (user != null) {
-               setUser(user);
-            } else {
-               // The specified user could not be found.
-            } // END if (user != null)
-         } else {
-            if (obj == null) {
-               logger.severe("Entity did not contain the username property");
-            } else {
-               logger.severe("Username property is not a string.");
-            } // END if (obj == null)
-         } // END if ((obj != null) && (obj instanceof String))
-      } // END if (entity != null)
-
-      logger.exiting(_CLASS, "populateFromEntity(Entity)");
-   }
-
-   /**
-    * Populates the current UserContext from the specified template.
-    */
-   @Override
-   public void populateFromObject(UserContext ctx) {
-      logger.entering(_CLASS, "populateFromObject(UserContext)", ctx);
-      if (ctx != null) {
-         //TODO
-      } else {
-         logger.severe("The UserContext is null.");
-      } // END if (ctx != null)
-
-      logger.exiting(_CLASS, "populateFromObject(UserContext)");
-   }
-
-   /**
-    * Used to tell the datastore the type of object represented by the entity.
-    */
-   @Override
-   public String getKind() {
-      logger.entering(_CLASS, "getKind()");
-      logger.exiting(_CLASS, "getKind()", UserContextImpl._KIND);
-      return UserContextImpl._KIND;
-   }
-
-   /**
     * Manages the process of authenticating the user against the persistent.
     * 
     * @return
@@ -264,6 +189,124 @@ public class UserContextImpl extends WildObjectImpl<UserContext>
       logger.exiting(_CLASS, "authenticate()", this.authenticated);
       return this.authenticated;
    }
+   
+   /**
+    * Used to tell the datastore the type of object represented by the entity.
+    */
+   @Override
+   public String getKind() {
+      logger.entering(_CLASS, "getKind()");
+      logger.exiting(_CLASS, "getKind()", UserContextImpl._KIND);
+      return UserContextImpl._KIND;
+   }
+   
+   /**
+    * Populate the Entity with information from the current object.
+    */
+   @Override
+   protected void populateEntity(Entity entity) {
+      logger.entering(_CLASS, "populateEntity(Entity)");
+      super.populateEntity(entity);
+      entity.setProperty("username", this.user.getName());
+      logger.exiting(_CLASS, "populateEntity(Entity)");
+   }
+
+   /**
+    * Populate the current object with information contained in the Entity.
+    */
+   @Override
+   protected void populateFromEntity(Entity entity, UserContext ctx) {
+      logger.entering(_CLASS, "populateFromEntity(Entity,UserContext)",
+            new Object[] { entity, ctx });
+      Object obj = null;
+      String username = null;
+      PersistentUser user = null;
+      UserDAOImpl dao = null;
+
+      if (entity != null) {
+         // Call the requisite superclass methods.
+         super.populateFromEntity(entity, ctx);
+         // Get the value of the username property
+         obj = entity.getProperty("username");
+         if ((obj != null) && (obj instanceof String)) {
+            username = (String) obj;
+            // Using the username property, look up the user object
+            dao = new UserDAOImpl();
+            user = dao.findByEmailAddress(username, ctx);
+            if (user != null) {
+               setUser(user);
+            } else {
+               // The specified user could not be found.
+            } // END if (user != null)
+         } else {
+            if (obj == null) {
+               logger.severe("Entity did not contain the username property");
+            } else {
+               logger.severe("Username property is not a string.");
+            } // END if (obj == null)
+         } // END if ((obj != null) && (obj instanceof String))
+      } // END if (entity != null)
+
+      logger.exiting(_CLASS, "populateFromEntity(Entity)");
+   }
+
+   /**
+    * Populates the current UserContext from the specified template.
+    */
+   @Override
+   public void populateFromObject(UserContext ctx) {
+      logger.entering(_CLASS, "populateFromObject(UserContext)", ctx);
+      if (ctx != null) {
+         //TODO
+      } else {
+         logger.severe("The UserContext is null.");
+      } // END if (ctx != null)
+
+      logger.exiting(_CLASS, "populateFromObject(UserContext)");
+   }
+   
+   /**
+    * Returns a string representation consisting of object properties.
+    */
+   public String toPropertyString() {
+      logger.entering(_CLASS, "toPropertyString()");
+      String returnValue=null;
+      StringBuilder sb=null;
+      
+      sb=new StringBuilder(1024);
+      sb.append(super.toPropertyString());
+      sb.append(",userName=\"").append(getIdentifier()).append("\", ");
+      sb.append("authenticated=\"");
+      if (isAuthenticated()) {
+         sb.append("true\", authenticationDate=\"");
+         sb.append(this.dFmt.format(getAuthenticationDate()));
+         sb.append("\",");
+      } else {
+         sb.append("false\",");
+      } // END if (this.authenticated)      
+      returnValue=sb.toString();
+      
+      logger.exiting(_CLASS, "toPropertyString()",returnValue);
+      return returnValue;
+   }
+   
+   /**
+    * Returns a string representation of the object.
+    */
+   public String toString() {
+     logger.entering(_CLASS,"toString()");
+     String result=null;
+     StringBuilder sb=null;
+     
+     sb=new StringBuilder(256);
+     sb.append("UserContextImpl [");
+     sb.append(toPropertyString());
+     sb.append("]");
+     result=sb.toString();
+     logger.exiting(_CLASS,"toString()",result);
+     return result;
+   }  
+   
    //***** Accessor methods
    //***** authentication
    /**

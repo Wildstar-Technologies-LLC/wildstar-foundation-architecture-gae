@@ -260,55 +260,95 @@ public class UserDAOImpl extends WildDAOImpl<User, PersistentUser>
    public PersistentUser save(User user, UserContext ctx) {
       logger.entering(_CLASS, "save(User,UserContext)",
             new Object[] { user, ctx });
-      PersistentGroup savedGroup = null;
       GroupDAO gDao = null;
       GroupDAOFactory gFactory = null;
       List<Group> groups = null;
       MemcacheService memcache = null;
-      PersistentUser savedUser = null;
-
-      /*
-       * Call the save method of the super class to handle the "normal"
-       * persistence requirements for saving a user record.
-       */
-      savedUser = super.save(user, ctx);
+      PersistentGroup savedGroup = null;
+      PersistentUser pUser = null;
+      String userName=null;
       
-      // Put the user back into memcache.
+      
       memcache = MemcacheServiceFactory.getMemcacheService();
-      memcache.put(
-            MemcacheKeyGenerator.getKey(
-                  PersistentUserImpl._KIND,
-                  user.getName()
-            ), 
-            user);
-      /*
-       * Now lets manage the process of saving information on the groups that
-       * are related to the user account.
-       */
-      groups = user.getGroups();
-      if (groups.size() > 0) {
-         // There are groups to save, so get access to the requisite DAOs
-         gFactory = new GroupDAOFactory();
-         gDao = gFactory.getDAO();
-         for (Group group : groups) {
-            // Iterate through the list of groups.
-            if (group instanceof PersistentGroupImpl == false) {
-               /*
-                * The specified group isn't a persistent group, so locate the
-                * persistent version.
-                */
-               savedGroup = gDao.findInstance(group, ctx);
-               if (savedGroup == null) {
-                  savedGroup = gDao.save(group, ctx);
-               } // END if (savedGroup == null)
-            } // END if (group instanceof GroupImpl
-         } // END for (Group group: groups)
-      } else {
-         // There are no specified groups, so do nothing.
-         logger.finest("No specified groups to save/associate.");
-      } // END if (groups.size() > 0)
+      userName=user.getName();      // Get the user name
+      
+      
+      if (!isEmpty(userName)) {
+         // The name property of the user object is specified, so continue...
+         /* Check memcache for the user... */
+         pUser=(PersistentUser)memcache.get(
+               MemcacheKeyGenerator.getKey(
+                     PersistentUserImpl._KIND,
+                     user.getName()
+               )
+         );
+         if (pUser == null) {
+            // The user was not in memcache, so let's get it from the DB
+            if (!isEmpty(userName)) {
+               pUser=findByName(userName,ctx);               
+            } // END if (!isEmpty(userName))
+         } // END if (pUser == null)
+         
+         /**
+          * Call the save method of the super class to handle the "normal"
+          * persistence requirements for saving a user record.
+          * 
+          * We're going to use different save methods if the user is a new
+          * account versus and existing account.
+          * 
+          */
+         //TODO This is sub-optimal and should be fixed.
+         if (pUser == null) {
+            // If the persistent user is still null, then it is a new one.
+            pUser=super.save(user, ctx);
+         } else {
+            pUser.updateFromObject(user);
+            pUser=super.save(pUser, ctx);
+         } // END if (pUser == null)
+         
+         // Put the persistent user back into memcache.
+         memcache.put(
+               MemcacheKeyGenerator.getKey(
+                     PersistentUserImpl._KIND,
+                     user.getName()
+               ), 
+               pUser);
+         
+         /*
+          * Now lets manage the process of saving information on the groups that
+          * are related to the user account.
+          */
+         groups = user.getGroups();
+         if (groups.size() > 0) {
+            // There are groups to save, so get access to the requisite DAOs
+            gFactory = new GroupDAOFactory();
+            gDao = gFactory.getDAO();
+            for (Group group : groups) {
+               // Iterate through the list of groups.
+               if (group instanceof PersistentGroupImpl == false) {
+                  /*
+                   * The specified group isn't a persistent group, so locate the
+                   * persistent version.
+                   */
+                  savedGroup = gDao.findInstance(group, ctx);
+                  if (savedGroup == null) {
+                     savedGroup = gDao.save(group, ctx);
+                  } // END if (savedGroup == null)
+               } // END if (group instanceof GroupImpl
+            } // END for (Group group: groups)
+         } else {
+            // There are no specified groups, so do nothing.
+            logger.finest("No specified groups to save/associate.");
+         } // END if (groups.size() > 0)
 
-      logger.exiting(_CLASS, "save(User,UserContext", savedUser);
-      return savedUser;
+         
+         
+      } else {
+         // The userName is not specified, the object CANNOT be saved.
+         
+      } // END if (!isEmpty(userName))
+      
+      logger.exiting(_CLASS, "save(User,UserContext", pUser);
+      return pUser;
    }
 }
