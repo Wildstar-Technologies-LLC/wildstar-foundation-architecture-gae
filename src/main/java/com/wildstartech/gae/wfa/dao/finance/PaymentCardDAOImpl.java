@@ -65,8 +65,10 @@ extends WildDAOImpl<PaymentCard,PersistentPaymentCard<?>> {
    }
    @Override
    public PersistentPaymentCard<?> create() {
-      // TODO Auto-generated method stub
-      return null;
+      PersistentPaymentCard<?> card=null;
+      
+      card=(PersistentPaymentCard<?>) new PersistentPaymentCardImpl<PaymentCard>();
+      return card;
    }
    @Override
    public PersistentPaymentCard<?> create(

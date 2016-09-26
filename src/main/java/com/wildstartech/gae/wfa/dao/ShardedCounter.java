@@ -455,7 +455,7 @@ public abstract class ShardedCounter<T extends Object> {
                "ConcurrentModificationException Thrown.",
                ex);
       } finally {
-         if (tx.isActive()) {
+         if ((tx != null) && (tx.isActive())) {
             tx.rollback();
          } // END if (tx.isActive())
       } // END try/catch
