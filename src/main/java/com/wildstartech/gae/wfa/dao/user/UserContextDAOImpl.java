@@ -45,6 +45,7 @@
 package com.wildstartech.gae.wfa.dao.user;
 
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.google.appengine.api.datastore.Query;
@@ -56,9 +57,11 @@ import com.google.appengine.api.memcache.MemcacheServiceFactory;
 import com.wildstartech.gae.wfa.dao.MemcacheKeyGenerator;
 import com.wildstartech.gae.wfa.dao.QueryWrapper;
 import com.wildstartech.gae.wfa.dao.WildDAOImpl;
+import com.wildstartech.wfa.Localization;
 import com.wildstartech.wfa.dao.DAOException;
 import com.wildstartech.wfa.dao.user.UserContext;
 import com.wildstartech.wfa.dao.user.UserContextDAO;
+import com.wildstartech.wfa.dao.user.UserContextDAOResources;
 
 public class UserContextDAOImpl 
 extends WildDAOImpl<UserContext, UserContext> 
@@ -77,6 +80,7 @@ implements UserContextDAO {
     MemcacheService cache = null;
     Query query = null;
     QueryWrapper qw=null;
+    String msg=null;
     UserContextImpl foundCtx = null;
 
     if (userName != null) {
@@ -100,19 +104,38 @@ implements UserContextDAO {
             if (items.size() == 1) {
               foundCtx=(UserContextImpl) items.get(0);
             } else {
-              logger.warning(
-                  "There should be only one match, but there are multiple.");
+               if (logger.isLoggable(Level.FINE)) {
+                  msg=Localization.getString(RESOURCE_BUNDLE, 
+                        UserContextDAOResources.msgUserContextMultipleMatch, 
+                        null);
+                  logger.fine(msg);
+               } // END if (logger.isLoggable(Level.FINE))              
             } // END if (items.size() > 1)         
           } else {
-            logger.warning("No user context exits for the specified user.");
+             if (logger.isLoggable(Level.FINE)) {
+                msg=Localization.getString(RESOURCE_BUNDLE, 
+                      UserContextDAOResources.msgUserContextDoesNotExist, 
+                      null);
+             } // END if (logger.isLoggable(Level.FINE))
+            logger.warning("");
           } // END if (items.size() == 0)
         } // END if (ctx == null)
       } else {
-        // The specified UserContext was null.
-        logger.warning("UserContext parameter specified is null.");
+         if (logger.isLoggable(Level.FINE)) {
+            msg=Localization.getString(
+                  RESOURCE_BUNDLE,
+                  UserContextDAOResources.msgUserContextParameterNull,
+                  null);
+            logger.warning(msg);
+         } // END if (logger.isLoggable(Level.FINE))
       } // END if (ctx != null)
     } else {
-      logger.warning("userName parameter specified is null.");
+       if (logger.isLoggable(Level.FINE)) {
+          msg=Localization.getString(RESOURCE_BUNDLE, 
+                UserContextDAOResources.msgUserNameParameterNull, 
+                null);
+         logger.fine(msg);
+       } // END if (logger.isLoggable(Level.FINE))
     } // END if (userName != null)
 
     logger.exiting(_CLASS, "findByUserName(String)", ctx);

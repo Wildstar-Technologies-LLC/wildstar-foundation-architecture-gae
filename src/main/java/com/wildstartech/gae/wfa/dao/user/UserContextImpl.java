@@ -41,7 +41,8 @@
  *
  *      derek.berube@wildstartech.com
  *      www.wildstartech.com
- */package com.wildstartech.gae.wfa.dao.user;
+ */
+package com.wildstartech.gae.wfa.dao.user;
 
 import java.text.DateFormat;
 import java.text.NumberFormat;

@@ -44,21 +44,26 @@
  */
 package com.wildstartech.gae.wfa.dao;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 import com.google.appengine.api.datastore.Query;
+import com.wildstartech.wfa.dao.Filter;
 
 public class QueryWrapper implements com.wildstartech.wfa.dao.Query {
   private static final String _CLASS=QueryWrapper.class.getName();
   private static final Logger logger=Logger.getLogger(_CLASS);
   
   private Query query=null;
+  private List<Filter> filters=null;
   
   /**
    * Default, no-argument constructor.
    */
   public QueryWrapper() {
     logger.entering(_CLASS,"QueryWrapper()");
+    init();    
     logger.exiting(_CLASS,"QueryWrapper()");
   }
   /**
@@ -67,8 +72,61 @@ public class QueryWrapper implements com.wildstartech.wfa.dao.Query {
    */
   public QueryWrapper(Query query) {
     logger.entering(_CLASS,"QueryWrapper(Query)",query);
+    init();
     this.query=query;
     logger.exiting(_CLASS,"QueryWrapper(Query)");
+  }
+  
+  private  void init() {
+     logger.entering(_CLASS, "init()");
+     this.filters=new ArrayList<Filter>();
+     logger.exiting(_CLASS, "init()");
+  }
+  
+  //***** Filter
+  @Override
+  public boolean addFilter(Filter filter) {
+     logger.entering(_CLASS, "addFilter(Filter)",filter);
+     boolean result=false;
+     logger.exiting(_CLASS, "addFilter(Filter)",result);
+     return result;
+  }
+  @Override
+  public List<Filter> addFilters(List<Filter> filters) {
+     logger.entering(_CLASS, "addFilter(List<Filter>)",filters);
+     List<Filter> returnFilters=null;
+     logger.exiting(_CLASS, "addFilter(List<Filter>)",returnFilters);
+     return returnFilters;
+  }
+  @Override
+  public void clearFilters() {
+     logger.entering(_CLASS,"clearFilters()");
+     
+     this.filters.clear();
+     
+     logger.exiting(_CLASS,"clearFilters()");
+  }
+  @Override
+  public List<Filter> getFilters() {
+     logger.entering(_CLASS, "getFilters()");
+     List<Filter> returnList=null;
+     
+     logger.exiting(_CLASS, "getFilters()",returnList);
+     return returnList;
+  }
+  @Override
+  public boolean removeFilter(Filter filter) {
+     logger.entering(_CLASS, "removeFilter(Filter)",filter);
+     boolean result=false;
+     logger.exiting(_CLASS, "removeFilter(Filter)",result);
+     return result;
+  }
+  @Override
+  public List<Filter> removeFilters(List<Filter> filters) {
+     logger.entering(_CLASS,"removeFilters(List<Filter>)",filters);
+     List<Filter> filtersRemoved=null;
+     logger.exiting(_CLASS,"removeFilters(List<Filter>)",filtersRemoved);
+     return filtersRemoved;
   }
   
   //***** query
