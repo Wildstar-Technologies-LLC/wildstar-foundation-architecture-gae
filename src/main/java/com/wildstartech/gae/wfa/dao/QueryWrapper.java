@@ -50,6 +50,7 @@ import java.util.logging.Logger;
 
 import com.google.appengine.api.datastore.Query;
 import com.wildstartech.wfa.dao.Filter;
+import com.wildstartech.wfa.dao.PropertyFilter;
 
 public class QueryWrapper implements com.wildstartech.wfa.dao.Query {
   private static final String _CLASS=QueryWrapper.class.getName();
@@ -81,7 +82,7 @@ public class QueryWrapper implements com.wildstartech.wfa.dao.Query {
      logger.entering(_CLASS, "init()");
      this.filters=new ArrayList<Filter>();
      logger.exiting(_CLASS, "init()");
-  }
+  }  
   
   //***** Filter
   @Override

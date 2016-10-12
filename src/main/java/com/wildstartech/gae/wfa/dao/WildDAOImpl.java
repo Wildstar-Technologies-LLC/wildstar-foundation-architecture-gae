@@ -41,7 +41,8 @@
  *
  *      derek.berube@wildstartech.com
  *      www.wildstartech.com
- */package com.wildstartech.gae.wfa.dao;
+ */
+package com.wildstartech.gae.wfa.dao;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -99,8 +100,10 @@ import com.wildstartech.wfa.dao.user.UserContext;
  * @param <T>
  * @param <W>
  */
-public abstract class WildDAOImpl<T, W extends WildObject> implements WildDAO<T, W> {
-   public static final String PROPKEY_RULESET = "com.wildstartech.wfa.dao.ruleset";
+public abstract class WildDAOImpl<T, W extends WildObject> 
+implements WildDAO<T, W> {
+   public static final String PROPKEY_RULESET = 
+         "com.wildstartech.wfa.dao.ruleset";
    private static final String _CLASS = WildDAOImpl.class.getName();
    private static final Logger logger = Logger.getLogger(_CLASS);
    private static final String DEFAULT_USERNAME = "WildAdmin";
@@ -214,6 +217,15 @@ public abstract class WildDAOImpl<T, W extends WildObject> implements WildDAO<T,
       logger.exiting(_CLASS, "WildDAOImpl()");
    }
 
+   /**
+    * Return
+    */
+   public Query createQuery() {
+      logger.entering(_CLASS, "createQuery()");
+      QueryImpl query=null;
+      logger.exiting(_CLASS, "createQuery()",query);
+      return query;
+   }
    /**
     * Returns localized message.
     * 
