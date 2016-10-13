@@ -109,11 +109,12 @@ implements WorkOrderDAO {
          throws DAOException {
       logger.entering(_CLASS, "findActionable(UserContext)",ctx);
       Filter filter=null;
+      Filter userFilter=null;
       List<Filter> filters=null;
       List<PersistentWorkOrder> workOrders=null;
-      
       Query query=null;
       QueryWrapper qw=null;
+      String currentUser=null;
       
       workOrders=new ArrayList<PersistentWorkOrder>();
       query=new Query(PersistentWorkOrderImpl._KIND);
@@ -128,6 +129,33 @@ implements WorkOrderDAO {
       filter=new Query.CompositeFilter(
             Query.CompositeFilterOperator.OR,
             filters);
+      
+      /* ***** BEGIN: User Filtering */
+      currentUser = ctx.getUserName();
+      if (
+            (currentUser != null) && 
+            (!currentUser.equalsIgnoreCase("transit.systems@justodelivery.com")) &&
+            (currentUser.endsWith("justodelivery.com"))
+         ) {
+         // No-Op
+         // This is a Justo Employee, so ALL records are welcome.
+      } else {
+         filters = new ArrayList<Filter>();
+         filters.add(new FilterPredicate("createdBy",
+               FilterOperator.EQUAL, currentUser));
+         filters.add(new FilterPredicate("contactEmail",
+               FilterOperator.EQUAL, currentUser));
+         userFilter = new Query.CompositeFilter(
+               Query.CompositeFilterOperator.OR, filters);
+         filters=new ArrayList<Filter>();
+         filters.add(filter);
+         filters.add(userFilter);
+         filter=new Query.CompositeFilter(
+               Query.CompositeFilterOperator.AND,
+               filters);
+      } // END if ((currentUser != null) && ...
+      /* ***** END: User Filtering */
+      
       query.setFilter(filter);
       qw=new QueryWrapper(query);
       workOrders=findByQuery(qw,ctx);
@@ -148,11 +176,12 @@ implements WorkOrderDAO {
          throws DAOException {
       logger.entering(_CLASS, "findAllOpen(UserContext)",ctx);
       Filter filter=null;
+      Filter userFilter=null;
       List<Filter> filters=null;
       List<PersistentWorkOrder> workOrders=null;
-      
       Query query=null;
       QueryWrapper qw=null;
+      String currentUser=null;      
       
       workOrders=new ArrayList<PersistentWorkOrder>();
       query=new Query(PersistentWorkOrderImpl._KIND);
@@ -169,6 +198,33 @@ implements WorkOrderDAO {
       filter=new Query.CompositeFilter(
             Query.CompositeFilterOperator.OR,
             filters);
+      
+      /* ***** BEGIN: User Filtering */
+      currentUser = ctx.getUserName();
+      if (
+            (currentUser != null) && 
+            (!currentUser.equalsIgnoreCase("transit.systems@justodelivery.com")) &&
+            (currentUser.endsWith("justodelivery.com"))
+         ) {
+         // No-Op
+         // This is a Justo Employee, so ALL records are welcome.
+      } else {
+         filters = new ArrayList<Filter>();
+         filters.add(new FilterPredicate("createdBy",
+               FilterOperator.EQUAL, currentUser));
+         filters.add(new FilterPredicate("contactEmail",
+               FilterOperator.EQUAL, currentUser));
+         userFilter = new Query.CompositeFilter(
+               Query.CompositeFilterOperator.OR, filters);
+         filters=new ArrayList<Filter>();
+         filters.add(filter);
+         filters.add(userFilter);
+         filter=new Query.CompositeFilter(
+               Query.CompositeFilterOperator.AND,
+               filters);
+      } // END if ((currentUser != null) && ...
+      /* ***** END: User Filtering */
+      
       query.setFilter(filter);
       qw=new QueryWrapper(query);
       workOrders=findByQuery(qw,ctx);

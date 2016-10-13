@@ -54,6 +54,7 @@ import java.util.logging.Logger;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.Filter;
 import com.google.appengine.api.datastore.Query.FilterOperator;
+import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.wildstartech.gae.wfa.dao.QueryWrapper;
 import com.wildstartech.gae.wfa.dao.WildDAOImpl;
 import com.wildstartech.gae.wfa.dao.WildObjectImpl;
@@ -73,9 +74,12 @@ public abstract class BasicTicketDAOImpl<T extends BasicTicket, W extends Persis
       logger.entering(_CLASS, "findByRequestId(String,UserContext)",
             new Object[] { requestId, ctx });
       Filter filter = null;
+      Filter userFilter=null;
+      List<Filter> filters=null;
       List<W> pObjects = null;
       Query query = null;
       QueryWrapper qw = null;
+      String currentUser=null;
       String kind = null;
       W pObject = null;
 
@@ -86,6 +90,33 @@ public abstract class BasicTicketDAOImpl<T extends BasicTicket, W extends Persis
          query = new Query(kind);
          filter = new Query.FilterPredicate("requestId", FilterOperator.EQUAL,
                requestId);
+         
+         /* ***** BEGIN: User Filtering */
+         currentUser = ctx.getUserName();
+         if (
+               (currentUser != null) && 
+               (!currentUser.equalsIgnoreCase("transit.systems@justodelivery.com")) &&
+               (currentUser.endsWith("justodelivery.com"))
+            ) {
+            // No-Op
+            // This is a Justo Employee, so ALL records are welcome.
+         } else {
+            filters = new ArrayList<Filter>();
+            filters.add(new FilterPredicate("createdBy",
+                  FilterOperator.EQUAL, currentUser));
+            filters.add(new FilterPredicate("contactEmail",
+                  FilterOperator.EQUAL, currentUser));
+            userFilter = new Query.CompositeFilter(
+                  Query.CompositeFilterOperator.OR, filters);
+            filters=new ArrayList<Filter>();
+            filters.add(filter);
+            filters.add(userFilter);
+            filter=new Query.CompositeFilter(
+                  Query.CompositeFilterOperator.AND,
+                  filters);
+         } // END if ((currentUser != null) && ...
+         /* ***** END: User Filtering */
+         
          query.setFilter(filter);
          qw = new QueryWrapper(query);
          pObjects = findByQuery(qw, ctx);
