@@ -58,6 +58,7 @@ import com.wildstartech.gae.wfa.dao.journal.JournalDAOImpl;
 import com.wildstartech.gae.wfa.dao.journal.PersistentJournalEntryImpl;
 import com.wildstartech.gae.wfa.dao.ticketing.BasicTicketDAOImpl;
 import com.wildstartech.wfa.dao.DAOException;
+import com.wildstartech.wfa.dao.logistics.ltl.PersistentQuote;
 import com.wildstartech.wfa.dao.logistics.ltl.PersistentWorkOrder;
 import com.wildstartech.wfa.dao.logistics.ltl.PersistentWorkOrderLineItem;
 import com.wildstartech.wfa.dao.logistics.ltl.WorkOrderDAO;
@@ -165,6 +166,72 @@ implements WorkOrderDAO {
       return workOrders;
    }
    
+   /**
+    * 
+    */
+   @Override
+   public List<PersistentWorkOrder> findAll(UserContext ctx) {
+      logger.entering(_CLASS, "findAll(UserContext)",ctx);
+      Query query = null;
+      Filter filter = null;
+      Filter userFilter=null;
+      List<Filter> filters=null;
+      List<PersistentWorkOrder> results=null;
+      QueryWrapper qw = null;
+      String currentUser = null;
+      String kind = null;
+      String msg = null;
+      StringBuilder sb = null;
+
+      if (
+            (ctx != null) && 
+            (ctx.isAuthenticated())
+         ) {
+         kind = getKind();
+         query = new Query(kind);
+
+         /* ***** BEGIN: User Filtering */
+         currentUser = ctx.getUserName();
+         if (
+               (currentUser != null) && 
+               (!currentUser.equalsIgnoreCase("transit.systems@justodelivery.com")) &&
+               (currentUser.endsWith("justodelivery.com"))
+            ) {
+            // No-Op
+            // This is a Justo Employee, so ALL records are welcome.
+         } else {
+            filters = new ArrayList<Filter>();
+            filters.add(new FilterPredicate("createdBy",
+                  FilterOperator.EQUAL, currentUser));
+            filters.add(new FilterPredicate("contactEmail",
+                  FilterOperator.EQUAL, currentUser));
+            userFilter = new Query.CompositeFilter(
+                  Query.CompositeFilterOperator.OR, filters);
+         } // END if ((currentUser != null) && ...
+         if (userFilter != null) {
+            query.setFilter(userFilter);
+         } // END if (userFilter != null)
+         /* ***** END: User Filtering */
+
+         qw = new QueryWrapper(query);
+         results = findByQuery(qw, ctx);
+      } else {
+         // The specified context was either null or has not been authenticated.
+         if (ctx == null) {
+            msg = ("The UserContext parameter was null.");
+         } else if (!ctx.isAuthenticated()) {
+            sb = new StringBuilder(80);
+            sb.append("The specified UserContext, ").append(ctx.getUserName());
+            sb.append(", is not authenticated.");
+            msg = sb.toString();
+         } // END if (ctx == null)
+         logger.fine(msg);
+
+      } // END if ((ctx != null) && (ctx.isAuthenticated()))
+      
+      logger.exiting(_CLASS, "findAll(UserContext)",results);
+      return results;
+   }
    /**
     * Returns a list of <code>PersistentWorkOrder</code> objects that are have a
     * value of neither "Resolved" nor "Closed" in the <code>statusState</code> 
