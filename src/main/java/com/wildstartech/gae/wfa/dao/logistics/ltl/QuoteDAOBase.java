@@ -290,17 +290,19 @@ public abstract class QuoteDAOBase<T extends QuickQuote, W extends PersistentQui
     */
    public final List<W> findAllActive(UserContext ctx) {
       logger.entering(_CLASS, "findAllActive(UserContext)", ctx);
+      Filter filter = null;
+      Filter userFilter=null;
       List<Filter> filters = null;
       List<W> quotes = null;
       Query query = null;
       QueryWrapper qw = null;
-      Query.Filter filter = null;
       String currentUser = null;
       String kind=null;
 
       if (ctx != null) {
          kind=getKind();
          query = new Query(kind);
+         
          // Let's build the list of composite queries.
          filters = new ArrayList<Filter>();
          filters.add(
@@ -311,18 +313,34 @@ public abstract class QuoteDAOBase<T extends QuickQuote, W extends PersistentQui
                "Pending"));
          filters.add(new FilterPredicate("statusState", FilterOperator.EQUAL,
                "Accepted"));
-
-         /* BEGIN: Add filter for transit.systems@justodelivery.com */
-         currentUser = ctx.getUserName();
-         if ((currentUser != null) && (currentUser
-               .equalsIgnoreCase("transit.systems@justodelivery.com"))) {
-            filters.add(new FilterPredicate("createdBy", FilterOperator.EQUAL,
-                  "transit.systems@justodelivery.com"));
-         } // END if ((currentUser != null) ...
-         /* END: Add filter for transit.systems@justodelivery.com */
-
          filter = new Query.CompositeFilter(Query.CompositeFilterOperator.OR,
                filters);
+         
+         /* ***** BEGIN: User Filtering */
+         currentUser = ctx.getUserName();
+         if (
+               (currentUser != null) && 
+               (!currentUser.equalsIgnoreCase("transit.systems@justodelivery.com")) &&
+               (currentUser.endsWith("justodelivery.com"))
+            ) {
+            // No-Op
+            // This is a Justo Employee, so ALL records are welcome.
+         } else {
+            filters = new ArrayList<Filter>();
+            filters.add(new FilterPredicate("createdBy",
+                  FilterOperator.EQUAL, currentUser));
+            filters.add(new FilterPredicate("contactEmail",
+                  FilterOperator.EQUAL, currentUser));
+            userFilter = new Query.CompositeFilter(
+                  Query.CompositeFilterOperator.OR, filters);
+            filters=new ArrayList<Filter>();
+            filters.add(filter);
+            filters.add(userFilter);
+            filter= new Query.CompositeFilter(
+                  Query.CompositeFilterOperator.AND, filters);
+         } // END if ((currentUser != null) && ...
+         /* ***** END: User Filtering */
+         
          query.setFilter(filter);
          // Run the query
          qw = new QueryWrapper(query);
@@ -353,7 +371,11 @@ public abstract class QuoteDAOBase<T extends QuickQuote, W extends PersistentQui
       String currentUser = null;
       String kind=null;
 
-      if ((requestId != null) && (requestId.length() > 0) && (ctx != null)) {
+      if (
+            (requestId != null) && 
+            (requestId.length() > 0) && 
+            (ctx != null)
+         ) {
          kind=getKind();
          query = new Query(kind);
 
@@ -369,7 +391,6 @@ public abstract class QuoteDAOBase<T extends QuickQuote, W extends PersistentQui
             ) {
             // No-Op
             // This is a Justo Employee, so ALL records are welcome.
-            query.setFilter(filter);
          } else {
             // Filter based upon name of the currently logged in user.
             tmpFilters = new ArrayList<Filter>();
@@ -385,10 +406,10 @@ public abstract class QuoteDAOBase<T extends QuickQuote, W extends PersistentQui
             filter=new Query.CompositeFilter(
                   Query.CompositeFilterOperator.AND,
                   tmpFilters);
-            query.setFilter(filter);
          } // END if ((currentUser != null) && ...
          /* ***** END: User Filtering */
-         
+
+         query.setFilter(filter);
          qw = new QueryWrapper(query);
          quotes = findByQuery(qw, ctx);
          if ((quotes != null) && (quotes.size() != 0)) {
