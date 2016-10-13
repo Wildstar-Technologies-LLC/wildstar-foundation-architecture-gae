@@ -11,7 +11,7 @@ public class QueryTest {
       Query query=null;
       PropertyFilter<String> filter=null;
       
-      filter=new PropertyFilterImpl<String>();
+      filter=new PropertyFilter<String>();
       query=new QueryImpl();
       
             

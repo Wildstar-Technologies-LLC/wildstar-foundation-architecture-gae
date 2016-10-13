@@ -136,13 +136,16 @@ public abstract class QuoteDAOBase<T extends QuickQuote, W extends PersistentQui
       List<W> quotes = null;
       Query query = null;
       QueryWrapper qw = null;
-      Query.Filter filter = null;
+      Filter filter = null;
+      Filter userFilter=null;
       String currentUser = null;
 
       if (ctx != null) {
          query = new Query(PersistentQuoteImpl._KIND);
          // Let's build the list of filters for the query.
          filters = new ArrayList<Filter>();
+         
+         
          // We want ALL quotes with a value of "New" for the 'Status' field.
          filters.add(
                new FilterPredicate("statusState", FilterOperator.EQUAL, "New"));
@@ -164,19 +167,35 @@ public abstract class QuoteDAOBase<T extends QuickQuote, W extends PersistentQui
          filter = new Query.CompositeFilter(Query.CompositeFilterOperator.OR,
                filters);
 
-         /* BEGIN: Add filter for transit.systems@justodelivery.com */
+         /* ***** BEGIN: User Filtering */
          currentUser = ctx.getUserName();
-         if ((currentUser != null) && (currentUser
-               .equalsIgnoreCase("transit.systems@justodelivery.com"))) {
+         if (
+               (currentUser != null) && 
+               (!currentUser.equalsIgnoreCase("transit.systems@justodelivery.com")) &&
+               (currentUser.endsWith("justodelivery.com"))
+            ) {
+            // No-Op
+            // This is a Justo Employee, so ALL records are welcome.
+         } else {
             tmpFilters = new ArrayList<Filter>();
-            tmpFilters.add(filter);
             tmpFilters.add(new FilterPredicate("createdBy",
-                  FilterOperator.EQUAL, "transit.systems@justodelivery.com"));
-            filter = new Query.CompositeFilter(
-                  Query.CompositeFilterOperator.AND, tmpFilters);
+                  FilterOperator.EQUAL, currentUser));
+            tmpFilters.add(new FilterPredicate("contactEmail",
+                  FilterOperator.EQUAL, currentUser));
+            userFilter = new Query.CompositeFilter(
+                  Query.CompositeFilterOperator.OR, tmpFilters);
          } // END if ((currentUser != null) && ...
          /* END: Add filter for transit.systems@justodelivery.com */
-
+         if (userFilter != null) {
+            tmpFilters=new ArrayList<Filter>();
+            tmpFilters.add(filter);
+            tmpFilters.add(userFilter);
+            filter=new Query.CompositeFilter(
+                  Query.CompositeFilterOperator.AND, 
+                  tmpFilters);
+         } // END if (userFilter != null)
+         /* ***** END: User Filtering */
+         
          query.setFilter(filter);
          qw = new QueryWrapper(query);
          quotes = findByQuery(qw, ctx);
@@ -199,9 +218,10 @@ public abstract class QuoteDAOBase<T extends QuickQuote, W extends PersistentQui
    @Override
    public final List<W> findAll(UserContext ctx) {
       logger.entering(_CLASS, "findAll(UserContext)", ctx);
-      com.google.appengine.api.datastore.Query gQuery = null;
-      Filter filter = null;
+      Filter userFilter=null;
+      List<Filter> tmpFilters=null;
       List<W> results = null;
+      Query query=null;
       QueryWrapper qw = null;
       String currentUser = null;
       String kind = null;
@@ -210,18 +230,32 @@ public abstract class QuoteDAOBase<T extends QuickQuote, W extends PersistentQui
 
       if ((ctx != null) && (ctx.isAuthenticated())) {
          kind = getKind();
-         gQuery = new com.google.appengine.api.datastore.Query(kind);
+         query = new Query(kind);
 
-         /** Let's see if the transit systems filter should apply. **/
+         /* ***** BEGIN: User Filtering */
          currentUser = ctx.getUserName();
-         if ((currentUser != null) && (currentUser
-               .equalsIgnoreCase("transit.systems@justodelivery.com"))) {
-            filter = new FilterPredicate("createdBy", FilterOperator.EQUAL,
-                  "transit.systems@justodelivery.com");
-            gQuery.setFilter(filter);
-         } // END if ((currentUser != null) ...
+         if (
+               (currentUser != null) && 
+               (!currentUser.equalsIgnoreCase("transit.systems@justodelivery.com")) &&
+               (currentUser.endsWith("justodelivery.com"))
+            ) {
+            // No-Op
+            // This is a Justo Employee, so ALL records are welcome.
+         } else {
+            tmpFilters = new ArrayList<Filter>();
+            tmpFilters.add(new FilterPredicate("createdBy",
+                  FilterOperator.EQUAL, currentUser));
+            tmpFilters.add(new FilterPredicate("contactEmail",
+                  FilterOperator.EQUAL, currentUser));
+            userFilter = new Query.CompositeFilter(
+                  Query.CompositeFilterOperator.OR, tmpFilters);
+         } // END if ((currentUser != null) && ...
+         if (userFilter != null) {
+            query.setFilter(userFilter);
+         } // END if (userFilter != null)
+         /* ***** END: User Filtering */
 
-         qw = new QueryWrapper(gQuery);
+         qw = new QueryWrapper(query);
          results = findByQuery(qw, ctx);
       } else {
          // The specified context was either null or has not been authenticated.
@@ -311,9 +345,10 @@ public abstract class QuoteDAOBase<T extends QuickQuote, W extends PersistentQui
       logger.entering(_CLASS, "findByRequestId(String)", requestId);
       W quote = null;
       List<W> quotes = null;
-      List<Filter> filters = null;
+      List<Filter> tmpFilters = null;
       Query query = null;
-      Query.Filter filter = null;
+      Filter filter = null;
+      Filter userFilter=null;
       QueryWrapper qw = null;
       String currentUser = null;
       String kind=null;
@@ -322,33 +357,38 @@ public abstract class QuoteDAOBase<T extends QuickQuote, W extends PersistentQui
          kind=getKind();
          query = new Query(kind);
 
-         /* BEGIN: Add filter for transit.systems@justodelivery.com */
+         filter=new Query.FilterPredicate("requestId",
+               Query.FilterOperator.EQUAL, requestId);
+         
+         /* ***** BEGIN: User Filtering */
          currentUser = ctx.getUserName();
-         if ((currentUser != null) && (currentUser
-               .equalsIgnoreCase("transit.systems@justodelivery.com"))) {
-            // The current user is a transit systems user.
-            filters = new ArrayList<Filter>();
-            filters.add(new FilterPredicate("createdBy", FilterOperator.EQUAL,
-                  "transit.systems@justodelivery.com"));
-            filters.add(new FilterPredicate("requestId",
-                  Query.FilterOperator.EQUAL, requestId));
-
-            filter = new Query.CompositeFilter(
-                  Query.CompositeFilterOperator.AND, filters);
+         if (
+               (currentUser != null) && 
+               (!currentUser.equalsIgnoreCase("transit.systems@justodelivery.com")) &&
+               (currentUser.endsWith("justodelivery.com"))
+            ) {
+            // No-Op
+            // This is a Justo Employee, so ALL records are welcome.
             query.setFilter(filter);
-
          } else {
-            // The current user is NOT a transit systems user.
-            query.setFilter(new Query.FilterPredicate("requestId",
-                  Query.FilterOperator.EQUAL, requestId));
-         } // END if ((currentUser != null) ...
-         /* END: Add filter for transit.systems@justodelivery.com */
-         /**
-          * NOTE: The following was the code before adding the above query.
-          * query.setFilter( new Query.FilterPredicate("requestId",
-          * Query.FilterOperator.EQUAL, requestId));
-          */
-
+            // Filter based upon name of the currently logged in user.
+            tmpFilters = new ArrayList<Filter>();
+            tmpFilters.add(new FilterPredicate("createdBy",
+                  FilterOperator.EQUAL, currentUser));
+            tmpFilters.add(new FilterPredicate("contactEmail",
+                  FilterOperator.EQUAL, currentUser));
+            userFilter = new Query.CompositeFilter(
+                  Query.CompositeFilterOperator.OR, tmpFilters);
+            tmpFilters.clear();
+            tmpFilters.add(filter);
+            tmpFilters.add(userFilter);
+            filter=new Query.CompositeFilter(
+                  Query.CompositeFilterOperator.AND,
+                  tmpFilters);
+            query.setFilter(filter);
+         } // END if ((currentUser != null) && ...
+         /* ***** END: User Filtering */
+         
          qw = new QueryWrapper(query);
          quotes = findByQuery(qw, ctx);
          if ((quotes != null) && (quotes.size() != 0)) {
@@ -387,6 +427,7 @@ public abstract class QuoteDAOBase<T extends QuickQuote, W extends PersistentQui
       logger.entering(_CLASS, "findByStatus(String,String,Date,UserContext)",
             new Object[] { status, statusReason, minDateModified, ctx });
       Calendar calendar = null;
+      Filter userFilter=null;
       List<Filter> filters = null;
       List<W> quotes = null;
       Query query = null;
@@ -398,29 +439,31 @@ public abstract class QuoteDAOBase<T extends QuickQuote, W extends PersistentQui
       if (ctx != null) {
          query = new Query(getKind());
          // Let's build the list of composite queries.
-         if ((status == null) && (statusReason == null)
-               && (minDateModified == null)) {
+         if (
+               (status == null) && 
+               (statusReason == null) && 
+               (minDateModified == null)
+            ) {
             logger.warning("The search parameters are all null.");
          } else {
             // At least one of the three critical search parameters is NOT
             // null...
+            // Create a list of filters
             filters = new ArrayList<Filter>();
 
-            // Check the status parameter.
+            // If the status parameter is specified, then use it.
             if (status != null) {
-               // Not null, so add the filter for the 'Status' property
                filters.add(new FilterPredicate("statusState",
                      FilterOperator.EQUAL, status));
             } // END if (status != null)
 
-            // Check the statusReason parameter
+            // If the statusReason parameter is specified, then use it.
             if (statusReason != null) {
-               // Not null, so add the filter for the 'statusReason' property.
                filters.add(new FilterPredicate("statusReason",
                      FilterOperator.EQUAL, statusReason));
             } // END if (statusReason != null)
 
-            // Check the minDate parameter
+            // If the minDate parameter is not specified, use last 90 days.
             if (minDateModified == null) {
                // The 'minDateModified' parameter was null, so use the last 90
                // days.
@@ -431,20 +474,41 @@ public abstract class QuoteDAOBase<T extends QuickQuote, W extends PersistentQui
             } // END if (minDateModified == null)
             filters.add(new FilterPredicate("dateModified",
                   FilterOperator.GREATER_THAN, minDateModified));
+            
+            /* Lets add the filters together */
+            filter=new Query.CompositeFilter(
+                  Query.CompositeFilterOperator.AND,
+                  filters);
+            
 
-            /* BEGIN: Add filter for transit.systems@justodelivery.com */
+            /* ***** BEGIN: User Filtering */
             currentUser = ctx.getUserName();
-            if ((currentUser != null) && (currentUser
-                  .equalsIgnoreCase("transit.systems@justodelivery.com"))) {
-               filters
-                     .add(new FilterPredicate("createdBy", FilterOperator.EQUAL,
-                           "transit.systems@justodelivery.com"));
-            } // END if ((currentUser != null) ...
-            /* END: Add filter for transit.systems@justodelivery.com */
-
-            // Now combine all those filters into one ...
-            filter = new Query.CompositeFilter(
-                  Query.CompositeFilterOperator.AND, filters);
+            if (
+                  (currentUser != null) && 
+                  (!currentUser.equalsIgnoreCase("transit.systems@justodelivery.com")) &&
+                  (currentUser.endsWith("justodelivery.com"))
+               ) {
+               // No-Op
+               // This is a Justo Employee, so ALL records are welcome.
+            } else {
+               filters = new ArrayList<Filter>();
+               filters.add(new FilterPredicate("createdBy",
+                     FilterOperator.EQUAL, currentUser));
+               filters.add(new FilterPredicate("contactEmail",
+                     FilterOperator.EQUAL, currentUser));
+               userFilter = new Query.CompositeFilter(
+                     Query.CompositeFilterOperator.OR, filters);
+            } // END if ((currentUser != null) && ...
+            /* ***** END: User Filtering */
+            
+            if (userFilter != null) {
+               filters = new ArrayList<Filter>();
+               filters.add(filter);
+               filters.add(userFilter);
+               filter= new Query.CompositeFilter(
+                     Query.CompositeFilterOperator.AND, filters);
+            } // END if (userFilter != null)
+            
             query.setFilter(filter);
 
             /*
