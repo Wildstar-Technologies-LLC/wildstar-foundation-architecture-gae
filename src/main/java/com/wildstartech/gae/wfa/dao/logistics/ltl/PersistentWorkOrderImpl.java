@@ -222,6 +222,7 @@ implements PersistentWorkOrder {
    private String referralOther = null;
    private String referralSource = null;
    private String serviceLevel = SERVICE_LEVEL_DEFAULT;
+   private Type type=Type.Delivery;
    
    /**
     * Default, no-argument constructor.
@@ -266,6 +267,7 @@ implements PersistentWorkOrder {
       PriceModel pm=null;
       String tmpStr="";
       Text tmpText = null;
+      Type type=null;
       
       if (entity != null) {
          super.populateEntity(entity);
@@ -411,6 +413,16 @@ implements PersistentWorkOrder {
          entity.setProperty("serviceLevel", getServiceLevel());
          // stairCarry
          entity.setProperty("stairCarry", isStairCarry());
+         // type
+         type=getType();
+         switch(type) {
+            case Pickup:
+               entity.setProperty("type", "Pick-Up");
+               break;
+            default:
+               entity.setProperty("type", "Delivery");
+               break;
+         }
          // unpackagingRequired
          entity.setProperty("unpackagingRequired", isUnpackagingRequired());
          // valuation
@@ -623,6 +635,13 @@ implements PersistentWorkOrder {
          setStairCarry(getPropertyAsBoolean(entity, "stairCarry"));
          // numberOfFlights
          setNumberOfFlights(getPropertyAsInteger(entity, "numberOfFlights", 0));
+         // type
+         tmpStr=getPropertyAsString(entity,"type","Delivery");
+         if (tmpStr.equalsIgnoreCase("Pickup")) {
+            setType(Type.Pickup);
+         } else {
+            setType(Type.Delivery);
+         } // END if (tmpStr.equalsIgnoreCase("Pickup")) 
          // unpackagingRequired
          setUnpackagingRequired(
                getPropertyAsBoolean(entity, "unpackagingRequired"));
@@ -766,6 +785,7 @@ implements PersistentWorkOrder {
          setStatusState(workOrder.getStatusState());
          setStatusReason(workOrder.getStatusReason());
          setStairCarry(workOrder.isStairCarry());
+         setType(workOrder.getType());
          setNumberOfFlights(workOrder.getNumberOfFlights());
          setUnpackagingRequired(workOrder.isUnpackagingRequired());
          setValuation(workOrder.getValuation());
@@ -1675,12 +1695,10 @@ implements PersistentWorkOrder {
       logger.entering(_CLASS, "getJournalEntries()");
       JournalDAOImpl dao=null;
       List<PersistentJournalEntry> journalEntries=null;
-      String kind=null;
       String identifier=null;
       StringBuilder msg=null;
       
       if (ctx != null) {
-         kind=getKind();
          identifier=getIdentifier();
          if (!isEmpty(identifier)) {
             dao=new JournalDAOImpl();
@@ -2400,6 +2418,17 @@ implements PersistentWorkOrder {
       return weight;
    }
 
+   // ***** type
+   public Type getType() {
+      logger.entering(_CLASS, "getType()");
+      logger.exiting(_CLASS, "getType()",this.type);
+      return this.type;
+   }
+   public void setType(Type type) {
+      logger.entering(_CLASS, "setType(Type)",type);
+      this.type=type;
+      logger.exiting(_CLASS, "setType(Type)");
+   }
    // ***** unpackagingRequired
    public boolean isUnpackagingRequired() {
       logger.entering(_CLASS, "isUnpackagingRequired()");
