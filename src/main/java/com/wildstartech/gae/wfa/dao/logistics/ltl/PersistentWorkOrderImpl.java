@@ -44,6 +44,7 @@
  */
 package com.wildstartech.gae.wfa.dao.logistics.ltl;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -254,6 +255,398 @@ implements PersistentWorkOrder {
       logger.exiting(_CLASS, "calculateRate()");
    }
    
+   @Override
+   public boolean equals(Object obj) {
+      if (this == obj)
+         return true;
+      if (!super.equals(obj))
+         return false;
+      if (getClass() != obj.getClass())
+         return false;
+      PersistentWorkOrderImpl other = (PersistentWorkOrderImpl) obj;
+      if (Double.doubleToLongBits(accessorialTotal) != Double.doubleToLongBits(other.accessorialTotal))
+         return false;
+      if (accessorials == null) {
+         if (other.accessorials != null)
+            return false;
+      } else if (!accessorials.equals(other.accessorials))
+         return false;
+      if (Double.doubleToLongBits(adjustmentAmount) != Double.doubleToLongBits(other.adjustmentAmount))
+         return false;
+      if (adjustmentType != other.adjustmentType)
+         return false;
+      if (Double.doubleToLongBits(amount) != Double.doubleToLongBits(other.amount))
+         return false;
+      if (assemblyRequired != other.assemblyRequired)
+         return false;
+      if (billingCity == null) {
+         if (other.billingCity != null)
+            return false;
+      } else if (!billingCity.equals(other.billingCity))
+         return false;
+      if (billingCompanyName == null) {
+         if (other.billingCompanyName != null)
+            return false;
+      } else if (!billingCompanyName.equals(other.billingCompanyName))
+         return false;
+      if (billingContactEmail == null) {
+         if (other.billingContactEmail != null)
+            return false;
+      } else if (!billingContactEmail.equals(other.billingContactEmail))
+         return false;
+      if (billingContactName == null) {
+         if (other.billingContactName != null)
+            return false;
+      } else if (!billingContactName.equals(other.billingContactName))
+         return false;
+      if (billingContactPhone == null) {
+         if (other.billingContactPhone != null)
+            return false;
+      } else if (!billingContactPhone.equals(other.billingContactPhone))
+         return false;
+      if (billingMethod == null) {
+         if (other.billingMethod != null)
+            return false;
+      } else if (!billingMethod.equals(other.billingMethod))
+         return false;
+      if (billingState == null) {
+         if (other.billingState != null)
+            return false;
+      } else if (!billingState.equals(other.billingState))
+         return false;
+      if (billingStreetAddress == null) {
+         if (other.billingStreetAddress != null)
+            return false;
+      } else if (!billingStreetAddress.equals(other.billingStreetAddress))
+         return false;
+      if (billingZip == null) {
+         if (other.billingZip != null)
+            return false;
+      } else if (!billingZip.equals(other.billingZip))
+         return false;
+      if (blanketWrapRequired != other.blanketWrapRequired)
+         return false;
+      if (contactCompanyName == null) {
+         if (other.contactCompanyName != null)
+            return false;
+      } else if (!contactCompanyName.equals(other.contactCompanyName))
+         return false;
+      if (contactEmail == null) {
+         if (other.contactEmail != null)
+            return false;
+      } else if (!contactEmail.equals(other.contactEmail))
+         return false;
+      if (contactName == null) {
+         if (other.contactName != null)
+            return false;
+      } else if (!contactName.equals(other.contactName))
+         return false;
+      if (contactPhone == null) {
+         if (other.contactPhone != null)
+            return false;
+      } else if (!contactPhone.equals(other.contactPhone))
+         return false;
+      if (contactPhoneHidden == null) {
+         if (other.contactPhoneHidden != null)
+            return false;
+      } else if (!contactPhoneHidden.equals(other.contactPhoneHidden))
+         return false;
+      if (cratingRequired != other.cratingRequired)
+         return false;
+      if (creditCardExpirationMonth != other.creditCardExpirationMonth)
+         return false;
+      if (creditCardExpirationYear != other.creditCardExpirationYear)
+         return false;
+      if (creditCardIdentifier == null) {
+         if (other.creditCardIdentifier != null)
+            return false;
+      } else if (!creditCardIdentifier.equals(other.creditCardIdentifier))
+         return false;
+      if (creditCardName == null) {
+         if (other.creditCardName != null)
+            return false;
+      } else if (!creditCardName.equals(other.creditCardName))
+         return false;
+      if (creditCardNumber == null) {
+         if (other.creditCardNumber != null)
+            return false;
+      } else if (!creditCardNumber.equals(other.creditCardNumber))
+         return false;
+      if (creditCardType == null) {
+         if (other.creditCardType != null)
+            return false;
+      } else if (!creditCardType.equals(other.creditCardType))
+         return false;
+      if (creditCardVerification == null) {
+         if (other.creditCardVerification != null)
+            return false;
+      } else if (!creditCardVerification.equals(other.creditCardVerification))
+         return false;
+      if (customerReferenceNote == null) {
+         if (other.customerReferenceNote != null)
+            return false;
+      } else if (!customerReferenceNote.equals(other.customerReferenceNote))
+         return false;
+      if (Double.doubleToLongBits(deductible) != Double.doubleToLongBits(other.deductible))
+         return false;
+      if (destinationCity == null) {
+         if (other.destinationCity != null)
+            return false;
+      } else if (!destinationCity.equals(other.destinationCity))
+         return false;
+      if (destinationCompanyName == null) {
+         if (other.destinationCompanyName != null)
+            return false;
+      } else if (!destinationCompanyName.equals(other.destinationCompanyName))
+         return false;
+      if (destinationContactEmail == null) {
+         if (other.destinationContactEmail != null)
+            return false;
+      } else if (!destinationContactEmail.equals(other.destinationContactEmail))
+         return false;
+      if (destinationContactName == null) {
+         if (other.destinationContactName != null)
+            return false;
+      } else if (!destinationContactName.equals(other.destinationContactName))
+         return false;
+      if (destinationContactPhone == null) {
+         if (other.destinationContactPhone != null)
+            return false;
+      } else if (!destinationContactPhone.equals(other.destinationContactPhone))
+         return false;
+      if (destinationResidential != other.destinationResidential)
+         return false;
+      if (destinationState == null) {
+         if (other.destinationState != null)
+            return false;
+      } else if (!destinationState.equals(other.destinationState))
+         return false;
+      if (destinationStreetAddress == null) {
+         if (other.destinationStreetAddress != null)
+            return false;
+      } else if (!destinationStreetAddress.equals(other.destinationStreetAddress))
+         return false;
+      if (destinationZip == null) {
+         if (other.destinationZip != null)
+            return false;
+      } else if (!destinationZip.equals(other.destinationZip))
+         return false;
+      if (Double.doubleToLongBits(distance) != Double.doubleToLongBits(other.distance))
+         return false;
+      if (Double.doubleToLongBits(fuelSurcharge) != Double.doubleToLongBits(other.fuelSurcharge))
+         return false;
+      if (initialized != other.initialized)
+         return false;
+      if (Double.doubleToLongBits(insuranceCharges) != Double.doubleToLongBits(other.insuranceCharges))
+         return false;
+      if (Double.doubleToLongBits(lineItemCharges) != Double.doubleToLongBits(other.lineItemCharges))
+         return false;
+      if (lineItems == null) {
+         if (other.lineItems != null)
+            return false;
+      } else if (!lineItems.equals(other.lineItems))
+         return false;
+      if (lineItemsToDelete == null) {
+         if (other.lineItemsToDelete != null)
+            return false;
+      } else if (!lineItemsToDelete.equals(other.lineItemsToDelete))
+         return false;
+      if (newJournalEntry == null) {
+         if (other.newJournalEntry != null)
+            return false;
+      } else if (!newJournalEntry.equals(other.newJournalEntry))
+         return false;
+      if (notes == null) {
+         if (other.notes != null)
+            return false;
+      } else if (!notes.equals(other.notes))
+         return false;
+      if (numberOfFlights != other.numberOfFlights)
+         return false;
+      if (originCity == null) {
+         if (other.originCity != null)
+            return false;
+      } else if (!originCity.equals(other.originCity))
+         return false;
+      if (originCompanyName == null) {
+         if (other.originCompanyName != null)
+            return false;
+      } else if (!originCompanyName.equals(other.originCompanyName))
+         return false;
+      if (originContactEmail == null) {
+         if (other.originContactEmail != null)
+            return false;
+      } else if (!originContactEmail.equals(other.originContactEmail))
+         return false;
+      if (originContactName == null) {
+         if (other.originContactName != null)
+            return false;
+      } else if (!originContactName.equals(other.originContactName))
+         return false;
+      if (originContactPhone == null) {
+         if (other.originContactPhone != null)
+            return false;
+      } else if (!originContactPhone.equals(other.originContactPhone))
+         return false;
+      if (originResidential != other.originResidential)
+         return false;
+      if (originState == null) {
+         if (other.originState != null)
+            return false;
+      } else if (!originState.equals(other.originState))
+         return false;
+      if (originStreetAddress == null) {
+         if (other.originStreetAddress != null)
+            return false;
+      } else if (!originStreetAddress.equals(other.originStreetAddress))
+         return false;
+      if (originZip == null) {
+         if (other.originZip != null)
+            return false;
+      } else if (!originZip.equals(other.originZip))
+         return false;
+      if (packagingRequired != other.packagingRequired)
+         return false;
+      if (paymentMethod == null) {
+         if (other.paymentMethod != null)
+            return false;
+      } else if (!paymentMethod.equals(other.paymentMethod))
+         return false;
+      if (preview != other.preview)
+         return false;
+      if (priceModelLabel == null) {
+         if (other.priceModelLabel != null)
+            return false;
+      } else if (!priceModelLabel.equals(other.priceModelLabel))
+         return false;
+      if (purchaseOrderNumber == null) {
+         if (other.purchaseOrderNumber != null)
+            return false;
+      } else if (!purchaseOrderNumber.equals(other.purchaseOrderNumber))
+         return false;
+      if (quoteRequestId == null) {
+         if (other.quoteRequestId != null)
+            return false;
+      } else if (!quoteRequestId.equals(other.quoteRequestId))
+         return false;
+      if (referralOther == null) {
+         if (other.referralOther != null)
+            return false;
+      } else if (!referralOther.equals(other.referralOther))
+         return false;
+      if (referralSource == null) {
+         if (other.referralSource != null)
+            return false;
+      } else if (!referralSource.equals(other.referralSource))
+         return false;
+      if (serviceLevel == null) {
+         if (other.serviceLevel != null)
+            return false;
+      } else if (!serviceLevel.equals(other.serviceLevel))
+         return false;
+      if (stairCarry != other.stairCarry)
+         return false;
+      if (type != other.type)
+         return false;
+      if (unpackagingRequired != other.unpackagingRequired)
+         return false;
+      if (Double.doubleToLongBits(valuation) != Double.doubleToLongBits(other.valuation))
+         return false;
+      if (valuationDeclined != other.valuationDeclined)
+         return false;
+      return true;
+   }
+
+   @Override
+   public int hashCode() {
+      final int prime = 31;
+      int result = super.hashCode();
+      long temp;
+      temp = Double.doubleToLongBits(accessorialTotal);
+      result = prime * result + (int) (temp ^ (temp >>> 32));
+      result = prime * result + ((accessorials == null) ? 0 : accessorials.hashCode());
+      temp = Double.doubleToLongBits(adjustmentAmount);
+      result = prime * result + (int) (temp ^ (temp >>> 32));
+      result = prime * result + ((adjustmentType == null) ? 0 : adjustmentType.hashCode());
+      temp = Double.doubleToLongBits(amount);
+      result = prime * result + (int) (temp ^ (temp >>> 32));
+      result = prime * result + (assemblyRequired ? 1231 : 1237);
+      result = prime * result + ((billingCity == null) ? 0 : billingCity.hashCode());
+      result = prime * result + ((billingCompanyName == null) ? 0 : billingCompanyName.hashCode());
+      result = prime * result + ((billingContactEmail == null) ? 0 : billingContactEmail.hashCode());
+      result = prime * result + ((billingContactName == null) ? 0 : billingContactName.hashCode());
+      result = prime * result + ((billingContactPhone == null) ? 0 : billingContactPhone.hashCode());
+      result = prime * result + ((billingMethod == null) ? 0 : billingMethod.hashCode());
+      result = prime * result + ((billingState == null) ? 0 : billingState.hashCode());
+      result = prime * result + ((billingStreetAddress == null) ? 0 : billingStreetAddress.hashCode());
+      result = prime * result + ((billingZip == null) ? 0 : billingZip.hashCode());
+      result = prime * result + (blanketWrapRequired ? 1231 : 1237);
+      result = prime * result + ((contactCompanyName == null) ? 0 : contactCompanyName.hashCode());
+      result = prime * result + ((contactEmail == null) ? 0 : contactEmail.hashCode());
+      result = prime * result + ((contactName == null) ? 0 : contactName.hashCode());
+      result = prime * result + ((contactPhone == null) ? 0 : contactPhone.hashCode());
+      result = prime * result + ((contactPhoneHidden == null) ? 0 : contactPhoneHidden.hashCode());
+      result = prime * result + (cratingRequired ? 1231 : 1237);
+      result = prime * result + creditCardExpirationMonth;
+      result = prime * result + creditCardExpirationYear;
+      result = prime * result + ((creditCardIdentifier == null) ? 0 : creditCardIdentifier.hashCode());
+      result = prime * result + ((creditCardName == null) ? 0 : creditCardName.hashCode());
+      result = prime * result + ((creditCardNumber == null) ? 0 : creditCardNumber.hashCode());
+      result = prime * result + ((creditCardType == null) ? 0 : creditCardType.hashCode());
+      result = prime * result + ((creditCardVerification == null) ? 0 : creditCardVerification.hashCode());
+      result = prime * result + ((customerReferenceNote == null) ? 0 : customerReferenceNote.hashCode());
+      temp = Double.doubleToLongBits(deductible);
+      result = prime * result + (int) (temp ^ (temp >>> 32));
+      result = prime * result + ((destinationCity == null) ? 0 : destinationCity.hashCode());
+      result = prime * result + ((destinationCompanyName == null) ? 0 : destinationCompanyName.hashCode());
+      result = prime * result + ((destinationContactEmail == null) ? 0 : destinationContactEmail.hashCode());
+      result = prime * result + ((destinationContactName == null) ? 0 : destinationContactName.hashCode());
+      result = prime * result + ((destinationContactPhone == null) ? 0 : destinationContactPhone.hashCode());
+      result = prime * result + (destinationResidential ? 1231 : 1237);
+      result = prime * result + ((destinationState == null) ? 0 : destinationState.hashCode());
+      result = prime * result + ((destinationStreetAddress == null) ? 0 : destinationStreetAddress.hashCode());
+      result = prime * result + ((destinationZip == null) ? 0 : destinationZip.hashCode());
+      temp = Double.doubleToLongBits(distance);
+      result = prime * result + (int) (temp ^ (temp >>> 32));
+      temp = Double.doubleToLongBits(fuelSurcharge);
+      result = prime * result + (int) (temp ^ (temp >>> 32));
+      result = prime * result + (initialized ? 1231 : 1237);
+      temp = Double.doubleToLongBits(insuranceCharges);
+      result = prime * result + (int) (temp ^ (temp >>> 32));
+      temp = Double.doubleToLongBits(lineItemCharges);
+      result = prime * result + (int) (temp ^ (temp >>> 32));
+      result = prime * result + ((lineItems == null) ? 0 : lineItems.hashCode());
+      result = prime * result + ((lineItemsToDelete == null) ? 0 : lineItemsToDelete.hashCode());
+      result = prime * result + ((newJournalEntry == null) ? 0 : newJournalEntry.hashCode());
+      result = prime * result + ((notes == null) ? 0 : notes.hashCode());
+      result = prime * result + numberOfFlights;
+      result = prime * result + ((originCity == null) ? 0 : originCity.hashCode());
+      result = prime * result + ((originCompanyName == null) ? 0 : originCompanyName.hashCode());
+      result = prime * result + ((originContactEmail == null) ? 0 : originContactEmail.hashCode());
+      result = prime * result + ((originContactName == null) ? 0 : originContactName.hashCode());
+      result = prime * result + ((originContactPhone == null) ? 0 : originContactPhone.hashCode());
+      result = prime * result + (originResidential ? 1231 : 1237);
+      result = prime * result + ((originState == null) ? 0 : originState.hashCode());
+      result = prime * result + ((originStreetAddress == null) ? 0 : originStreetAddress.hashCode());
+      result = prime * result + ((originZip == null) ? 0 : originZip.hashCode());
+      result = prime * result + (packagingRequired ? 1231 : 1237);
+      result = prime * result + ((paymentMethod == null) ? 0 : paymentMethod.hashCode());
+      result = prime * result + (preview ? 1231 : 1237);
+      result = prime * result + ((priceModelLabel == null) ? 0 : priceModelLabel.hashCode());
+      result = prime * result + ((purchaseOrderNumber == null) ? 0 : purchaseOrderNumber.hashCode());
+      result = prime * result + ((quoteRequestId == null) ? 0 : quoteRequestId.hashCode());
+      result = prime * result + ((referralOther == null) ? 0 : referralOther.hashCode());
+      result = prime * result + ((referralSource == null) ? 0 : referralSource.hashCode());
+      result = prime * result + ((serviceLevel == null) ? 0 : serviceLevel.hashCode());
+      result = prime * result + (stairCarry ? 1231 : 1237);
+      result = prime * result + ((type == null) ? 0 : type.hashCode());
+      result = prime * result + (unpackagingRequired ? 1231 : 1237);
+      temp = Double.doubleToLongBits(valuation);
+      result = prime * result + (int) (temp ^ (temp >>> 32));
+      result = prime * result + (valuationDeclined ? 1231 : 1237);
+      return result;
+   }
+
    @Override
    public String getKind() {
       logger.entering(_CLASS, "getKind()");
@@ -864,6 +1257,109 @@ implements PersistentWorkOrder {
       } // END if (workOrder != null)
       logger.exiting(_CLASS, 
          "populateFromPersistentObject(PersistentWorkOrder)");
+   }
+   
+   public String toString() {
+      logger.entering(_CLASS, "toString()");
+      String result = null;
+      StringBuilder sb = null;
+
+      sb = new StringBuilder(2048);
+      sb.append(_CLASS).append(" [");
+      sb.append(toPropertyString()).append("]");
+      result = sb.toString();
+
+      logger.entering(_CLASS, "toString()", result);
+      return result;
+   }
+   
+   public String toPropertyString() {
+      logger.entering(_CLASS, "toPropertyString()");
+      NumberFormat cFmt = null;
+      NumberFormat fmt=null;
+      String result="";
+      StringBuilder sb = null;
+
+      sb = new StringBuilder(2048);
+      cFmt = NumberFormat.getCurrencyInstance();
+      fmt=NumberFormat.getInstance();
+      fmt.setMaximumFractionDigits(2);
+      fmt.setMinimumIntegerDigits(1);
+      
+      sb.append(super.toPropertyString());
+      if (sb.length() > 0) {
+         sb.append(", ");
+      } // END if (sb.length() > 0)
+      sb.append(", amount=").append(cFmt.format(getAmount()));
+      sb.append(", accessorialTotal=").append(
+            cFmt.format(getAccessorialTotal()));
+      sb.append(", adjustmentType=").append(getAdjustmentType());
+      sb.append(", adjustmentAmount=").append(
+            cFmt.format(getAdjustmentAmount()));
+      sb.append(", assemblyRequired=").append(isAssemblyRequired());
+      sb.append(", billingCity=").append(getBillingCity());     
+      sb.append(", billingCompanyName=").append(getBillingCompanyName());
+      sb.append(", billingContaactEmail=").append(getBillingContactEmail());
+      sb.append(", billingContactName=").append(getBillingContactName());
+      sb.append(", billingContactPhone=").append(getBillingContactPhone());
+      sb.append(", billingMethod=").append(getBillingMethod());
+      sb.append(", billingState=").append(getBillingState());
+      sb.append(", billingStreetAddress=").append(getBillingStreetAddress());
+      sb.append(", billingZip=").append(getBillingZip());
+      sb.append(", blanketWrapRequired=").append(isBlanketWrapRequired());
+      sb.append(", contactCompanyName=").append(getContactCompanyName());
+      sb.append(", contactEmail=").append(getContactEmail());
+      sb.append(", contactCompanyName=").append(getContactName());
+      sb.append(", contactPhone=").append(getContactPhone());
+      sb.append(", cratingRequired=").append(isCratingRequired());
+      sb.append(", deductible=").append(cFmt.format(getDeductible()));
+      sb.append(", destinationCity=").append(getDestinationCity());
+      sb.append(", destinationCompanyName=").append(getDestinationCompanyName());
+      sb.append(", destinationContactEmail=").append(
+            getDestinationContactEmail());
+      sb.append(", destinationContactName=").append(
+            getDestinationContactName());
+      sb.append(", destinationContactPhone=").append(
+            getDestinationContactPhone());
+      sb.append(", destinationResidential=").append(isDestinationResidential());
+      sb.append(", destinationState=").append(getDestinationState());
+      sb.append(", destinationStreetAddress=").append(
+            getDestinationStreetAddress());
+      sb.append(", destinationZip=").append(getDestinationZip());
+      sb.append(", distance=").append(fmt.format(getDistance()));
+      sb.append(", insuranceCharges=").append(
+            cFmt.format(getInsuranceCharges()));
+      sb.append(", lineItemCharges=").append(
+            cFmt.format(getLineItemCharges()));
+      sb.append(", originCity=").append(getOriginCity());
+      sb.append(", originCompanyName=").append(getOriginCompanyName());
+      sb.append(", originContactEmail=").append(getOriginContactEmail());
+      sb.append(", originContactName=").append(getOriginContactName());
+      sb.append(", originContactPhone=").append(getOriginContactPhone());
+      sb.append(", originResidential=").append(isOriginResidential());
+      sb.append(", originState=").append(getOriginState());
+      sb.append(", originStreetAddress=").append(getOriginStreetAddress());
+      sb.append(", originZip=").append(getOriginZip());
+      sb.append(", packagingRequired=").append(isPackagingRequired());
+      sb.append(", paymentMethod=").append(getPaymentMethod());
+      sb.append(", priceModel=").append(getPriceModel());
+      sb.append(", purchaseOrderNumber=").append(getPurchaseOrderNumber());
+      sb.append(", referralSource=").append(getReferralSource());
+      sb.append(", referralOther=").append(getReferralOther());
+      sb.append(", serviceLevel=").append(getServiceLevel());
+      sb.append(", stairCarry=").append(isStairCarry());
+      sb.append(", type=").append(getType());
+      sb.append(", numberOfFlights=").append(getNumberOfFlights());
+      sb.append(", unpackagingReuqired=").append(isUnpackagingRequired());
+      sb.append(", numberOfFlights=").append(cFmt.format(getValuation()));
+      sb.append(", valuationDeclined=").append(isValuationDeclined());
+      sb.append(", quoteRequestId=").append(getQuoteRequestId());
+      for (WorkOrderLineItem item: getLineItems()) {
+         sb.append(", ").append(item.toString());
+      } // END for (WorkOrderLineItem item: getLineItems())
+      
+      logger.exiting(_CLASS, "toPropertyString()",result);
+      return result;
    }
    //********** accessor methods
    //***** billingCity
