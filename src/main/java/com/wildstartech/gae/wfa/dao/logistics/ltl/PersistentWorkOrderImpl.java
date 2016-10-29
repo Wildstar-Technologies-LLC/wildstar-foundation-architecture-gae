@@ -900,7 +900,11 @@ implements PersistentWorkOrder {
          // creditCardIdentifier
          tmpStr=getPropertyAsString(entity,"creditCardIdentifier");
          setCreditCardIdentifier(
-               getPropertyAsString(entity,"creditCardIdentifier"));
+               getPropertyAsString(entity,"creditCardIdentifier"));         
+         // ***** CreditCard data
+         // creditCardIdentifier
+         tmpStr = getPropertyAsString(entity, "creditCardIdentifier");
+         setCreditCardIdentifier(getPropertyAsString(entity, "creditCardIdentifier"));
          // read the rest of the credit card data.
          if (!isEmpty(tmpStr)) {
             cDAOFactory=new CreditCardDAOFactory();
