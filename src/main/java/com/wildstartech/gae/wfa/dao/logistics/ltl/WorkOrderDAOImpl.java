@@ -446,6 +446,8 @@ implements WorkOrderDAO {
           pJournalEntry.setRelatedIdentifier(pWO.getIdentifier());
           pJournalEntry=(PersistentJournalEntryImpl)
                 journalDAO.save(pJournalEntry, ctx);
+          // Clear out the new journal entry.
+          pWO.setNewJournalEntry(null);
        } // END if (!pJournalEntry.isEmpty())
        
        // ******************** Line Items ********************

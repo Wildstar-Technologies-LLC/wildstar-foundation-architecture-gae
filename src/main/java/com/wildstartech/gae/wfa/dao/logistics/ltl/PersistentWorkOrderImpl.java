@@ -713,6 +713,8 @@ implements PersistentWorkOrder {
          // customerReferenceNote
          entity.setProperty("customerReferenceNote",
                getCustomerReferenceNote());
+         // deductible
+         entity.setProperty("deductible", getDeductible());
          // destinationCity
          entity.setProperty("destinationCity", getDestinationCity());
          // destinationCompanyName
@@ -928,6 +930,8 @@ implements PersistentWorkOrder {
          // customerReferenceNote
          setCustomerReferenceNote(
                getPropertyAsString(entity, "customerReferenceNote"));
+         // deductible 
+         setDeductible(getPropertyAsDouble(entity,"deductible"));
          // destinationCity
          setDestinationCity(getPropertyAsString(entity, "destinationCity"));
          // destinationCompanyName
