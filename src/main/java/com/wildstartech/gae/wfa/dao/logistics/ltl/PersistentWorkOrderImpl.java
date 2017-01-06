@@ -1038,7 +1038,7 @@ implements PersistentWorkOrder {
          setNumberOfFlights(getPropertyAsInteger(entity, "numberOfFlights", 0));
          // type
          tmpStr=getPropertyAsString(entity,"type","Delivery");
-         if (tmpStr.equalsIgnoreCase("Pickup")) {
+         if (tmpStr.equalsIgnoreCase("Pick-Up")) {
             setType(Type.Pickup);
          } else {
             setType(Type.Delivery);
