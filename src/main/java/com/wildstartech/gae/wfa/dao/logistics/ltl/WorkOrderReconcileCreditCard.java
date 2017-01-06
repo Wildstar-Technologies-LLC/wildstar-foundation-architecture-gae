@@ -241,6 +241,7 @@ extends PersistentRuleImpl<PersistentWorkOrderImpl> {
       boolean changeDetected=false;
       boolean result=false;
       int tmpInt=0;
+      int woInt=0;
       PersistentCreditCard creditCard=null;
       CreditCardDAO dao=null;
       CreditCardDAOFactory factory=null;
@@ -298,16 +299,18 @@ extends PersistentRuleImpl<PersistentWorkOrderImpl> {
          } // END if (result)
          // expirationMonth
          tmpInt=creditCard.getExpirationMonth();
-         if (tmpInt != pWorkOrder.getCreditCardExpirationMonth()) {
+         woInt=pWorkOrder.getCreditCardExpirationMonth();
+         if (tmpInt != woInt) {
             changeDetected=true;
-            creditCard.setExpirationMonth(tmpInt);
+            creditCard.setExpirationMonth(woInt);
          } // END if (tmpInt != pWorkOrder.getCreditCardExpirationMonth())
-         // expirationMonth
+         // expirationYear
          tmpInt=creditCard.getExpirationYear();
-         if (tmpInt != pWorkOrder.getCreditCardExpirationYear()) {
+         woInt=pWorkOrder.getCreditCardExpirationYear();
+         if (tmpInt != woInt) {
             changeDetected=true;
-            creditCard.setExpirationYear(tmpInt);
-         } // END if (tmpInt != pWorkOrder.getCreditCardExpirationYera())
+            creditCard.setExpirationYear(woInt);
+         } // END if (tmpInt != pWorkOrder.getCreditCardExpirationYear())
          // cardVerification
          cardProperty=creditCard.getVerification();
          woProperty=pWorkOrder.getCreditCardVerification();
