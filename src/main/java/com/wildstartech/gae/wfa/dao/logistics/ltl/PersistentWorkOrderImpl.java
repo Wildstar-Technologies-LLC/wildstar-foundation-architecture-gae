@@ -131,9 +131,9 @@ implements PersistentWorkOrder {
 
    static {
       statusStates.add("New");
-      statusStates.add("Assigned");
+      statusStates.add("Unscheduled");
+      statusStates.add("Scheduled");
       statusStates.add("Pending");
-      statusStates.add("Accepted");
       statusStates.add("Resolved");
       statusStates.add("Closed");
    }
