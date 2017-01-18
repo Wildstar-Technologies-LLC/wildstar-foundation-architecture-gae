@@ -146,6 +146,10 @@ implements PersistentWorkOrder {
       resolvedClosedStatusReasons.add("Declined");
       resolvedClosedStatusReasons.add("Canceled");
    }
+   static {
+      resolvedClosedStatusReasons.add("Complete");
+      resolvedClosedStatusReasons.add("Canceled");
+   }
    
    protected static final String _KIND = 
          "com.wildstartech.wfa.logistics.ltl.WorkOrder";
