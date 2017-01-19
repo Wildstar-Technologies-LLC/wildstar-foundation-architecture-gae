@@ -353,7 +353,8 @@ implements WorkOrderDAO {
          String type,
          String statusState,
          String statusReason, 
-         UserContext ctx) {
+         UserContext ctx) 
+   throws DAOException {
       logger.entering(_CLASS, 
             "findByTypeAndStatus(String,String,String,UserContext)",
             new Object[] {type,statusState,statusReason,ctx});
