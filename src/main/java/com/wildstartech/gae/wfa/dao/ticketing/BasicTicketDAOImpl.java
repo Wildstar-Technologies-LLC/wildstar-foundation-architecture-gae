@@ -45,10 +45,8 @@
 package com.wildstartech.gae.wfa.dao.ticketing;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.TimeZone;
 import java.util.logging.Logger;
 
 import com.google.appengine.api.datastore.Query;
@@ -59,6 +57,8 @@ import com.wildstartech.gae.wfa.dao.QueryWrapper;
 import com.wildstartech.gae.wfa.dao.WildDAOImpl;
 import com.wildstartech.gae.wfa.dao.WildObjectImpl;
 import com.wildstartech.wfa.dao.DAOException;
+import com.wildstartech.wfa.dao.Property;
+import com.wildstartech.wfa.dao.SortCriterion;
 import com.wildstartech.wfa.dao.ticketing.BasicTicketDAO;
 import com.wildstartech.wfa.dao.ticketing.PersistentBasicTicket;
 import com.wildstartech.wfa.dao.user.UserContext;
@@ -154,22 +154,115 @@ public abstract class BasicTicketDAOImpl<T extends BasicTicket, W extends Persis
          UserContext ctx) throws DAOException {
       logger.entering(_CLASS, "findByStatus(String,String,Date,UserContext)",
             new Object[] {statusState,statusReason,startDate,ctx});
-      Calendar calendar=null;
       List<Filter> filters=null;
       List<W> results=null;
+      List<SortCriterion> sortCriteria=null;
+      Property property=null;
       Query query=null;
       QueryWrapper qw=null;
       Query.Filter filter=null;
+      Query.Filter userFilter=null;
+      SortCriterion sortCriterion=null;
       String currentUser=null;
-      String kind=null;
-      TimeZone tz=null;
+      String kind=null;      
       
-      if (ctx != null) {
+      if (
+            (ctx != null) &&
+            (ctx.isAuthenticated()) &&
+            (statusState != null) &&
+            (!statusState.isEmpty())
+         ) {
          kind=getKind();
          query=new Query(kind);
+         filters=new ArrayList<Filter>();
+         // Process the status state parameter
+         filter=new FilterPredicate(
+               "statusState",
+               FilterOperator.EQUAL,
+               statusState);
+         filters.add(filter);
+         // Process the statusReason parameter.
+         if ((statusReason != null) && (!statusReason.isEmpty())) {
+            filter=new FilterPredicate(
+                  "statusReason",
+                  FilterOperator.EQUAL,
+                  statusReason);
+            filters.add(filter);                  
+         } // END if ((statusReason != null) && (!statusReason.isEmpty()))
+         // Process the startDate parameter
+         if (startDate != null) {
+            filter=new FilterPredicate(
+                  "dateCreated",
+                  FilterOperator.GREATER_THAN,
+                  startDate);
+            filters.add(filter);
+            /* ****************************************************************
+             * BEGIN: Modify Sort Criteria
+             * This is necessary because if there is a startDate specified, the
+             * FIRST field in the list of sort criteria MUST Be the createDate.
+             * Otherwise, the following error will be thrown at runtime:
+             * 
+             * SEVERE: java.lang.IllegalArgumentException: The first sort 
+             * property must be the same as the property to which the 
+             * inequality filter is applied.  In your query the first sort
+             * property is dateCreated but the inequality filter is on 
+             * dateCreated
+             *****************************************************************/
+            sortCriteria=this.getSortCriteria();
+            if (sortCriteria == null) {
+               sortCriteria=new ArrayList<SortCriterion>();
+            } // END if (sortCriteria == null)
+            sortCriterion=new SortCriterion();
+            property=new Property();
+            property.setName("dateCreated");
+            property.setType(Date.class);
+            sortCriterion.setProperty(property);
+            sortCriteria.add(0,sortCriterion);
+            setSortCriteria(sortCriteria);
+            /* ****************************************************************
+             * END: Modify Sort Criteria
+             * ***************************************************************/
+         } // END if (startDate != null)    
+         filter=new Query.CompositeFilter(
+            Query.CompositeFilterOperator.AND,
+            filters);
          
+         /* ***** BEGIN: User Filtering */
+         currentUser = ctx.getUserName();
+         if (
+               (currentUser != null) && 
+               (!currentUser.equalsIgnoreCase("transit.systems@justodelivery.com")) &&
+               (currentUser.endsWith("justodelivery.com"))
+            ) {
+            // No-Op
+            // This is a Justo Employee, so ALL records are welcome.
+         } else {
+            filters = new ArrayList<Filter>();
+            filters.add(new FilterPredicate("createdBy",
+                  FilterOperator.EQUAL, currentUser));
+            filters.add(new FilterPredicate("contactEmail",
+                  FilterOperator.EQUAL, currentUser));
+            userFilter = new Query.CompositeFilter(
+                  Query.CompositeFilterOperator.OR, filters);
+            filters=new ArrayList<Filter>();
+            filters.add(filter);
+            filters.add(userFilter);
+            filter=new Query.CompositeFilter(
+                  Query.CompositeFilterOperator.AND,
+                  filters);
+         } // END if ((currentUser != null) && ...
+         /* ***** END: User Filtering */
+         query.setFilter(filter);
+         qw=new QueryWrapper(query);
+         results=findByQuery(qw,ctx);
       } else {
-         logger.severe("UserContext parameter was null.");
+         if (ctx == null) {
+            logger.severe("UserContext parameter was null.");
+         } else if (!ctx.isAuthenticated()) {
+            logger.severe("The UserContext is NOT authenticated.");
+         } else {
+            logger.severe("The statusState parameter was not specified.");
+         } // END if (ctx == null)
       } // END if (ctx != null) && (statusReason == null) ... 
       
       if (results == null) {

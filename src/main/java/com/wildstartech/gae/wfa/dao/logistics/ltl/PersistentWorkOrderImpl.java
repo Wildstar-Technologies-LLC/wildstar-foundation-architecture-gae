@@ -816,7 +816,7 @@ implements PersistentWorkOrder {
          type=getType();
          switch(type) {
             case Pickup:
-               entity.setProperty("type", "Pick-Up");
+               entity.setProperty("type", "Pickup");
                break;
             default:
                entity.setProperty("type", "Delivery");
@@ -1042,7 +1042,10 @@ implements PersistentWorkOrder {
          setNumberOfFlights(getPropertyAsInteger(entity, "numberOfFlights", 0));
          // type
          tmpStr=getPropertyAsString(entity,"type","Delivery");
-         if (tmpStr.equalsIgnoreCase("Pick-Up")) {
+         if (
+               (tmpStr.equalsIgnoreCase("Pick-Up")) ||
+               (tmpStr.equalsIgnoreCase("Pickup"))
+            ) {
             setType(Type.Pickup);
          } else {
             setType(Type.Delivery);

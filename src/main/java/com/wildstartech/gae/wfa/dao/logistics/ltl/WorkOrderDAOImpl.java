@@ -58,7 +58,6 @@ import com.wildstartech.gae.wfa.dao.journal.JournalDAOImpl;
 import com.wildstartech.gae.wfa.dao.journal.PersistentJournalEntryImpl;
 import com.wildstartech.gae.wfa.dao.ticketing.BasicTicketDAOImpl;
 import com.wildstartech.wfa.dao.DAOException;
-import com.wildstartech.wfa.dao.logistics.ltl.PersistentQuote;
 import com.wildstartech.wfa.dao.logistics.ltl.PersistentWorkOrder;
 import com.wildstartech.wfa.dao.logistics.ltl.PersistentWorkOrderLineItem;
 import com.wildstartech.wfa.dao.logistics.ltl.WorkOrderDAO;
@@ -173,7 +172,6 @@ implements WorkOrderDAO {
    public List<PersistentWorkOrder> findAll(UserContext ctx) {
       logger.entering(_CLASS, "findAll(UserContext)",ctx);
       Query query = null;
-      Filter filter = null;
       Filter userFilter=null;
       List<Filter> filters=null;
       List<PersistentWorkOrder> results=null;
@@ -257,11 +255,12 @@ implements WorkOrderDAO {
       filters.add(
             new FilterPredicate("statusState",FilterOperator.EQUAL,"New"));
       filters.add(
-            new FilterPredicate("statusState",FilterOperator.EQUAL,"Assigned"));
-      filters.add(
             new FilterPredicate("statusState",FilterOperator.EQUAL,"Pending"));
       filters.add(
-            new FilterPredicate("statusState",FilterOperator.EQUAL,"Accepted"));
+            new FilterPredicate("statusState",FilterOperator.EQUAL,"Scheduled"));
+      filters.add(
+            new FilterPredicate("statusState",FilterOperator.EQUAL,"Unscheduled"));
+      
       filter=new Query.CompositeFilter(
             Query.CompositeFilterOperator.OR,
             filters);
@@ -350,6 +349,98 @@ implements WorkOrderDAO {
       return pWorkOrder;
    }   
 
+   public List<PersistentWorkOrder> findByTypeAndStatus(
+         String type,
+         String statusState,
+         String statusReason, 
+         UserContext ctx) {
+      logger.entering(_CLASS, 
+            "findByTypeAndStatus(String,String,String,UserContext)",
+            new Object[] {type,statusState,statusReason,ctx});
+      boolean filterPresent=false;
+      Filter filter=null;
+      Filter userFilter=null;
+      List<Filter> filters=null;
+      List<PersistentWorkOrder> workOrders=null;
+      Query query=null;
+      QueryWrapper qw=null;
+      String currentUser=null;
+      String kind="";
+      
+      if ((ctx != null) && (ctx.isAuthenticated())) {
+         // So the user context has been specified
+         kind = getKind();
+         query = new Query(kind);
+         
+         filters=new ArrayList<Filter>();
+         if ((type != null) && (!type.isEmpty())) {
+            filter=new FilterPredicate("type",FilterOperator.EQUAL,type);
+            filters.add(filter);
+            if (!filterPresent) filterPresent=true;
+         } // END if ((type != null) && (!type.isEmpty()))
+         if ((statusState != null) && (!statusState.isEmpty())) {
+            filter=new FilterPredicate(
+               "statusState",FilterOperator.EQUAL,statusState);
+            filters.add(filter);
+            if (!filterPresent) filterPresent=true;
+         } // END if ((statusState != null) && (!statusState.isEmpty()))
+         if ((statusReason !=null) && (!statusReason.isEmpty())) {
+            filter=new FilterPredicate(
+               "statusReason",FilterOperator.EQUAL,statusReason);
+            filters.add(filter);
+            if (!filterPresent) filterPresent=true;
+         } // END if ((statusReason !=null) && (!statusReason.isEmpty()))
+         
+         if (filterPresent) {
+            if (filters.size() > 1) {
+               filter=new Query.CompositeFilter(
+                     Query.CompositeFilterOperator.AND,
+                     filters);
+            } else {
+               filter=filters.get(0);
+            } // END if (filters.size() > 1) 
+            
+            /* ***** BEGIN: User Filtering */
+            currentUser = ctx.getUserName();
+            if (
+                  (currentUser != null) && 
+                  (!currentUser.equalsIgnoreCase("transit.systems@justodelivery.com")) &&
+                  (currentUser.endsWith("justodelivery.com"))
+               ) {
+               // No-Op
+               // This is a Justo Employee, so ALL records are welcome.
+            } else {
+               filters = new ArrayList<Filter>();
+               filters.add(new FilterPredicate("createdBy",
+                     FilterOperator.EQUAL, currentUser));
+               filters.add(new FilterPredicate("contactEmail",
+                     FilterOperator.EQUAL, currentUser));
+               userFilter = new Query.CompositeFilter(
+                     Query.CompositeFilterOperator.OR, filters);
+               filters=new ArrayList<Filter>();
+               filters.add(filter);
+               filters.add(userFilter);
+               filter=new Query.CompositeFilter(
+                     Query.CompositeFilterOperator.AND,
+                     filters);
+            } // END if ((currentUser != null) && ...
+            /* ***** END: User Filtering */
+            
+            query.setFilter(filter);
+            qw=new QueryWrapper(query);
+            workOrders=findByQuery(qw,ctx);            
+         } else {            
+            logger.severe("No filtering criteria specified.");
+         } // END if (filterPresent)         
+      } else {
+         logger.severe("UserContext is null or NOT AUTHENTICATED");
+      } // END ((ctx != null) && (ctx.isAuthenticated()))
+      
+      logger.exiting(_CLASS, 
+            "findByTypeAndStatus(String,String,String,UserContext)",
+            workOrders);
+      return workOrders;
+   }
    /**
     * Returns the <em>Kind</em> property of the entity which is used for the 
     * purpose of querying the Datastore.
