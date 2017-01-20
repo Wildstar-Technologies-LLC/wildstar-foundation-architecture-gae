@@ -140,15 +140,15 @@ implements PersistentWorkOrder {
 
    private static List<String> resolvedClosedStatusReasons = 
          new ArrayList<String>();
-
-   static {
-      resolvedClosedStatusReasons.add("Accepted");
-      resolvedClosedStatusReasons.add("Declined");
-      resolvedClosedStatusReasons.add("Canceled");
-   }
    static {
       resolvedClosedStatusReasons.add("Complete");
       resolvedClosedStatusReasons.add("Canceled");
+   }
+   private static List<String> pendingStatusReasons = 
+         new ArrayList<String>();
+   static {
+      resolvedClosedStatusReasons.add("Audit");
+      resolvedClosedStatusReasons.add("Billing");
    }
    
    protected static final String _KIND = 
@@ -2873,9 +2873,11 @@ implements PersistentWorkOrder {
 
       status = getStatusState();
       if (status != null) {
-         if (status.equalsIgnoreCase("Resolved")) {
+         if (status.equalsIgnoreCase("Closed")) {
             reasons = PersistentWorkOrderImpl.resolvedClosedStatusReasons;
-         } else if (status.equalsIgnoreCase("Closed")) {
+         } else if (status.equalsIgnoreCase("Pending")) {
+            reasons = PersistentWorkOrderImpl.pendingStatusReasons;
+         } else if (status.equalsIgnoreCase("Resolved")) {
             reasons = PersistentWorkOrderImpl.resolvedClosedStatusReasons;
          } else {
             reasons = new ArrayList<String>();
