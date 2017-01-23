@@ -42,12 +42,12 @@
  *      derek.berube@wildstartech.com
  *      www.wildstartech.com
  */
-package com.wildstartech.gae.wfa.dao.logistics.ltl;
+package com.wildstartech.gae.wfa.dao.logistics.ltl.freight;
 
 import java.util.logging.Logger;
 
 import com.wildstartech.gae.wfa.dao.ticketing.TicketingShardedCounter;
-import com.wildstartech.wfa.logistics.ltl.FreightDueInWorkOrder;
+import com.wildstartech.wfa.logistics.ltl.freight.FreightDueInWorkOrder;
 
 public class FreightDueInWorkOrderRequestIdGenerator
 extends TicketingShardedCounter<FreightDueInWorkOrder> {

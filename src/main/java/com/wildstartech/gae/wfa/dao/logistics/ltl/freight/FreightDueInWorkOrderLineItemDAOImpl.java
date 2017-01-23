@@ -42,7 +42,7 @@
  *      derek.berube@wildstartech.com
  *      www.wildstartech.com
  */
-package com.wildstartech.gae.wfa.dao.logistics.ltl;
+package com.wildstartech.gae.wfa.dao.logistics.ltl.freight;
 
 import java.util.Collections;
 import java.util.List;
@@ -55,11 +55,11 @@ import com.google.appengine.api.datastore.Query.SortDirection;
 import com.wildstartech.gae.wfa.dao.QueryWrapper;
 import com.wildstartech.gae.wfa.dao.WildDAOImpl;
 import com.wildstartech.gae.wfa.dao.location.PersistentPostalCodeDistanceImpl;
-import com.wildstartech.wfa.logistics.ltl.FreightDueInWorkOrderLineItem;
 import com.wildstartech.wfa.logistics.ltl.LineItemComparator;
+import com.wildstartech.wfa.logistics.ltl.freight.FreightDueInWorkOrderLineItem;
 import com.wildstartech.wfa.dao.DAOException;
-import com.wildstartech.wfa.dao.logistics.ltl.FreightDueInWorkOrderLineItemDAO;
-import com.wildstartech.wfa.dao.logistics.ltl.PersistentFreightDueInWorkOrderLineItem;
+import com.wildstartech.wfa.dao.logistics.ltl.freight.FreightDueInWorkOrderLineItemDAO;
+import com.wildstartech.wfa.dao.logistics.ltl.freight.PersistentFreightDueInWorkOrderLineItem;
 import com.wildstartech.wfa.dao.user.UserContext;
 
 public class FreightDueInWorkOrderLineItemDAOImpl 

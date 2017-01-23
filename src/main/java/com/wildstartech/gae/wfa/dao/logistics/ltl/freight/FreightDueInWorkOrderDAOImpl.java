@@ -42,7 +42,7 @@
  *      derek.berube@wildstartech.com
  *      www.wildstartech.com
  */
-package com.wildstartech.gae.wfa.dao.logistics.ltl;
+package com.wildstartech.gae.wfa.dao.logistics.ltl.freight;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,15 +55,15 @@ import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.wildstartech.gae.wfa.dao.QueryWrapper;
 import com.wildstartech.gae.wfa.dao.ticketing.BasicTicketDAOImpl;
 import com.wildstartech.wfa.dao.DAOException;
-import com.wildstartech.wfa.dao.logistics.ltl.FreightDueInWorkOrderDAO;
-import com.wildstartech.wfa.dao.logistics.ltl.FreightDueInWorkOrderLineItemDAO;
-import com.wildstartech.wfa.dao.logistics.ltl.FreightDueInWorkOrderLineItemDAOFactory;
-import com.wildstartech.wfa.dao.logistics.ltl.PersistentFreightDueInWorkOrder;
-import com.wildstartech.wfa.dao.logistics.ltl.PersistentFreightDueInWorkOrderLineItem;
 import com.wildstartech.wfa.dao.logistics.ltl.PersistentQuote;
+import com.wildstartech.wfa.dao.logistics.ltl.freight.FreightDueInWorkOrderDAO;
+import com.wildstartech.wfa.dao.logistics.ltl.freight.FreightDueInWorkOrderLineItemDAO;
+import com.wildstartech.wfa.dao.logistics.ltl.freight.FreightDueInWorkOrderLineItemDAOFactory;
+import com.wildstartech.wfa.dao.logistics.ltl.freight.PersistentFreightDueInWorkOrder;
+import com.wildstartech.wfa.dao.logistics.ltl.freight.PersistentFreightDueInWorkOrderLineItem;
 import com.wildstartech.wfa.dao.user.UserContext;
-import com.wildstartech.wfa.logistics.ltl.FreightDueInWorkOrder;
-import com.wildstartech.wfa.logistics.ltl.FreightDueInWorkOrderLineItem;
+import com.wildstartech.wfa.logistics.ltl.freight.FreightDueInWorkOrder;
+import com.wildstartech.wfa.logistics.ltl.freight.FreightDueInWorkOrderLineItem;
 
 public class FreightDueInWorkOrderDAOImpl 
 extends BasicTicketDAOImpl<FreightDueInWorkOrder, 
