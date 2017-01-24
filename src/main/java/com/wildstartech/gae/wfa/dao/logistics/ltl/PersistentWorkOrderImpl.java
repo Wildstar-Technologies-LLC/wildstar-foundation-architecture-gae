@@ -44,9 +44,12 @@
  */
 package com.wildstartech.gae.wfa.dao.logistics.ltl;
 
+import java.text.DateFormat;
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -181,6 +184,8 @@ implements PersistentWorkOrder {
    private ArrayList<AccessorialCharge> accessorials = null;
    private ArrayList<WorkOrderLineItem> lineItems = null;
    private ArrayList<WorkOrderLineItem> lineItemsToDelete = null;
+   private Date scheduledDeliveryDate=null;
+   private Date scheduledPickupDate=null;
    private transient PriceModel priceModel = null;
    private PersistentJournalEntryImpl newJournalEntry=null;
    private String billingCompanyName="";
@@ -661,6 +666,7 @@ implements PersistentWorkOrder {
    @Override
    protected void populateEntity(Entity entity) {
       logger.entering(_CLASS,"populateEntity(Entity)",entity);
+      Date tmpDate=null;
       PriceModel pm=null;
       String tmpStr="";
       Text tmpText = null;
@@ -808,6 +814,12 @@ implements PersistentWorkOrder {
          entity.setProperty("referralSource", getReferralSource());
          // referralOther
          entity.setProperty("referralOther", getReferralOther());
+         // scheduledDeliveryDate
+         tmpDate=getScheduledDeliveryDate();
+         entity.setProperty("scheduledDeliveryDate", tmpDate);
+         // scheduledPickupDate
+         tmpDate=getScheduledDeliveryDate();
+         entity.setProperty("scheduledPickupDate", tmpDate);         
          // serviceLevel
          entity.setProperty("serviceLevel", getServiceLevel());
          // stairCarry
@@ -1034,6 +1046,10 @@ implements PersistentWorkOrder {
          setReferralOther(getPropertyAsString(entity,"referralOther"));
          // requestId
          setRequestId(getPropertyAsString(entity, "requestId"));
+         // scheduledDeliveryDate
+         setScheduledDeliveryDate(getPropertyAsDate(entity,"scheduledDeliveryDate"));
+         // scheduledPickupDate
+         setScheduledPickupDate(getPropertyAsDate(entity,"scheduledPickupDate"));
          // serviceLevel
          setServiceLevel(getPropertyAsString(entity, "serviceLevel"));
          // stairCarry
@@ -1189,6 +1205,8 @@ implements PersistentWorkOrder {
          setReferralSource(workOrder.getReferralSource());
          setReferralOther(workOrder.getReferralOther());
          setRequestId(workOrder.getRequestId());
+         setScheduledDeliveryDate(workOrder.getScheduledDeliveryDate());
+         setScheduledPickupDate(workOrder.getScheduledPickupDate());
          setServiceLevel(workOrder.getServiceLevel());
          setStatusState(workOrder.getStatusState());
          setStatusReason(workOrder.getStatusReason());
@@ -1290,17 +1308,20 @@ implements PersistentWorkOrder {
    
    public String toPropertyString() {
       logger.entering(_CLASS, "toPropertyString()");
+      DateFormat dFmt=null;
       NumberFormat cFmt = null;
       NumberFormat fmt=null;
       String result="";
       StringBuilder sb = null;
 
       sb = new StringBuilder(2048);
+      // Create the currency formatter
       cFmt = NumberFormat.getCurrencyInstance();
       fmt=NumberFormat.getInstance();
       fmt.setMaximumFractionDigits(2);
       fmt.setMinimumIntegerDigits(1);
-      
+      // Create the dateFormatter
+      dFmt=new SimpleDateFormat("MM/dd/yyyy");
       sb.append(super.toPropertyString());
       if (sb.length() > 0) {
          sb.append(", ");
@@ -1362,6 +1383,10 @@ implements PersistentWorkOrder {
       sb.append(", referralSource=").append(getReferralSource());
       sb.append(", referralOther=").append(getReferralOther());
       sb.append(", serviceLevel=").append(getServiceLevel());
+      sb.append(", scheduledDeliveryDate=").append(
+         dFmt.format(getScheduledDeliveryDate()));
+      sb.append(", scheduledPickupDate=").append(
+         dFmt.format(getScheduledPickupDate()));
       sb.append(", stairCarry=").append(isStairCarry());
       sb.append(", type=").append(getType());
       sb.append(", numberOfFlights=").append(getNumberOfFlights());
@@ -2827,6 +2852,29 @@ implements PersistentWorkOrder {
       logger.entering(_CLASS, "setReferralOther(String)", other);
       this.referralOther = defaultValue(other);
       logger.exiting(_CLASS, "setReferralOther(String)");
+   }
+   
+   // ***** scheduledDeliveryDate
+   public Date getScheduledDeliveryDate() {
+      logger.entering(_CLASS,"getScheduledDeliveryDate()");
+      logger.exiting(_CLASS,"getScheduledDeliveryDate()",this.scheduledDeliveryDate);
+      return this.scheduledDeliveryDate;
+   }
+   public void setScheduledDeliveryDate(Date scheduledDate) {
+      logger.entering(_CLASS, "setScheduledDeliveryDate(Date)",scheduledDate);
+      this.scheduledDeliveryDate=scheduledDate;
+      logger.exiting(_CLASS, "setScheduledDeliveryDate(Date)");
+   }
+   // ***** scheduledPickupDate
+   public Date getScheduledPickupDate() {
+      logger.entering(_CLASS,"getScheduledPickupDate()");
+      logger.exiting(_CLASS,"getScheduledPickupDate()",this.scheduledPickupDate);
+      return this.scheduledPickupDate;
+   }
+   public void setScheduledPickupDate(Date scheduledDate) {
+      logger.entering(_CLASS, "setScheduledPickupDate(Date)",scheduledDate);
+      this.scheduledPickupDate=scheduledDate;
+      logger.exiting(_CLASS, "setScheduledPickupDate(Date)");
    }
    // ***** serviceLevel
    @Override
