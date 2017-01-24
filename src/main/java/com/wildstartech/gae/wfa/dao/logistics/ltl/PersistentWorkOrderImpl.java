@@ -818,7 +818,7 @@ implements PersistentWorkOrder {
          tmpDate=getScheduledDeliveryDate();
          entity.setProperty("scheduledDeliveryDate", tmpDate);
          // scheduledPickupDate
-         tmpDate=getScheduledDeliveryDate();
+         tmpDate=getScheduledPickupDate();
          entity.setProperty("scheduledPickupDate", tmpDate);         
          // serviceLevel
          entity.setProperty("serviceLevel", getServiceLevel());
