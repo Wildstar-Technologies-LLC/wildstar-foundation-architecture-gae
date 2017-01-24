@@ -57,9 +57,9 @@ import com.wildstartech.wfa.dao.user.UserContext;
 import com.wildstartech.wfa.logistics.ltl.QuickQuote;
 import com.wildstartech.wfa.logistics.ltl.Quote;
 import com.wildstartech.wfa.logistics.ltl.SimpleQuote;
-import com.wildstartech.wfa.logistics.ltl.WorkOrder;
 import com.wildstartech.wfa.logistics.ltl.pricemodels.CubeDistancePriceModel;
 import com.wildstartech.wfa.logistics.ltl.pricemodels.PriceModel;
+import com.wildstartech.wfa.logistics.ltl.workorder.WorkOrder;
 
 public class PersistentCubeDistancePriceModelImpl
 extends PersistentPriceModelImpl

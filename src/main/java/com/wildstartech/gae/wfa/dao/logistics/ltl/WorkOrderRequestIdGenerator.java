@@ -47,7 +47,7 @@ package com.wildstartech.gae.wfa.dao.logistics.ltl;
 import java.util.logging.Logger;
 
 import com.wildstartech.gae.wfa.dao.ticketing.TicketingShardedCounter;
-import com.wildstartech.wfa.logistics.ltl.WorkOrder;
+import com.wildstartech.wfa.logistics.ltl.workorder.WorkOrder;
 
 public class WorkOrderRequestIdGenerator
       extends TicketingShardedCounter<WorkOrder> {

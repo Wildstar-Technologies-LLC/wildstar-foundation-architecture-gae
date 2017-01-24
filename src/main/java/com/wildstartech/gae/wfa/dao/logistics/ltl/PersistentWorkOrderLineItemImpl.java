@@ -49,7 +49,7 @@ import java.util.logging.Logger;
 import com.google.appengine.api.datastore.Entity;
 import com.wildstartech.wfa.dao.logistics.ltl.PersistentWorkOrderLineItem;
 import com.wildstartech.wfa.dao.user.UserContext;
-import com.wildstartech.wfa.logistics.ltl.WorkOrderLineItem;
+import com.wildstartech.wfa.logistics.ltl.workorder.WorkOrderLineItem;
 
 public class PersistentWorkOrderLineItemImpl 
 extends PersistentEditableCommodityLineItemImpl<WorkOrderLineItem> 

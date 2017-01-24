@@ -64,8 +64,8 @@ import com.wildstartech.wfa.dao.logistics.ltl.WorkOrderDAO;
 import com.wildstartech.wfa.dao.logistics.ltl.WorkOrderLineItemDAO;
 import com.wildstartech.wfa.dao.logistics.ltl.WorkOrderLineItemDAOFactory;
 import com.wildstartech.wfa.dao.user.UserContext;
-import com.wildstartech.wfa.logistics.ltl.WorkOrder;
-import com.wildstartech.wfa.logistics.ltl.WorkOrderLineItem;
+import com.wildstartech.wfa.logistics.ltl.workorder.WorkOrder;
+import com.wildstartech.wfa.logistics.ltl.workorder.WorkOrderLineItem;
 
 public class WorkOrderDAOImpl
 extends BasicTicketDAOImpl<WorkOrder, PersistentWorkOrder>

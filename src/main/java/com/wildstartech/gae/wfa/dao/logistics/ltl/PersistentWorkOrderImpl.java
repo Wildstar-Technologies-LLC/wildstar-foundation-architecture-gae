@@ -81,10 +81,10 @@ import com.wildstartech.wfa.location.address.City;
 import com.wildstartech.wfa.location.address.PostalCodeFactory;
 import com.wildstartech.wfa.location.spi.DistanceServiceProvider;
 import com.wildstartech.wfa.logistics.ltl.AccessorialCharge;
-import com.wildstartech.wfa.logistics.ltl.WorkOrder;
-import com.wildstartech.wfa.logistics.ltl.WorkOrderLineItem;
 import com.wildstartech.wfa.logistics.ltl.pricemodels.PriceModel;
 import com.wildstartech.wfa.logistics.ltl.pricemodels.PriceModelFactory;
+import com.wildstartech.wfa.logistics.ltl.workorder.WorkOrder;
+import com.wildstartech.wfa.logistics.ltl.workorder.WorkOrderLineItem;
 
 public class PersistentWorkOrderImpl 
 extends PersistentBasicTicketImpl<WorkOrder>

@@ -60,7 +60,7 @@ import com.wildstartech.wfa.dao.logistics.ltl.PersistentWorkOrderLineItem;
 import com.wildstartech.wfa.dao.logistics.ltl.WorkOrderLineItemDAO;
 import com.wildstartech.wfa.dao.user.UserContext;
 import com.wildstartech.wfa.logistics.ltl.LineItemComparator;
-import com.wildstartech.wfa.logistics.ltl.WorkOrderLineItem;
+import com.wildstartech.wfa.logistics.ltl.workorder.WorkOrderLineItem;
 
 public class WorkOrderLineItemDAOImpl
 extends WildDAOImpl<WorkOrderLineItem, PersistentWorkOrderLineItem> 
