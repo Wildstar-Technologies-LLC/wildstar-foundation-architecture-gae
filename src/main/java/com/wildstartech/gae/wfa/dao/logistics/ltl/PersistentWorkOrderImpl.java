@@ -2855,22 +2855,26 @@ implements PersistentWorkOrder {
    }
    
    // ***** scheduledDeliveryDate
+   @Override
    public Date getScheduledDeliveryDate() {
       logger.entering(_CLASS,"getScheduledDeliveryDate()");
       logger.exiting(_CLASS,"getScheduledDeliveryDate()",this.scheduledDeliveryDate);
       return this.scheduledDeliveryDate;
    }
+   @Override
    public void setScheduledDeliveryDate(Date scheduledDate) {
       logger.entering(_CLASS, "setScheduledDeliveryDate(Date)",scheduledDate);
       this.scheduledDeliveryDate=scheduledDate;
       logger.exiting(_CLASS, "setScheduledDeliveryDate(Date)");
    }
    // ***** scheduledPickupDate
+   @Override
    public Date getScheduledPickupDate() {
       logger.entering(_CLASS,"getScheduledPickupDate()");
       logger.exiting(_CLASS,"getScheduledPickupDate()",this.scheduledPickupDate);
       return this.scheduledPickupDate;
    }
+   @Override
    public void setScheduledPickupDate(Date scheduledDate) {
       logger.entering(_CLASS, "setScheduledPickupDate(Date)",scheduledDate);
       this.scheduledPickupDate=scheduledDate;
