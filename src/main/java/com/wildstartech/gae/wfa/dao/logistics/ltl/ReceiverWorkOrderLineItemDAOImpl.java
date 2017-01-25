@@ -10,9 +10,9 @@ import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.wildstartech.gae.wfa.dao.QueryWrapper;
 import com.wildstartech.gae.wfa.dao.WildDAOImpl;
 import com.wildstartech.wfa.dao.DAOException;
-import com.wildstartech.wfa.dao.logistics.ltl.PersistentQuoteLineItem;
 import com.wildstartech.wfa.dao.logistics.ltl.PersistentReceiverWorkOrderLineItem;
 import com.wildstartech.wfa.dao.logistics.ltl.ReceiverWorkOrderLineItemDAO;
+import com.wildstartech.wfa.dao.logistics.ltl.quote.PersistentQuoteLineItem;
 import com.wildstartech.wfa.dao.user.UserContext;
 import com.wildstartech.wfa.logistics.ltl.ReceiverWorkOrderLineItem;
 

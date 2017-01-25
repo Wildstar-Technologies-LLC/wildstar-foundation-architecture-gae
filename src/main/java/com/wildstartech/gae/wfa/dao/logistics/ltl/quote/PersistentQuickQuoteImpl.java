@@ -1,4 +1,4 @@
-package com.wildstartech.gae.wfa.dao.logistics.ltl;
+package com.wildstartech.gae.wfa.dao.logistics.ltl.quote;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -12,12 +12,12 @@ import com.wildstartech.gae.wfa.dao.journal.JournalDAOImpl;
 import com.wildstartech.gae.wfa.dao.journal.PersistentJournalEntryImpl;
 import com.wildstartech.gae.wfa.dao.ticketing.PersistentBasicTicketImpl;
 import com.wildstartech.wfa.dao.journal.PersistentJournalEntry;
-import com.wildstartech.wfa.dao.logistics.ltl.PersistentQuickQuote;
+import com.wildstartech.wfa.dao.logistics.ltl.quote.PersistentQuickQuote;
 import com.wildstartech.wfa.dao.user.UserContext;
 import com.wildstartech.wfa.journal.JournalEntry;
-import com.wildstartech.wfa.logistics.ltl.QuickQuote;
 import com.wildstartech.wfa.logistics.ltl.pricemodels.PriceModel;
 import com.wildstartech.wfa.logistics.ltl.pricemodels.PriceModelFactory;
+import com.wildstartech.wfa.logistics.ltl.quote.QuickQuote;
 
 public class PersistentQuickQuoteImpl 
 extends PersistentBasicTicketImpl<QuickQuote> 

@@ -42,7 +42,7 @@
  *      derek.berube@wildstartech.com
  *      www.wildstartech.com
  */
-package com.wildstartech.gae.wfa.dao.logistics.ltl;
+package com.wildstartech.gae.wfa.dao.logistics.ltl.quote;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -58,14 +58,14 @@ import com.wildstartech.wfa.dao.WildObject;
 import com.wildstartech.wfa.dao.finance.CreditCardDAO;
 import com.wildstartech.wfa.dao.finance.CreditCardDAOFactory;
 import com.wildstartech.wfa.dao.finance.PersistentCreditCard;
-import com.wildstartech.wfa.dao.logistics.ltl.PersistentQuote;
-import com.wildstartech.wfa.dao.logistics.ltl.PersistentQuoteLineItem;
-import com.wildstartech.wfa.dao.logistics.ltl.QuoteLineItemDAO;
-import com.wildstartech.wfa.dao.logistics.ltl.QuoteLineItemDAOFactory;
+import com.wildstartech.wfa.dao.logistics.ltl.quote.PersistentQuote;
+import com.wildstartech.wfa.dao.logistics.ltl.quote.PersistentQuoteLineItem;
+import com.wildstartech.wfa.dao.logistics.ltl.quote.QuoteLineItemDAO;
+import com.wildstartech.wfa.dao.logistics.ltl.quote.QuoteLineItemDAOFactory;
 import com.wildstartech.wfa.dao.user.UserContext;
 import com.wildstartech.wfa.logistics.ltl.AccessorialCharge;
-import com.wildstartech.wfa.logistics.ltl.Quote;
-import com.wildstartech.wfa.logistics.ltl.QuoteLineItem;
+import com.wildstartech.wfa.logistics.ltl.quote.Quote;
+import com.wildstartech.wfa.logistics.ltl.quote.QuoteLineItem;
 
 public class PersistentQuoteImpl 
 extends PersistentSimpleQuoteImpl

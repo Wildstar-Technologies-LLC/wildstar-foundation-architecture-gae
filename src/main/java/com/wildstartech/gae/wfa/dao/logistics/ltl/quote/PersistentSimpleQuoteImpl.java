@@ -1,4 +1,4 @@
-package com.wildstartech.gae.wfa.dao.logistics.ltl;
+package com.wildstartech.gae.wfa.dao.logistics.ltl.quote;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -7,7 +7,7 @@ import java.util.logging.Logger;
 
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.Text;
-import com.wildstartech.wfa.dao.logistics.ltl.PersistentSimpleQuote;
+import com.wildstartech.wfa.dao.logistics.ltl.quote.PersistentSimpleQuote;
 import com.wildstartech.wfa.dao.user.UserContext;
 import com.wildstartech.wfa.logistics.ltl.SimpleQuote;
 

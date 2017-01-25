@@ -1,10 +1,10 @@
-package com.wildstartech.gae.wfa.dao.logistics.ltl;
+package com.wildstartech.gae.wfa.dao.logistics.ltl.quote;
 
 import java.util.logging.Logger;
 
 import com.wildstartech.wfa.dao.DAOException;
-import com.wildstartech.wfa.dao.logistics.ltl.PersistentSimpleQuote;
-import com.wildstartech.wfa.dao.logistics.ltl.SimpleQuoteDAO;
+import com.wildstartech.wfa.dao.logistics.ltl.quote.PersistentSimpleQuote;
+import com.wildstartech.wfa.dao.logistics.ltl.quote.SimpleQuoteDAO;
 import com.wildstartech.wfa.dao.user.UserContext;
 import com.wildstartech.wfa.logistics.ltl.SimpleQuote;
 

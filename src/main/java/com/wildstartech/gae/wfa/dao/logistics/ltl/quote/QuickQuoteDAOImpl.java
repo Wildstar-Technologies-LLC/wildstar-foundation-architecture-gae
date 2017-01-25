@@ -1,12 +1,12 @@
-package com.wildstartech.gae.wfa.dao.logistics.ltl;
+package com.wildstartech.gae.wfa.dao.logistics.ltl.quote;
 
 import java.util.logging.Logger;
 
 import com.wildstartech.wfa.dao.DAOException;
-import com.wildstartech.wfa.dao.logistics.ltl.PersistentQuickQuote;
-import com.wildstartech.wfa.dao.logistics.ltl.QuickQuoteDAO;
+import com.wildstartech.wfa.dao.logistics.ltl.quote.PersistentQuickQuote;
+import com.wildstartech.wfa.dao.logistics.ltl.quote.QuickQuoteDAO;
 import com.wildstartech.wfa.dao.user.UserContext;
-import com.wildstartech.wfa.logistics.ltl.QuickQuote;
+import com.wildstartech.wfa.logistics.ltl.quote.QuickQuote;
 
 public class QuickQuoteDAOImpl
 extends QuoteDAOBase<QuickQuote, PersistentQuickQuote>

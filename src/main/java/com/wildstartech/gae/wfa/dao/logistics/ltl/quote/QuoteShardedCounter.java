@@ -42,10 +42,10 @@
  *      derek.berube@wildstartech.com
  *      www.wildstartech.com
  */
-package com.wildstartech.gae.wfa.dao.logistics.ltl;
+package com.wildstartech.gae.wfa.dao.logistics.ltl.quote;
 
 import com.wildstartech.gae.wfa.dao.ShardedCounter;
-import com.wildstartech.wfa.logistics.ltl.Quote;
+import com.wildstartech.wfa.logistics.ltl.quote.Quote;
 
 public class QuoteShardedCounter extends ShardedCounter<Quote> {   
 }

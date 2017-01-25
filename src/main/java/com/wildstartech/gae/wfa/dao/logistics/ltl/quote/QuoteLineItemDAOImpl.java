@@ -42,7 +42,7 @@
  *      derek.berube@wildstartech.com
  *      www.wildstartech.com
  */
-package com.wildstartech.gae.wfa.dao.logistics.ltl;
+package com.wildstartech.gae.wfa.dao.logistics.ltl.quote;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,10 +56,10 @@ import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.wildstartech.gae.wfa.dao.QueryWrapper;
 import com.wildstartech.gae.wfa.dao.WildDAOImpl;
 import com.wildstartech.wfa.dao.DAOException;
-import com.wildstartech.wfa.dao.logistics.ltl.PersistentQuoteLineItem;
-import com.wildstartech.wfa.dao.logistics.ltl.QuoteLineItemDAO;
+import com.wildstartech.wfa.dao.logistics.ltl.quote.PersistentQuoteLineItem;
+import com.wildstartech.wfa.dao.logistics.ltl.quote.QuoteLineItemDAO;
 import com.wildstartech.wfa.dao.user.UserContext;
-import com.wildstartech.wfa.logistics.ltl.QuoteLineItem;
+import com.wildstartech.wfa.logistics.ltl.quote.QuoteLineItem;
 
 public class QuoteLineItemDAOImpl 
 extends WildDAOImpl<QuoteLineItem, PersistentQuoteLineItem> 

@@ -1,48 +1,4 @@
-/*
- * Copyright (c) 2013 - 2016 Wildstar Technologies, LLC.
- *
- * This file is part of Wildstar Foundation Architecture.
- *
- * Wildstar Foundation Architecture is free software: you can redistribute it
- * and/or modify it under the terms of the GNU General Public License as
- * published by the Free Software Foundation, either version 3 of the License,
- * or (at your option) any later version.
- *
- * Wildstar Foundation Architecture is distributed in the hope that it will be
- * useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License along with
- * Wildstar Foundation Architecture.  If not, see 
- * <http://www.gnu.org/licenses/>.
- * 
- * Linking this library statically or dynamically with other modules is making a
- * combined work based on this library. Thus, the terms and conditions of the 
- * GNU General Public License cover the whole combination.
- * 
- * As a special exception, the copyright holders of this library give you 
- * permission to link this library with independent modules to produce an 
- * executable, regardless of the license terms of these independent modules, 
- * and to copy and distribute the resulting executable under terms of your 
- * choice, provided that you also meet, for each linked independent module, the
- * terms and conditions of the license of that module. An independent module is
- * a module which is not derived from or based on this library. If you modify 
- * this library, you may extend this exception to your version of the library, 
- * but you are not obliged to do so. If you do not wish to do so, delete this 
- * exception statement from your version.
- * 
- * If you need additional information or have any questions, please contact:
- *
- *      Wildstar Technologies, LLC.
- *      63 The Greenway Loop
- *      Panama City Beach, FL 32413
- *      USA
- *
- *      derek.berube@wildstartech.com
- *      www.wildstartech.com
- */
-package com.wildstartech.gae.wfa.dao.logistics.ltl;
+package com.wildstartech.gae.wfa.dao.logistics.ltl.quote;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -62,77 +18,30 @@ import com.wildstartech.gae.wfa.dao.QueryWrapper;
 import com.wildstartech.gae.wfa.dao.WildDAOImpl;
 import com.wildstartech.gae.wfa.dao.journal.JournalDAOImpl;
 import com.wildstartech.gae.wfa.dao.journal.PersistentJournalEntryImpl;
-import com.wildstartech.wfa.dao.DAOException;
-import com.wildstartech.wfa.dao.logistics.ltl.PersistentQuote;
-import com.wildstartech.wfa.dao.logistics.ltl.PersistentQuoteLineItem;
-import com.wildstartech.wfa.dao.logistics.ltl.QuoteDAO;
-import com.wildstartech.wfa.dao.logistics.ltl.QuoteLineItemDAO;
-import com.wildstartech.wfa.dao.logistics.ltl.QuoteLineItemDAOFactory;
+import com.wildstartech.wfa.dao.logistics.ltl.quote.PersistentQuickQuote;
 import com.wildstartech.wfa.dao.user.UserContext;
-import com.wildstartech.wfa.logistics.ltl.Quote;
-import com.wildstartech.wfa.logistics.ltl.QuoteLineItem;
+import com.wildstartech.wfa.logistics.ltl.quote.QuickQuote;
 
-/**
- * Save a copy of the <code>Quote</code> to the persistent data store.
- * <table border="0">
- * <tr>
- * <td><strong>NOTE:</strong></td>
- * <td><strong>
- * <p>
- * This Data Access Object ONLY persists the quote itself. It DOES NOT persist
- * any associated line item and/or accessorial charges.
- * </p>
- * <p>
- * It is the responsibility of the caller to ensure that those entities are
- * saved.
- * </p>
- * </td>
- * </tr>
- * </table>
- * 
- * @author Derek Berube, Wildstar Technologies, LLC.
- *
- */
-public class QuoteDAOImpl extends WildDAOImpl<Quote, PersistentQuote>
-implements QuoteDAO {
-   private static final String _CLASS = QuoteDAOImpl.class.getName();
-   private static final Logger logger = Logger.getLogger(_CLASS);
-
+public abstract class QuoteDAOBase<T extends QuickQuote, W extends PersistentQuickQuote> extends WildDAOImpl<T, W> {
+   private static final String _CLASS=QuoteDAOBase.class.getName();
+   private static final Logger logger=Logger.getLogger(_CLASS);
    private static final QuoteShardedCounter requestIdGenerator = new QuoteShardedCounter();
-
-   // ********** Implementation of super-class methods
-   @Override
-   public PersistentQuoteImpl create() {
-      logger.entering(_CLASS, "create()");
-      PersistentQuoteImpl quote = null;
-      quote = new PersistentQuoteImpl();
-      logger.exiting(_CLASS, "create()", quote);
-      return quote;
+   
+   /**
+    * Returns the <em>Kind</em> property of the entity which is used for the
+    * purpose of querying the Datastore.
+    * 
+    * @return A string value which is used by the Datastore for the purpose of
+    *         categorizing entities of this object's type to provide the ability
+    *         to querying the Datastore and retrieve entities.
+    */
+   protected final String getKind() {
+      logger.entering(_CLASS, "getKind()");
+      logger.exiting(_CLASS, "getKind()", PersistentQuoteImpl._KIND);
+      return PersistentQuoteImpl._KIND;
    }
-
-   @Override
-   public PersistentQuoteImpl create(Quote quote, UserContext ctx) {
-      logger.entering(_CLASS, "create(Quote,UserContext)",
-            new Object[] { quote, ctx });
-      PersistentQuoteImpl pQuote = null;
-      if ((quote != null) && (ctx != null)) {
-         // Neither the Quote nor UserContext were null.
-         // Let's see if it is an existing instance.
-         pQuote = (PersistentQuoteImpl) findInstance(quote, ctx);
-         if (pQuote == null) {
-            pQuote = (PersistentQuoteImpl) create();
-            pQuote.populateFromObject(quote);
-         } // END if (pQuote == null)
-      } else {
-         if (quote == null)
-            logger.warning("Quote parameter is null.");
-         if (ctx == null)
-            logger.warning("UserContext parameter is null.");
-      }
-      logger.exiting(_CLASS, "create(Quote,UserContext)");
-      return pQuote;
-   }
-
+   
+   // ********** Save method 
    /**
     * Save method responsible for persisting the Quote entity.
     * 
@@ -141,26 +50,19 @@ implements QuoteDAO {
     * that method as there are children that need to be saved.
     * </p>
     */
+   @SuppressWarnings("unchecked")
    @Override
-   public PersistentQuoteImpl save(Quote quote, UserContext ctx,
+   public W save(T quote, UserContext ctx,
          Transaction txn) {
-      logger.entering(_CLASS, "save(Quote,UserContext,Transaction)",
+      logger.entering(_CLASS, "save(T,UserContext,Transaction)",
             new Object[] { quote, ctx, txn });
       JournalDAOImpl journalDAO=null;
-      List<QuoteLineItem> lineItems = null;
-      List<PersistentQuoteLineItem> lineItemsToDelete = null;
-      PersistentJournalEntryImpl pJournalEntry=null;
-      PersistentQuoteImpl pQuote = null;
-      PersistentQuoteLineItemImpl pQli = null;
-      QuoteLineItemDAO qliDAO = null;
-      QuoteLineItemDAOFactory qliFactory = null;
-      ReconcileCreditCard reconcileCreditCard=null;      
-      String identifier = "";
+      PersistentJournalEntryImpl pJournal=null;
       String nextIdValue = "";
-      String quoteIdentifier = "";
       String requestId = "";
       String requestIdTemplate = "Q00000000000000";
       StringBuilder sb = null;
+      W pQuote=null;
 
       if ((quote != null) && (ctx != null)) {
          // Get the quote identifier
@@ -169,11 +71,11 @@ implements QuoteDAO {
          if (!isEmpty(requestId)) {
             // Yes there is a request Id, let's use it to get the current
             // version of the object.
-            pQuote=(PersistentQuoteImpl) findByRequestId(requestId,ctx);            
+            pQuote=findByRequestId(requestId,ctx);            
          } else {
             // No, there is no requestId, so let's generate one....
             sb = new StringBuilder(30);
-            nextIdValue = String.valueOf(requestIdGenerator.nextId());
+            nextIdValue = String.valueOf(QuoteDAOBase.requestIdGenerator.nextId());
             sb.append(
                   requestIdTemplate.substring(0, 15 - nextIdValue.length()));
             sb.append(nextIdValue);
@@ -184,81 +86,28 @@ implements QuoteDAO {
             // Nope, so let's create a new persistent object.
             pQuote=create();
          } // END if (pQuote == null)
-         // So let's update the persistent quote from the specified quote.
-         pQuote.updateFromObject(quote);
-         pQuote.setRequestId(requestId);
-         // ******************** Process Rules
-         reconcileCreditCard=new ReconcileCreditCard(ctx);
-         reconcileCreditCard.apply(pQuote);
          
-         /* Get the list of line items that will need to be saved */
-         lineItems = pQuote.getLineItems();
-         /* Get the list of line items that will need to be removed. */
-         lineItemsToDelete = pQuote.getLineItemsToDelete(); 
+         // So let's update the persistent quote from the specified quote.
+         pQuote.updateFromObject((T)quote);
+         pQuote.setRequestId(requestId);
+          
          /* Get the journal entry. */
-         pJournalEntry=(PersistentJournalEntryImpl) pQuote.getNewJournalEntry();
+         pJournal=(PersistentJournalEntryImpl) pQuote.getNewJournalEntry();
          
          /* Saving the quote will return ONLY the parent object.  The children
           * will not be present in the object that is returned. */
-         pQuote = (PersistentQuoteImpl) super.save(pQuote, ctx, txn);
+         pQuote = (W) super.save((T) pQuote, ctx, txn);
          
          // ******************** Journal Entry ********************
-         if (!pJournalEntry.isEmpty()) {
+         if (!pJournal.isEmpty()) {
             // The journal contains data, so let's save it.
             journalDAO=new JournalDAOImpl();
-            pJournalEntry.setRelatedKind(getKind());
-            pJournalEntry.setRelatedIdentifier(pQuote.getIdentifier());
-            pJournalEntry=(PersistentJournalEntryImpl)
-                  journalDAO.save(pJournalEntry, ctx);
+            pJournal.setRelatedKind(getKind());
+            pJournal.setRelatedIdentifier(pQuote.getIdentifier());
+            pJournal=(PersistentJournalEntryImpl)
+                  journalDAO.save(pJournal, ctx);
          } // END if (!pJournalEntry.isEmpty())
-         
-         // ******************** Line Items ********************
-         /* quoteIdentifier will be saved with the QuoteLineItem instances */
-         quoteIdentifier = pQuote.getIdentifier();
-         qliFactory = new QuoteLineItemDAOFactory();
-         qliDAO = qliFactory.getDAO();
-         // ***** Iterate through the QuoteLineItems and save them.
-         for (int i = 0; i < lineItems.size(); i++) {
-            QuoteLineItem qli = lineItems.get(i);
-            if (!(qli instanceof PersistentQuoteLineItemImpl)) {
-               // The Quote Line Item IS NOT a persistent entity.
-               pQli = (PersistentQuoteLineItemImpl) qliDAO.findInstance(qli,
-                     ctx);
-            } else {
-               identifier = ((PersistentQuoteLineItemImpl) qli).getIdentifier();
-               if (!isEmpty(identifier)) {
-                  pQli = (PersistentQuoteLineItemImpl) qliDAO
-                        .findByIdentifier(identifier, ctx);
-               } else {
-                  logger.info(
-                   "The entity is a persistent one, but it hasn't been saved.");
-               } // END if (identifier != null)
-            } // END if (!(qli instanceof PersistentQuoteLineItemImpl))
-            if (pQli == null) {
-               // An existing line item WAS NOT found.
-               pQli = (PersistentQuoteLineItemImpl) qliDAO.create();
-            } // END if (pQli == null)
-              // Popluate with line item data
-              // Populate the object with information from the passsed object.
-            pQli.populateFromObject(qli);
-            // Associate the QuoteLineItem with the quote.
-            pQli.setQuoteIdentifier(quoteIdentifier);
-            // Save the QuoteLineItem
-            pQli = (PersistentQuoteLineItemImpl) ((QuoteLineItemDAOImpl) qliDAO)
-                  .save(pQli, ctx, txn);
-            // Add the saved line item to the persistent quote
-            pQuote.addLineItem(pQli);
-            qli = null;
-            pQli = null;
-         } // END for (QuoteLineItem qli: lineItems)
-         
-         // Remove QuoteLineItems No longer associated.
-         for (PersistentQuoteLineItem item : lineItemsToDelete) {
-            // Get the identifier.
-            identifier = item.getIdentifier();
-            // Remove the object.
-            qliDAO.deleteByIdentifier(identifier, ctx);
-         } // END for (PersistentQuoteLineItem item:
+                  
       } else {
          // Either the Quote object was null or the UserContext object was null.
          if (quote == null)
@@ -270,18 +119,8 @@ implements QuoteDAO {
       logger.entering(_CLASS, "save(Quote,UserContext,Transaction)", pQuote);
       return pQuote;
    }
-
-   /**
-    * Find the persistent version of the specified quote.
-    */
-   @Override
-   public PersistentQuote findInstance(Quote quote, UserContext ctx)
-         throws DAOException {
-      // TODO Auto-generated method stub
-      return null;
-   }
-
-// ********** Search Methods
+   
+   // ********** Search Methods
    /**
     * Returns a list of quotes that require action.
     * <p>
@@ -290,15 +129,15 @@ implements QuoteDAO {
     * </p>
     
     */
-   public final List<PersistentQuote> findActionable(UserContext ctx) {
+   public final List<W> findActionable(UserContext ctx) {
       logger.entering(_CLASS, "findActionable(UserContext)", ctx);
-      Filter userFilter=null;
       List<Filter> filters = null;
       List<Filter> tmpFilters = null;
-      List<PersistentQuote> quotes = null;
+      List<W> quotes = null;
       Query query = null;
       QueryWrapper qw = null;
-      Query.Filter filter = null;
+      Filter filter = null;
+      Filter userFilter=null;
       String currentUser = null;
 
       if (ctx != null) {
@@ -377,13 +216,12 @@ implements QuoteDAO {
     * </p>
     */
    @Override
-   public final List<PersistentQuote> findAll(UserContext ctx) {
+   public final List<W> findAll(UserContext ctx) {
       logger.entering(_CLASS, "findAll(UserContext)", ctx);
-      Query query = null;
-      Filter filter = null;
       Filter userFilter=null;
-      List<Filter> filters=null;
-      List<PersistentQuote> results = null;
+      List<Filter> tmpFilters=null;
+      List<W> results = null;
+      Query query=null;
       QueryWrapper qw = null;
       String currentUser = null;
       String kind = null;
@@ -404,13 +242,13 @@ implements QuoteDAO {
             // No-Op
             // This is a Justo Employee, so ALL records are welcome.
          } else {
-            filters = new ArrayList<Filter>();
-            filters.add(new FilterPredicate("createdBy",
+            tmpFilters = new ArrayList<Filter>();
+            tmpFilters.add(new FilterPredicate("createdBy",
                   FilterOperator.EQUAL, currentUser));
-            filters.add(new FilterPredicate("contactEmail",
+            tmpFilters.add(new FilterPredicate("contactEmail",
                   FilterOperator.EQUAL, currentUser));
             userFilter = new Query.CompositeFilter(
-                  Query.CompositeFilterOperator.OR, filters);
+                  Query.CompositeFilterOperator.OR, tmpFilters);
          } // END if ((currentUser != null) && ...
          if (userFilter != null) {
             query.setFilter(userFilter);
@@ -450,12 +288,12 @@ implements QuoteDAO {
     * <li>Accepted</li>
     * </ul>
     */
-   public final List<PersistentQuote> findAllActive(UserContext ctx) {
+   public final List<W> findAllActive(UserContext ctx) {
       logger.entering(_CLASS, "findAllActive(UserContext)", ctx);
       Filter filter = null;
       Filter userFilter=null;
       List<Filter> filters = null;
-      List<PersistentQuote> quotes = null;
+      List<W> quotes = null;
       Query query = null;
       QueryWrapper qw = null;
       String currentUser = null;
@@ -510,6 +348,7 @@ implements QuoteDAO {
       } else {
          logger.severe("The UserContext parameter was null.");
       } // END if (ctx != null)
+      logger.exiting(_CLASS, "findAllActive(UserContext)");
       return quotes;
    }
 
@@ -520,14 +359,14 @@ implements QuoteDAO {
     * matches the value passed as the <code>requestId</code> parameter.
     * </p>
     */
-   public PersistentQuote findByRequestId(String requestId, UserContext ctx) {
+   public final W findByRequestId(String requestId, UserContext ctx) {
       logger.entering(_CLASS, "findByRequestId(String)", requestId);
+      W quote = null;
+      List<W> quotes = null;
+      List<Filter> tmpFilters = null;
+      Query query = null;
       Filter filter = null;
       Filter userFilter=null;
-      List<PersistentQuote> quotes = null;
-      List<Filter> filters = null;
-      PersistentQuote quote = null;
-      Query query = null;
       QueryWrapper qw = null;
       String currentUser = null;
       String kind=null;
@@ -554,30 +393,27 @@ implements QuoteDAO {
             // This is a Justo Employee, so ALL records are welcome.
          } else {
             // Filter based upon name of the currently logged in user.
-            filters = new ArrayList<Filter>();
-            filters.add(new FilterPredicate("createdBy",
+            tmpFilters = new ArrayList<Filter>();
+            tmpFilters.add(new FilterPredicate("createdBy",
                   FilterOperator.EQUAL, currentUser));
-            filters.add(new FilterPredicate("contactEmail",
+            tmpFilters.add(new FilterPredicate("contactEmail",
                   FilterOperator.EQUAL, currentUser));
             userFilter = new Query.CompositeFilter(
-                  Query.CompositeFilterOperator.OR,filters);
-            filters=new ArrayList<Filter>();
-            filters.add(filter);
-            filters.add(userFilter);
+                  Query.CompositeFilterOperator.OR, tmpFilters);
+            tmpFilters.clear();
+            tmpFilters.add(filter);
+            tmpFilters.add(userFilter);
             filter=new Query.CompositeFilter(
                   Query.CompositeFilterOperator.AND,
-                  filters);
+                  tmpFilters);
          } // END if ((currentUser != null) && ...
          /* ***** END: User Filtering */
 
          query.setFilter(filter);
          qw = new QueryWrapper(query);
          quotes = findByQuery(qw, ctx);
-         if (
-               (quotes != null) && 
-               (quotes.size() != 0)
-            ) {
-            quote = quotes.get(0);
+         if ((quotes != null) && (quotes.size() != 0)) {
+            quote = (W) quotes.get(0);
          } else {
             logger.warning(
                   "A quote with the specified requestId was not found.");
@@ -607,17 +443,17 @@ implements QuoteDAO {
     * that is ninety days prior to the current date/time will be used.</p>
     * 
     */
-   public final List<PersistentQuote> findByStatus(String status, String statusReason,
+   public final List<W> findByStatus(String status, String statusReason,
          Date minDateModified, UserContext ctx) {
       logger.entering(_CLASS, "findByStatus(String,String,Date,UserContext)",
             new Object[] { status, statusReason, minDateModified, ctx });
       Calendar calendar = null;
-      Filter filter = null;
       Filter userFilter=null;
       List<Filter> filters = null;
-      List<PersistentQuote> quotes = null;
+      List<W> quotes = null;
       Query query = null;
       QueryWrapper qw = null;
+      Query.Filter filter = null;
       String currentUser = null;
       TimeZone tz = null;
 
@@ -712,20 +548,11 @@ implements QuoteDAO {
       } else {
          logger.severe("UserContext parameter was null.");
       } // END if (ctx != null) && (statusReason == null) ...
-      
       if (quotes == null) {
-         quotes = new ArrayList<PersistentQuote>();
+         quotes = new ArrayList<W>();
       } // END if (quotes == null)
       logger.exiting(_CLASS, "findByStatus(String,String,Date,UserContext)",
             quotes);
       return quotes;
-   }
-
-   @Override
-   protected String getKind() {
-      logger.entering(_CLASS, "getKind()");
-      logger.exiting(_CLASS, "getKind()",PersistentQuoteImpl._KIND);
-      return PersistentQuoteImpl._KIND;
-   } 
-   
+   }   
 }

@@ -42,14 +42,15 @@
  *      derek.berube@wildstartech.com
  *      www.wildstartech.com
  */
-package com.wildstartech.gae.wfa.dao.logistics.ltl;
+package com.wildstartech.gae.wfa.dao.logistics.ltl.quote;
 
 import java.util.logging.Logger;
 
 import com.google.appengine.api.datastore.Entity;
-import com.wildstartech.wfa.dao.logistics.ltl.PersistentQuoteLineItem;
+import com.wildstartech.gae.wfa.dao.logistics.ltl.PersistentEditableCommodityLineItemImpl;
+import com.wildstartech.wfa.dao.logistics.ltl.quote.PersistentQuoteLineItem;
 import com.wildstartech.wfa.dao.user.UserContext;
-import com.wildstartech.wfa.logistics.ltl.QuoteLineItem;
+import com.wildstartech.wfa.logistics.ltl.quote.QuoteLineItem;
 
 public class PersistentQuoteLineItemImpl 
 extends PersistentEditableCommodityLineItemImpl<QuoteLineItem> 

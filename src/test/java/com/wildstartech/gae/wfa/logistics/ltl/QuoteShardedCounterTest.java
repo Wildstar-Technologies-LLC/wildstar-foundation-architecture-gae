@@ -54,7 +54,7 @@ import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
-import com.wildstartech.gae.wfa.dao.logistics.ltl.QuoteShardedCounter;
+import com.wildstartech.gae.wfa.dao.logistics.ltl.quote.QuoteShardedCounter;
 import com.wildstartech.wfa.dao.WildDAOTest;
 
 public class QuoteShardedCounterTest {
