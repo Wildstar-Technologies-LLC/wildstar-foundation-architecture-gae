@@ -685,7 +685,7 @@ implements PersistentWorkOrder {
          // accessorialTotal
          entity.setProperty("accessorialTotal", getAccessorialTotal());
          // actualDeliveryDate
-         entity.setProperty("actualDeliveryDaet", getActualDeliveryDate());
+         entity.setProperty("actualDeliveryDate", getActualDeliveryDate());
          // actualPickupDate
          entity.setProperty("actualPickupDate", getActualPickupDate());
          // adjustmentAmount
@@ -900,7 +900,7 @@ implements PersistentWorkOrder {
             getPropertyAsDate(entity, "actualDeliveryDate"));
          // actualPickupDate
          setActualPickupDate(
-            getPropertyAsDate(entity, "actualPickupyDate"));
+            getPropertyAsDate(entity, "actualPickupDate"));
          // adjustmentAmount
          setAdjustmentAmount(getPropertyAsDouble(entity, "adjustmentAmount"));
          // adjustmentType
