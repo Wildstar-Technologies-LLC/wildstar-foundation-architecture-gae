@@ -6,7 +6,7 @@ import com.wildstartech.wfa.dao.DAOException;
 import com.wildstartech.wfa.dao.logistics.ltl.quote.PersistentSimpleQuote;
 import com.wildstartech.wfa.dao.logistics.ltl.quote.SimpleQuoteDAO;
 import com.wildstartech.wfa.dao.user.UserContext;
-import com.wildstartech.wfa.logistics.ltl.SimpleQuote;
+import com.wildstartech.wfa.logistics.ltl.quote.SimpleQuote;
 
 public class SimpleQuoteDAOImpl 
 extends QuoteDAOBase<SimpleQuote,PersistentSimpleQuote> 
