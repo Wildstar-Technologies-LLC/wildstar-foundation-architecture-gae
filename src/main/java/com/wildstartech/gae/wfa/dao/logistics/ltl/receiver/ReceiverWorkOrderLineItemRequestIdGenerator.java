@@ -1,9 +1,9 @@
-package com.wildstartech.gae.wfa.dao.logistics.ltl;
+package com.wildstartech.gae.wfa.dao.logistics.ltl.receiver;
 
 import java.util.logging.Logger;
 
 import com.wildstartech.gae.wfa.dao.ticketing.TicketingShardedCounter;
-import com.wildstartech.wfa.logistics.ltl.ReceiverWorkOrderLineItem;
+import com.wildstartech.wfa.logistics.ltl.receiver.ReceiverWorkOrderLineItem;
 
 public class ReceiverWorkOrderLineItemRequestIdGenerator 
 extends TicketingShardedCounter<ReceiverWorkOrderLineItem> {

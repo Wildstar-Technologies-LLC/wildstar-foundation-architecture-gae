@@ -42,7 +42,7 @@
  *      derek.berube@wildstartech.com
  *      www.wildstartech.com
  */
-package com.wildstartech.gae.wfa.dao.logistics.ltl;
+package com.wildstartech.gae.wfa.dao.logistics.ltl.receiver;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -55,12 +55,12 @@ import com.google.appengine.api.datastore.Entity;
 import com.wildstartech.gae.wfa.dao.journal.PersistentJournalEntryImpl;
 import com.wildstartech.gae.wfa.dao.ticketing.PersistentBasicTicketImpl;
 import com.wildstartech.wfa.dao.WildObject;
-import com.wildstartech.wfa.dao.logistics.ltl.PersistentReceiverWorkOrder;
-import com.wildstartech.wfa.dao.logistics.ltl.PersistentReceiverWorkOrderLineItem;
+import com.wildstartech.wfa.dao.logistics.ltl.receiver.PersistentReceiverWorkOrder;
+import com.wildstartech.wfa.dao.logistics.ltl.receiver.PersistentReceiverWorkOrderLineItem;
 import com.wildstartech.wfa.dao.user.UserContext;
 import com.wildstartech.wfa.journal.JournalEntry;
-import com.wildstartech.wfa.logistics.ltl.ReceiverWorkOrder;
-import com.wildstartech.wfa.logistics.ltl.ReceiverWorkOrderLineItem;
+import com.wildstartech.wfa.logistics.ltl.receiver.ReceiverWorkOrder;
+import com.wildstartech.wfa.logistics.ltl.receiver.ReceiverWorkOrderLineItem;
 
 public class PersistentReceiverWorkOrderImpl 
 extends PersistentBasicTicketImpl<ReceiverWorkOrder>

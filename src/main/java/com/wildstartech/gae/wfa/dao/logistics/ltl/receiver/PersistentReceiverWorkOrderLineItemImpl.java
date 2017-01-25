@@ -42,7 +42,7 @@
  *      derek.berube@wildstartech.com
  *      www.wildstartech.com
  */
-package com.wildstartech.gae.wfa.dao.logistics.ltl;
+package com.wildstartech.gae.wfa.dao.logistics.ltl.receiver;
 
 
 import java.util.logging.Logger;
@@ -50,11 +50,12 @@ import java.util.logging.Logger;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.Text;
 import com.wildstartech.gae.wfa.dao.logistics.PersistentWarehouseLocationImpl;
-import com.wildstartech.wfa.dao.logistics.ltl.PersistentReceiverWorkOrderLineItem;
+import com.wildstartech.gae.wfa.dao.logistics.ltl.PersistentLineItemImpl;
+import com.wildstartech.wfa.dao.logistics.ltl.receiver.PersistentReceiverWorkOrderLineItem;
 import com.wildstartech.wfa.dao.user.UserContext;
 import com.wildstartech.wfa.journal.JournalEntry;
 import com.wildstartech.wfa.logistics.WarehouseLocation;
-import com.wildstartech.wfa.logistics.ltl.ReceiverWorkOrderLineItem;
+import com.wildstartech.wfa.logistics.ltl.receiver.ReceiverWorkOrderLineItem;
 
 public class PersistentReceiverWorkOrderLineItemImpl
 extends PersistentLineItemImpl<ReceiverWorkOrderLineItem>
