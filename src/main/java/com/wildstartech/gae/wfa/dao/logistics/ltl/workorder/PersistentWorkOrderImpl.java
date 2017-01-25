@@ -167,6 +167,7 @@ implements PersistentWorkOrder {
    private boolean packagingRequired = false;
    private boolean preview = false;
    private boolean stairCarry = false;
+   private boolean storageRequired=false;
    private boolean valuationDeclined = true;
    private boolean unpackagingRequired = false;
    private double amount = 0.0;
@@ -185,6 +186,10 @@ implements PersistentWorkOrder {
    private ArrayList<AccessorialCharge> accessorials = null;
    private ArrayList<WorkOrderLineItem> lineItems = null;
    private ArrayList<WorkOrderLineItem> lineItemsToDelete = null;
+   private Date actualDeliveryDate=null;
+   private Date actualPickupDate=null;
+   private Date requestedDeliveryDate=null;
+   private Date requestedPickupDate=null;
    private Date scheduledDeliveryDate=null;
    private Date scheduledPickupDate=null;
    private transient PriceModel priceModel = null;
@@ -232,6 +237,8 @@ implements PersistentWorkOrder {
    private String quoteRequestId= "";
    private String referralOther = null;
    private String referralSource = null;
+   private String requestedDeliveryWindow="";
+   private String requestedPickupWindow="";
    private String serviceLevel = SERVICE_LEVEL_DEFAULT;
    private Type type=Type.Delivery;
    
@@ -677,6 +684,10 @@ implements PersistentWorkOrder {
          super.populateEntity(entity);
          // accessorialTotal
          entity.setProperty("accessorialTotal", getAccessorialTotal());
+         // actualDeliveryDate
+         entity.setProperty("actualDeliveryDaet", getActualDeliveryDate());
+         // actualPickupDate
+         entity.setProperty("actualPickupDate", getActualPickupDate());
          // adjustmentAmount
          entity.setProperty("adjustmentAmount", getAdjustmentAmount());
          // adjustmentType
@@ -815,6 +826,18 @@ implements PersistentWorkOrder {
          entity.setProperty("referralSource", getReferralSource());
          // referralOther
          entity.setProperty("referralOther", getReferralOther());
+         // requestedDeliveryDate
+         entity.setProperty("requestedDeliveryDate", 
+            getRequestedDeliveryDate());
+         // requestedDeliveryWindow
+         entity.setProperty("requestedDeliveryWindow", 
+            getRequestedDeliveryWindow());
+         // requestedPickupDate
+         entity.setProperty("requestedPickupDate", 
+            getRequestedPickupDate());
+         // requestedPickupWindow
+         entity.setProperty("requestedPickupWindow",
+            getRequestedPickupWindow());
          // scheduledDeliveryDate
          tmpDate=getScheduledDeliveryDate();
          entity.setProperty("scheduledDeliveryDate", tmpDate);
@@ -825,6 +848,8 @@ implements PersistentWorkOrder {
          entity.setProperty("serviceLevel", getServiceLevel());
          // stairCarry
          entity.setProperty("stairCarry", isStairCarry());
+         // storageRequired
+         entity.setProperty("storageRequired", isStorageRequired());
          // type
          type=getType();
          switch(type) {
@@ -870,6 +895,12 @@ implements PersistentWorkOrder {
          super.populateFromEntity(entity, ctx);
          // accessorialTotal
          setAccessorialTotal(getPropertyAsDouble(entity, "accessorialTotal"));
+         // actualDeliveryDate
+         setActualDeliveryDate(
+            getPropertyAsDate(entity, "actualDeliveryDate"));
+         // actualPickupDate
+         setActualPickupDate(
+            getPropertyAsDate(entity, "actualPickupyDate"));
          // adjustmentAmount
          setAdjustmentAmount(getPropertyAsDouble(entity, "adjustmentAmount"));
          // adjustmentType
@@ -1045,6 +1076,18 @@ implements PersistentWorkOrder {
          setReferralSource(getPropertyAsString(entity,"referralSource"));
          // referralOther
          setReferralOther(getPropertyAsString(entity,"referralOther"));
+         // requestedDeliveryDate
+         setRequestedDeliveryDate(
+            getPropertyAsDate(entity,"requestedDeliveryDate"));
+         // requestedDeliveryWindow
+         setRequestedDeliveryWindow(
+            getPropertyAsString(entity,"requestedDeliveryWindow"));
+         // requestedPickupDate
+         setRequestedPickupDate(
+               getPropertyAsDate(entity,"requestedPickupDate"));
+         // requestedPickupWindow
+         setRequestedPickupWindow(
+            getPropertyAsString(entity,"requestedPickupWindow"));
          // requestId
          setRequestId(getPropertyAsString(entity, "requestId"));
          // scheduledDeliveryDate
@@ -1055,6 +1098,8 @@ implements PersistentWorkOrder {
          setServiceLevel(getPropertyAsString(entity, "serviceLevel"));
          // stairCarry
          setStairCarry(getPropertyAsBoolean(entity, "stairCarry"));
+         // storageRequired
+         setStorageRequired(getPropertyAsBoolean(entity,"storageRequired"));
          // numberOfFlights
          setNumberOfFlights(getPropertyAsInteger(entity, "numberOfFlights", 0));
          // type
@@ -1145,6 +1190,8 @@ implements PersistentWorkOrder {
          super.populateFromObject(workOrder);
          setAmount(workOrder.getAmount());
          setAccessorialTotal(workOrder.getAccessorialTotal());
+         setActualDeliveryDate(workOrder.getActualDeliveryDate());
+         setActualPickupDate(workOrder.getActualPickupDate());
          setAdjustmentType(workOrder.getAdjustmentType());
          setAdjustmentAmount(workOrder.getAdjustmentAmount());
          setAssemblyRequired(workOrder.isAssemblyRequired());
@@ -1205,6 +1252,10 @@ implements PersistentWorkOrder {
           */
          setReferralSource(workOrder.getReferralSource());
          setReferralOther(workOrder.getReferralOther());
+         setRequestedDeliveryDate(workOrder.getRequestedDeliveryDate());
+         setRequestedDeliveryWindow(workOrder.getRequestedDeliveryWindow());
+         setRequestedPickupDate(workOrder.getRequestedPickupDate());
+         setRequestedPickupWindow(workOrder.getRequestedPickupWindow());
          setRequestId(workOrder.getRequestId());
          setScheduledDeliveryDate(workOrder.getScheduledDeliveryDate());
          setScheduledPickupDate(workOrder.getScheduledPickupDate());
@@ -1212,6 +1263,7 @@ implements PersistentWorkOrder {
          setStatusState(workOrder.getStatusState());
          setStatusReason(workOrder.getStatusReason());
          setStairCarry(workOrder.isStairCarry());
+         setStorageRequired(workOrder.isStorageRequired());
          setType(workOrder.getType());
          setNumberOfFlights(workOrder.getNumberOfFlights());
          setUnpackagingRequired(workOrder.isUnpackagingRequired());
@@ -1329,10 +1381,14 @@ implements PersistentWorkOrder {
       } // END if (sb.length() > 0)
       sb.append(", amount=").append(cFmt.format(getAmount()));
       sb.append(", accessorialTotal=").append(
-            cFmt.format(getAccessorialTotal()));
+         cFmt.format(getAccessorialTotal()));
       sb.append(", adjustmentType=").append(getAdjustmentType());
+      sb.append(", actualDeliveryDate=").append(
+         dFmt.format(getActualDeliveryDate()));
+      sb.append(", actualPickupDate=").append(
+         dFmt.format(getActualPickupDate()));
       sb.append(", adjustmentAmount=").append(
-            cFmt.format(getAdjustmentAmount()));
+         cFmt.format(getAdjustmentAmount()));
       sb.append(", assemblyRequired=").append(isAssemblyRequired());
       sb.append(", billingCity=").append(getBillingCity());     
       sb.append(", billingCompanyName=").append(getBillingCompanyName());
@@ -1383,12 +1439,21 @@ implements PersistentWorkOrder {
       sb.append(", purchaseOrderNumber=").append(getPurchaseOrderNumber());
       sb.append(", referralSource=").append(getReferralSource());
       sb.append(", referralOther=").append(getReferralOther());
+      sb.append(", requestedDeliveryDate=").append(
+         dFmt.format(getRequestedDeliveryDate()));
+      sb.append(", requestedDeliveryWindow=").append(
+            getRequestedDeliveryWindow());
+      sb.append(", requestedPickupDate=").append(
+         dFmt.format(getRequestedPickupDate()));
+      sb.append(", requestedPickupWindow=").append(
+         getRequestedPickupWindow());
       sb.append(", serviceLevel=").append(getServiceLevel());
       sb.append(", scheduledDeliveryDate=").append(
          dFmt.format(getScheduledDeliveryDate()));
       sb.append(", scheduledPickupDate=").append(
          dFmt.format(getScheduledPickupDate()));
       sb.append(", stairCarry=").append(isStairCarry());
+      sb.append(", storageRequired=").append(isStorageRequired());
       sb.append(", type=").append(getType());
       sb.append(", numberOfFlights=").append(getNumberOfFlights());
       sb.append(", unpackagingReuqired=").append(isUnpackagingRequired());
@@ -1608,6 +1673,34 @@ implements PersistentWorkOrder {
       logger.exiting(_CLASS, "setAccessorialTotal(double)");
    }
 
+   // ***** actualDeliveryDate
+   @Override
+   public Date getActualDeliveryDate() {
+      logger.entering(_CLASS, "getActualDeliveryDate()");
+      logger.exiting(_CLASS, "getActualDeliveryDate()",
+            this.actualDeliveryDate);
+      return this.actualDeliveryDate;
+   }
+   @Override
+   public void setActualDeliveryDate(Date deliveryDate) {
+      logger.entering(_CLASS, "setActualDeliveryDate(Date)",deliveryDate);
+      this.actualDeliveryDate=deliveryDate;
+      logger.exiting(_CLASS, "setActualDeliveryDate(Date)");
+   }
+   // ***** actualPickupDate
+   @Override
+   public Date getActualPickupDate() {
+      logger.entering(_CLASS, "getActualPickupDate()");
+      logger.exiting(_CLASS, "getActualPickupDate()",
+            this.actualPickupDate);
+      return this.actualPickupDate;
+   }
+   @Override
+   public void setActualPickupDate(Date pickupDate) {
+      logger.entering(_CLASS, "setActualPickupDate(Date)",pickupDate);
+      this.actualPickupDate=pickupDate;
+      logger.exiting(_CLASS, "setActualPickupDate(Date)");
+   }
    // ***** adjustmentAmount
    public double getAdjustmentAmount() {
       logger.entering(_CLASS, "getAdjustmentAmount()");
@@ -2855,6 +2948,63 @@ implements PersistentWorkOrder {
       logger.exiting(_CLASS, "setReferralOther(String)");
    }
    
+   // ***** requestedDeliveryDate
+   @Override
+   public Date getRequestedDeliveryDate() {
+      logger.entering(_CLASS, "getRequestedDeliveryDate()");
+      logger.exiting(_CLASS, "getRequestedDeliveryDate()",
+            this.requestedDeliveryDate);
+      return this.requestedDeliveryDate;
+   }
+   @Override
+   public void setRequestedDeliveryDate(Date deliveryDate) {
+      logger.entering(_CLASS, "setRequestedDeliveryDate(Date)",deliveryDate);
+      this.requestedDeliveryDate=deliveryDate;
+      logger.exiting(_CLASS, "setRequestedDeliveryDate(Date)");
+   }
+   // ***** requestedDeliveryWindow
+   @Override
+   public String getRequestedDeliveryWindow() {
+      logger.entering(_CLASS, "getRequestedDeliveryWindow()");
+      logger.exiting(_CLASS, "getRequestedDeliveryWindow()",
+            this.requestedDeliveryWindow);
+      return this.requestedDeliveryWindow;
+   }
+   @Override
+   public void setRequestedDeliveryWindow(String windowLabel) {
+      logger.entering(_CLASS, "setRequestedDeliveryWindow(String)",windowLabel);
+      this.requestedDeliveryWindow=defaultValue(windowLabel);
+      logger.exiting(_CLASS, "setRequestedDeliveryWindow(String)");
+   }
+   // ***** requestedPickupDate
+   @Override
+   public Date getRequestedPickupDate() {
+      logger.entering(_CLASS, "getRequestedPickupDate()");
+      logger.exiting(_CLASS, "getRequestedPickupDate()",
+            this.requestedPickupDate);
+      return this.requestedPickupDate;
+   }
+   @Override
+   public void setRequestedPickupDate(Date pickupDate) {
+      logger.entering(_CLASS, "setRequestedPickupDate(Date)",pickupDate);
+      this.requestedPickupDate=pickupDate;
+      logger.exiting(_CLASS, "setRequestedPickupDate(Date)");
+   }
+   // ***** requestedPickupWindow
+   @Override
+   public String getRequestedPickupWindow() {
+      logger.entering(_CLASS, "getRequestedPickupWindow()");
+      logger.exiting(_CLASS, "getRequestedPickupWindow()",
+            this.requestedPickupWindow);
+      return this.requestedPickupWindow;
+   }
+   @Override
+   public void setRequestedPickupWindow(String windowLabel) {
+      logger.entering(_CLASS, "setRequestedPickupWindow(String)",windowLabel);
+      this.requestedPickupWindow=defaultValue(windowLabel);
+      logger.exiting(_CLASS, "setRequestedPickupWindow(String)");
+   }
+   
    // ***** scheduledDeliveryDate
    @Override
    public Date getScheduledDeliveryDate() {
@@ -2954,6 +3104,20 @@ implements PersistentWorkOrder {
       logger.entering(_CLASS, "setStairCarry(boolean)", stairCarry);
       this.stairCarry = stairCarry;
       logger.exiting(_CLASS, "setStairCarry(boolean)");
+   }
+   
+   // ***** storageRequired
+   @Override
+   public boolean isStorageRequired() {
+      logger.entering(_CLASS, "isStorageRequired()");
+      logger.exiting(_CLASS, "isStorageRequired()",this.storageRequired);
+      return this.storageRequired;
+   }
+   @Override
+   public void setStorageRequired(boolean required) {
+      logger.entering(_CLASS, "isStorageRequired(boolean)",required);
+      this.storageRequired=required;
+      logger.exiting(_CLASS, "isStorageRequired(boolean)");
    }
 
    // ***** totalCubes
