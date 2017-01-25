@@ -50,10 +50,10 @@ import java.util.logging.Logger;
 
 import com.google.appengine.api.datastore.Entity;
 import com.wildstartech.gae.wfa.dao.WildObjectImpl;
-import com.wildstartech.wfa.dao.logistics.ltl.PersistentBillOfLading;
+import com.wildstartech.wfa.dao.logistics.ltl.billoflading.PersistentBillOfLading;
 import com.wildstartech.wfa.dao.user.UserContext;
-import com.wildstartech.wfa.logistics.ltl.BillOfLading;
-import com.wildstartech.wfa.logistics.ltl.BillOfLadingLineItem;
+import com.wildstartech.wfa.logistics.ltl.billoflading.BillOfLading;
+import com.wildstartech.wfa.logistics.ltl.billoflading.BillOfLadingLineItem;
 
 /**
  * 

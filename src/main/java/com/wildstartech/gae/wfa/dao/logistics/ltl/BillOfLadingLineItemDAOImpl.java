@@ -48,10 +48,10 @@ import java.util.logging.Logger;
 
 import com.wildstartech.gae.wfa.dao.WildDAOImpl;
 import com.wildstartech.wfa.dao.DAOException;
-import com.wildstartech.wfa.dao.logistics.ltl.BillOfLadingLineItemDAO;
-import com.wildstartech.wfa.dao.logistics.ltl.PersistentBillOfLadingLineItem;
+import com.wildstartech.wfa.dao.logistics.ltl.billoflading.BillOfLadingLineItemDAO;
+import com.wildstartech.wfa.dao.logistics.ltl.billoflading.PersistentBillOfLadingLineItem;
 import com.wildstartech.wfa.dao.user.UserContext;
-import com.wildstartech.wfa.logistics.ltl.BillOfLadingLineItem;
+import com.wildstartech.wfa.logistics.ltl.billoflading.BillOfLadingLineItem;
 
 public class BillOfLadingLineItemDAOImpl 
 extends WildDAOImpl<BillOfLadingLineItem, PersistentBillOfLadingLineItem> 
