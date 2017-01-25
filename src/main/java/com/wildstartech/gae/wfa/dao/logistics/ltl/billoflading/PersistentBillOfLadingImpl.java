@@ -42,7 +42,7 @@
  *      derek.berube@wildstartech.com
  *      www.wildstartech.com
  */
-package com.wildstartech.gae.wfa.dao.logistics.ltl;
+package com.wildstartech.gae.wfa.dao.logistics.ltl.billoflading;
 
 import java.util.Date;
 import java.util.List;

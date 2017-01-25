@@ -42,50 +42,46 @@
  *      derek.berube@wildstartech.com
  *      www.wildstartech.com
  */
-package com.wildstartech.gae.wfa.dao.logistics.ltl;
+package com.wildstartech.gae.wfa.dao.logistics.ltl.billoflading;
 
 import java.util.logging.Logger;
 
 import com.wildstartech.gae.wfa.dao.WildDAOImpl;
 import com.wildstartech.wfa.dao.DAOException;
-import com.wildstartech.wfa.dao.logistics.ltl.billoflading.BillOfLadingLineItemDAO;
-import com.wildstartech.wfa.dao.logistics.ltl.billoflading.PersistentBillOfLadingLineItem;
+import com.wildstartech.wfa.dao.logistics.ltl.billoflading.BillOfLadingDAO;
+import com.wildstartech.wfa.dao.logistics.ltl.billoflading.PersistentBillOfLading;
 import com.wildstartech.wfa.dao.user.UserContext;
-import com.wildstartech.wfa.logistics.ltl.billoflading.BillOfLadingLineItem;
+import com.wildstartech.wfa.logistics.ltl.billoflading.BillOfLading;
 
-public class BillOfLadingLineItemDAOImpl 
-extends WildDAOImpl<BillOfLadingLineItem, PersistentBillOfLadingLineItem> 
-implements BillOfLadingLineItemDAO {
-  private static final String _CLASS=
-      BillOfLadingLineItemDAOImpl.class.getName();
-  private static final Logger logger=Logger.getLogger(_CLASS);
-  
+public class BillOfLadingDAOImpl 
+extends WildDAOImpl<BillOfLading, PersistentBillOfLading> 
+implements BillOfLadingDAO {
+  private static String _CLASS=BillOfLadingDAOImpl.class.getName();
+  private static Logger logger=Logger.getLogger(_CLASS);
   
   @Override
-  public PersistentBillOfLadingLineItem findInstance(
-      BillOfLadingLineItem object, UserContext ctx) throws DAOException {
-    logger.entering(_CLASS, "findInstance(BillOfLadingLineItem,UserContext",
-        new Object[] {object,ctx});
-    logger.exiting(_CLASS, "findInstance(BillOfLadingLineItem,UserContext");
-    throw new UnsupportedOperationException("Not implemented yet.");
+  public PersistentBillOfLading create() {
+    logger.entering(_CLASS,"create()");
+    PersistentBillOfLading bol=new PersistentBillOfLadingImpl();
+    logger.exiting(_CLASS,"create()",bol);
+    return bol;
   }
 
-
   @Override
-  public PersistentBillOfLadingLineItem create() {
-    logger.entering(_CLASS, "create()");
-    PersistentBillOfLadingLineItem bol=
-        new PersistentBillOfLadingLineItemImpl();
-    logger.entering(_CLASS, "create()",bol);
-    return null;
+  public PersistentBillOfLading create(BillOfLading billOfLading, UserContext ctx) {
+    logger.entering(_CLASS,"create(BillOfLading,UserContext)",
+        new Object[] {billOfLading,ctx});
+    PersistentBillOfLading bol=null;
+    bol=new PersistentBillOfLadingImpl();
+    
+    logger.exiting(_CLASS,"create(BillOfLading,UserContext)",bol);
+    return bol;
   }
 
-
   @Override
-  public PersistentBillOfLadingLineItem create(BillOfLadingLineItem object,
-      UserContext ctx) {
-    // TODO Auto-generated method stub
-    return null;
+  public PersistentBillOfLading findInstance(BillOfLading object,
+      UserContext ctx) throws DAOException {
+    throw new UnsupportedOperationException("Not Implemented.");
   }
   /**
    * Returns the <em>Kind</em> property of the entity which is used for the
@@ -98,8 +94,7 @@ implements BillOfLadingLineItemDAO {
   @Override
   protected final String getKind() {
      logger.entering(_CLASS, "getKind()");
-     logger.exiting(_CLASS, "getKind()", 
-           PersistentBillOfLadingLineItemImpl._KIND);
-     return PersistentBillOfLadingLineItemImpl._KIND;
+     logger.exiting(_CLASS, "getKind()", PersistentBillOfLadingImpl._KIND);
+     return PersistentBillOfLadingImpl._KIND;
   } 
 }
