@@ -42,7 +42,7 @@
  *      derek.berube@wildstartech.com
  *      www.wildstartech.com
  */
-package com.wildstartech.gae.wfa.dao.logistics.ltl;
+package com.wildstartech.gae.wfa.dao.logistics.ltl.workorder;
 
 import java.text.DateFormat;
 import java.text.NumberFormat;
@@ -62,6 +62,7 @@ import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.Text;
 import com.wildstartech.gae.wfa.dao.journal.JournalDAOImpl;
 import com.wildstartech.gae.wfa.dao.journal.PersistentJournalEntryImpl;
+import com.wildstartech.gae.wfa.dao.logistics.ltl.PersistentAccessorialChargeImpl;
 import com.wildstartech.gae.wfa.dao.ticketing.PersistentBasicTicketImpl;
 import com.wildstartech.wfa.dao.WildObject;
 import com.wildstartech.wfa.dao.finance.CreditCardDAO;
