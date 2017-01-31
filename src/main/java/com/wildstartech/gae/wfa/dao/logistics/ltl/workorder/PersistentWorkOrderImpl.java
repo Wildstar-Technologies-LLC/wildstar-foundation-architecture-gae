@@ -132,7 +132,7 @@ implements PersistentWorkOrder {
    
    /* The list of available 'Status' fields. */
    private static List<String> statusStates = new ArrayList<String>();
-
+   private static String DEFAULT_STATUS="New";
    static {
       statusStates.add("New");
       statusStates.add("Unscheduled");
@@ -248,6 +248,8 @@ implements PersistentWorkOrder {
    public PersistentWorkOrderImpl() {
       super();
       logger.entering(_CLASS, "PersistentWorkOrderImpl()");
+      // Set the default value for the statusState field
+      setStatusState(DEFAULT_STATUS);
       this.accessorials=new ArrayList<AccessorialCharge>();
       this.lineItems=new ArrayList<WorkOrderLineItem>();
       this.lineItemsToDelete=new ArrayList<WorkOrderLineItem>();
@@ -893,6 +895,11 @@ implements PersistentWorkOrder {
 
       if (entity != null) {
          super.populateFromEntity(entity, ctx);
+         // Check status state
+         tmpStr=getStatusState();
+         if ((tmpStr == null) || (tmpStr.isEmpty())) {
+            setStatusState(DEFAULT_STATUS);
+         } // END if ((tmpStr == null) || (tmpStr.isEmpty()))
          // accessorialTotal
          setAccessorialTotal(getPropertyAsDouble(entity, "accessorialTotal"));
          // actualDeliveryDate
