@@ -68,9 +68,10 @@
         <class name="com.wildstartech.wfa.dao.logistics.WarehouseLocationDAOTest"/>
     </classes>
   </test>
-  <!-- ********** wfa.dao.logistics.ltl ********** -->
-  <test name="wfa.dao.logistics.ltl.logistics">
+  <!-- ********** wfa.dao.logistics.ltl.quote ********** -->
+  <test name="wfa.dao.logistics.ltl.quote">
     <classes>
+       <class name="com.wildstartech.wfa.dao.logistics.ltl.quote.QuickQuoteDAOTest"/>
       <class name="com.wildstartech.wfa.dao.logistics.ltl.quote.QuoteDAOTest"/>
     </classes>      
   </test>

@@ -26,7 +26,8 @@ implements PersistentQuickQuote {
 	private static final long serialVersionUID = -893624294240299966L;
 	private static final String _CLASS = PersistentQuickQuoteImpl.class.getName();
 	private static final Logger logger = Logger.getLogger(_CLASS);
-
+	
+	private static final QuoteMethod _QuoteMethodDefault=QuoteMethod.ByCube;
 	private static List<String> serviceLevels = new ArrayList<String>();
 	static {
 		serviceLevels.add("Threshold");
@@ -52,6 +53,8 @@ implements PersistentQuickQuote {
 	private AdjustmentType adjustmentType = AdjustmentType.FixedAmount;
 	private PersistentJournalEntryImpl newJournalEntry = null;
 	private PriceModel priceModel = null;
+	private QuoteMethod quoteMethod=
+	      PersistentQuickQuoteImpl._QuoteMethodDefault;
 	private String contactCompanyName = "";
 	private String contactName = "";
 	private String contactPhone = "";
@@ -79,8 +82,8 @@ implements PersistentQuickQuote {
 		setContactName("");
 		setContactPhone("");
 		setDestinationZip("");
-		;
 		setOriginZip("");
+		setQuoteMethod(_QuoteMethodDefault);
 		setServiceLevel(SERVICE_LEVEL_DEFAULT);
 		setStatusState("");
 		setStatusReason("");
@@ -169,6 +172,8 @@ implements PersistentQuickQuote {
 				tmpStr = pm.getLabel();
 			} // END if (pm == null)
 			entity.setProperty("priceModelLabel", tmpStr);
+			// quoteMethod
+			entity.setProperty("quoteMethod", getQuoteMethodLabel());
 			// serviceLevel
 			entity.setProperty("serviceLevel", getServiceLevel());
 			// totalCubes
@@ -247,6 +252,8 @@ implements PersistentQuickQuote {
 			pm = pmFactory.getDefaultModel();
 		} // END if (tmpStr != null)
 		setPriceModel(pm);
+		// quoteMethod
+		setQuoteMethod(getPropertyAsString(entity, "quoteMethod"));
 		// serviceLevel
 		setServiceLevel(getPropertyAsString(entity, "serviceLevel"));
 		// totalCubes
@@ -284,6 +291,7 @@ implements PersistentQuickQuote {
 			setOrderType(quote.getOrderType());
 			setOriginZip(quote.getOriginZip());
 			setPriceModel(quote.getPriceModel());
+			setQuoteMethod(quote.getQuoteMethod());
 			setServiceLevel(quote.getServiceLevel());
 			setTotalCubes(quote.getTotalCubes());
 			setTotalWeight(quote.getTotalWeight());
@@ -337,6 +345,7 @@ implements PersistentQuickQuote {
 		sb.append(", insuranceCharges=").append(cFmt.format(getInsuranceCharges()));
 		sb.append(", orderType=").append(getOrderType());
 		sb.append(", originZip=").append(getOriginZip());
+		sb.append(", quoteMethod=").append(getQuoteMethodLabel());
 		sb.append(", serviceLevel=").append(getServiceLevel());
 		sb.append(", valuation=").append(cFmt.format(getValuation()));
 		sb.append(", valuationDeclined=").append(isValuationDeclined());
@@ -789,6 +798,48 @@ implements PersistentQuickQuote {
 		this.priceModel = model;
 		logger.exiting(_CLASS, "setPriceModel(PriceModel)");
 	}
+	
+	// ***** quoteMethod
+	@Override
+	public final QuoteMethod getQuoteMethod() {
+	   logger.entering(_CLASS, "getQuoteMethod()");
+	   logger.exiting(_CLASS, "getQuoteMethod()",this.quoteMethod);
+	   return this.quoteMethod;
+	}
+	
+	@Override
+	public final String getQuoteMethodLabel() {
+	   logger.entering(_CLASS, "getQuoteMethodLabel()");
+	   String label=null;
+	   if ((this.quoteMethod != null) && (this.quoteMethod == QuoteMethod.ByWeight)) {
+	      label="By Weight";
+	   } else {
+	      label="By Cube";
+	   } // END if ((this.quoteMethod != null) 	      
+	   logger.exiting(_CLASS, "getQuoteMethodLabel()",label);
+	   return label;
+	}
+	
+	@Override
+	public final void setQuoteMethod(QuoteMethod method) {
+	   logger.entering(_CLASS, "setQuoteMethod(QuoteMethod)",method);
+	   if (method != null) {
+	      this.quoteMethod=method;
+	   } else {
+	      this.quoteMethod=PersistentQuickQuoteImpl._QuoteMethodDefault;
+	   } // END if (method != null)
+	}
+	
+	@Override
+	public final void setQuoteMethod(String method) {
+	   logger.entering(_CLASS,"setQuoteMethod(String)",method);
+	   if ((method != null) && (method.equals("By Weight"))) {
+	      this.quoteMethod=QuoteMethod.ByWeight;
+	   } else {
+	      this.quoteMethod=QuoteMethod.ByCube;
+	   } // if ((method != null) && (method.equals("By Weight"))
+	   logger.exiting(_CLASS, "setQuoteMethod(String");
+	}
 
 	// ***** serviceLevel
 	@Override
@@ -827,13 +878,13 @@ implements PersistentQuickQuote {
 
 	// ***** totalWeight
 	@Override
-	public final int getTotalWeight() {
+	public int getTotalWeight() {
 		logger.entering(_CLASS, "getTotalWeight()");
 		logger.exiting(_CLASS, "getTotalWeight()", this.totalWeight);
 		return this.totalWeight;
 	}
 
-	public final void setTotalWeight(int totalWeight) {
+	public void setTotalWeight(int totalWeight) {
 		logger.entering(_CLASS, "setTotalWeight(int)", totalWeight);
 		this.totalWeight = totalWeight;
 		logger.exiting(_CLASS, "setTotalWeight(int)");

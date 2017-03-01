@@ -4,10 +4,10 @@
   <listeners>
     <listener class-name="com.wildstartech.gae.wfa.dao.DataStoreTestClassListener" />    
   </listeners>
-  <!-- ********** wfa.user ********** -->
-  <test name="wfa.once">
+  <!-- ********** wfa.quickQuote ********** -->
+  <test name="wfa.quickQuote">
     <classes>
-        <class name="com.wildstartech.wfa.dao.user.UserDAOTest"/>
+        <class name="com.wildstartech.wfa.dao.logistics.ltl.quote.QuickQuoteDAOTest"/>
     </classes>
   </test>
  </suite>

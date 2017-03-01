@@ -266,6 +266,10 @@ implements PersistentQuote {
 			entity.setProperty("lineItemCharges", getLineItemCharges());
 			// paymentMethod
 			entity.setProperty("paymentMethod", getPaymentMethod());
+			// totalCubes
+			entity.setProperty("totalCubes", getTotalCubes());
+			// totalWeight
+			entity.setProperty("totalWeight", getTotalWeight());
 			// workOrderRequestId
 			entity.setProperty("workOrderRequestId", getWorkOrderRequestId());
 		} else {
@@ -768,19 +772,7 @@ implements PersistentQuote {
 		logger.entering(_CLASS, "setCreditCardVerification(String)", verification);
 		this.creditCardVerification = verification;
 		logger.entering(_CLASS, "setCreditCardVerification(String)");
-	}
-
-	// ***** totalCubes
-	@Override
-	public int getTotalCubes() {
-		logger.entering(_CLASS, "getTotalCubes()");
-		int cubes = 0;
-		for (QuoteLineItem item : this.lineItems) {
-			cubes += item.getCube() * item.getQuantity();
-		} // END for (QuoteLineItem item: this.lineItems)
-		logger.exiting(_CLASS, "getTotalCubes()", cubes);
-		return cubes;
-	}
+	}	
 
 	// ***** lineItems
 	@Override
@@ -970,9 +962,48 @@ implements PersistentQuote {
 		logger.exiting(_CLASS, "getPaymentMethod(String)");
 	}
 
+	// ***** totalCubes
+   @Override
+   public int getTotalCubes() {
+      logger.entering(_CLASS, "getTotalCubes()");
+      int cubes = 0;
+      
+      if (
+            (this.lineItems != null) &&
+            (this.lineItems.size() > 0)
+         ) {
+         for (QuoteLineItem item : this.lineItems) {
+            cubes += (item.getCube() * item.getQuantity());
+         } // END for (QuoteLineItem item: this.lineItems)
+         super.setTotalCubes(cubes);
+      } else {
+         cubes=super.getTotalCubes();
+      } // END if ((this.lineItems != null) ...
+      logger.exiting(_CLASS, "getTotalCubes()", cubes);
+      return cubes;
+   } // END if ((this.lineItems != null) ...
 	
-
-	
+   // ***** totalWeight
+   @Override
+   public int getTotalWeight() {
+      logger.entering(_CLASS, "getTotalWeight()");
+      int weight=0;
+      
+      if (
+            (this.lineItems != null) &&
+            (this.lineItems.size() > 0)
+         ) {
+         for (QuoteLineItem item : this.lineItems) {
+            weight += (item.getWeight() * item.getQuantity());
+         } // END for (QuoteLineItem item: this.lineItems)
+         super.setTotalWeight(weight);
+      } else {
+         weight=super.getTotalWeight();
+      } // END if ((this.lineItems != null) ...
+      
+      logger.exiting(_CLASS, "getTotalWeight()",weight);
+      return weight;
+   }
 
 	// ***** workOrderRequestId
 	public String getWorkOrderRequestId() {
