@@ -361,6 +361,7 @@ implements PersistentQuote {
 		Map<String, PersistentQuoteLineItemImpl> targetLineItems = null;
 		PersistentQuoteLineItemImpl persistentLineItem = null;
 		String sourceId = "";
+		String sourceLineItemDescription="";
 
 		if (quote != null) {
 			super.populateFromObject(quote);
@@ -396,35 +397,49 @@ implements PersistentQuote {
 				// Now let's iterate over the list of associated line items.
 			for (QuoteLineItem source : quote.getLineItems()) {
 				sourceId = "";
-				if (source instanceof PersistentQuoteLineItem) {
-					sourceId = ((PersistentQuoteLineItem) source).getIdentifier();
-				} else if (source instanceof WildObject) {
-					sourceId = ((WildObject) source).getIdentifier();
-				} // END if (source instanceof PersistentQuoteLineItem)
+				sourceLineItemDescription=source.getDescription();
+				if (
+				      (sourceLineItemDescription != null) &&
+				      (!sourceLineItemDescription.isEmpty())
+				   ) {
+				   /*
+                * This test was done to make sure the source line item is NOT a
+                * "dummy" or "default" line item which happens when the user
+                * interface class adds any time a getLineItems method is called
+                * and there are NO associated line items.  So the source should
+                * be ignored.
+                */
+				   // The source line item appears to be a valid one, so continue
+				   if (source instanceof PersistentQuoteLineItem) {
+	               sourceId = ((PersistentQuoteLineItem) source).getIdentifier();
+	            } else if (source instanceof WildObject) {
+	               sourceId = ((WildObject) source).getIdentifier();
+	            } // END if (source instanceof PersistentQuoteLineItem)
 
-				if (sourceId == null) {
-					// The source ID was NULL, so create a new object and
-					// populate
-					// it.
-					persistentLineItem = new PersistentQuoteLineItemImpl();
-					persistentLineItem.populateFromObject(source);
-					persistentLineItem.setQuoteIdentifier(getIdentifier());
-					addLineItem(persistentLineItem);
-				} else {
-					// Remove the Line Item with the matching identifier
-					persistentLineItem = targetLineItems.remove(sourceId);
-					if (persistentLineItem == null) {
-						// The current quote DOES NOT have the specified line
-						// item.
-						// So we will add it.
-						persistentLineItem = new PersistentQuoteLineItemImpl();
-						persistentLineItem.populateFromObject(source);
-						persistentLineItem.setQuoteIdentifier(getIdentifier());
-						this.lineItems.add(persistentLineItem);
-					} else {
-						persistentLineItem.updateFromObject(source);
-					} // END if (persistentLineItem == null)
-				} // END if (sourceId == null)
+	            if (sourceId == null) {
+	               // The source ID was NULL, so create a new object and
+	               // populate
+	               // it.
+	               persistentLineItem = new PersistentQuoteLineItemImpl();
+	               persistentLineItem.populateFromObject(source);
+	               persistentLineItem.setQuoteIdentifier(getIdentifier());
+	               addLineItem(persistentLineItem);
+	            } else {
+	               // Remove the Line Item with the matching identifier
+	               persistentLineItem = targetLineItems.remove(sourceId);
+	               if (persistentLineItem == null) {
+	                  // The current quote DOES NOT have the specified line
+	                  // item.
+	                  // So we will add it.
+	                  persistentLineItem = new PersistentQuoteLineItemImpl();
+	                  persistentLineItem.populateFromObject(source);
+	                  persistentLineItem.setQuoteIdentifier(getIdentifier());
+	                  this.lineItems.add(persistentLineItem);
+	               } else {
+	                  persistentLineItem.updateFromObject(source);
+	               } // END if (persistentLineItem == null)
+	            } // END if (sourceId == null)
+				} // END if ( (sourceLineItemDescription != null) ...				
 			} // END for (QuoteLineItem source: quote.getLineItems())
 			/*
 			 * Let's iterate through the list of line items found and remove
