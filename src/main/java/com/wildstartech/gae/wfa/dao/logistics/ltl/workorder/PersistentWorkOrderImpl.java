@@ -830,7 +830,7 @@ implements PersistentWorkOrder {
          entity.setProperty("referralOther", getReferralOther());
          // requestedDeliveryDate
          entity.setProperty("requestedDeliveryDate", 
-            getRequestedDeliveryDate());
+         getRequestedDeliveryDate());
          // requestedDeliveryWindow
          entity.setProperty("requestedDeliveryWindow", 
             getRequestedDeliveryWindow());

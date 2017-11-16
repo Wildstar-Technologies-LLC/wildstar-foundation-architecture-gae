@@ -276,7 +276,7 @@ public class UserContextImpl extends WildObjectImpl<UserContext>
       
       sb=new StringBuilder(1024);
       sb.append(super.toPropertyString());
-      sb.append(",userName=\"").append(getIdentifier()).append("\", ");
+      sb.append(",userName=\"").append(getUserName()).append("\", ");
       sb.append("authenticated=\"");
       if (isAuthenticated()) {
          sb.append("true\", authenticationDate=\"");

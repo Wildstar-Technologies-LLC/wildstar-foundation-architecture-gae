@@ -73,6 +73,7 @@ implements PersistentCubeDistancePriceModel {
       "com.wildstartech.wfa.logistics.ltl.pricemodels.CubeDistancePriceModel";
   
   private int mileageInterval=0;
+  private int mileageMax=0;
   private int minCube=0;
   private double baseCharge=0;
   private double cubeDiscount=0;
@@ -86,29 +87,8 @@ implements PersistentCubeDistancePriceModel {
     logger.exiting(_CLASS,"PersistentCubeDistancePriceModelImpl()");
   }
   
-  //***** mileageInterval
-  public int getMileageInterval() {
-    logger.entering(_CLASS,"getMileageInterval()");
-    logger.exiting(_CLASS,"getMileageInterval()",this.mileageInterval);
-    return this.mileageInterval;
-  }
-  public void setMileageInterval(int mileageInterval) {
-    logger.entering(_CLASS,"setMileageInterval(int)",mileageInterval);
-    this.mileageInterval = mileageInterval;
-    logger.exiting(_CLASS,"setMileageInterval(int)");
-  }
-  //***** minCube
-  public int getMinCube() {
-    logger.entering(_CLASS,"getMinCube()");
-    logger.exiting(_CLASS,"getMinCube()",this.minCube);
-    return this.minCube;
-  }  
-  public void setMinCube(int minCube) {
-    logger.entering(_CLASS,"setMinCube(int)",minCube);
-    this.minCube = minCube;
-    logger.exiting(_CLASS,"setMinCube(int)");
-  }
   //***** baseCharge
+  @Override
   public double getBaseCharge() {
     logger.entering(_CLASS,"getBaseCharge()");
     logger.exiting(_CLASS,"getBaseCharge()",this.baseCharge);
@@ -120,6 +100,7 @@ implements PersistentCubeDistancePriceModel {
    * @param mileage
    * @return
    */
+  @Override
   public double getBaseCharge(int cube, double mileage) {
     logger.entering(_CLASS, "getBaseCharge(int)",cube);
     double computedBaseCharge=0;
@@ -161,6 +142,7 @@ implements PersistentCubeDistancePriceModel {
    * @param cube
    * @return
    */
+  @Override
   public double getBaseCubeCharge(int cube) {
     logger.entering(_CLASS,"getBaseCubeCharge(int)",cube);
     double baseCharge;
@@ -218,23 +200,72 @@ implements PersistentCubeDistancePriceModel {
     
     logger.exiting(_CLASS,"setDefault()");
   }
+  
+  //***** mileageInterval
+  @Override
+  public int getMileageInterval() {
+    logger.entering(_CLASS,"getMileageInterval()");
+    logger.exiting(_CLASS,"getMileageInterval()",this.mileageInterval);
+    return this.mileageInterval;
+  }
+  @Override
+  public void setMileageInterval(int mileageInterval) {
+    logger.entering(_CLASS,"setMileageInterval(int)",mileageInterval);
+    this.mileageInterval = mileageInterval;
+    logger.exiting(_CLASS,"setMileageInterval(int)");
+  }
+  //***** mileageMax
+  @Override
+  public int getMileageMax() {
+	   logger.entering(_CLASS,"getMileageMax()");
+	   logger.exiting(_CLASS,"getMileageMax()",this.mileageMax);
+	   return this.mileageMax;
+  }
+  @Override
+  public void setMileageMax(int mileageMax) {
+	   logger.entering(_CLASS, "setMileageMax(int)",mileageMax);
+	   if (mileageMax < 0) {
+		   this.mileageMax=0;
+	   } else {
+		   this.mileageMax=mileageMax;
+	   } // END if (mileageMax < 0)	   
+	   logger.exiting(_CLASS, "setMileageMax(int)");
+  }
   //***** mileageStep 
+  @Override
   public double getMileageStep() {
     logger.entering(_CLASS,"getMileageStep()");
     logger.exiting(_CLASS,"getMileageStep()",this.mileageStep);
     return this.mileageStep;
   }
+  @Override
   public void setMileageStep(double mileageStep) {
     logger.entering(_CLASS,"setMileageStep(double)",mileageStep);
     this.mileageStep = mileageStep;
     logger.exiting(_CLASS,"setMileageStep(double)");
   }
+  //***** minCube
+  @Override
+  public int getMinCube() {
+    logger.entering(_CLASS,"getMinCube()");
+    logger.exiting(_CLASS,"getMinCube()",this.minCube);
+    return this.minCube;
+  }
+  @Override
+  public void setMinCube(int minCube) {
+    logger.entering(_CLASS,"setMinCube(int)",minCube);
+    this.minCube = minCube;
+    logger.exiting(_CLASS,"setMinCube(int)");
+  }
+  
   //***** minCubeCharge
+  @Override
   public double getMinCubeCharge() {
     logger.entering(_CLASS,"getMinCubeCharge()");
     logger.exiting(_CLASS,"getMinCubeCharge()",this.minCubeCharge);
     return this.minCubeCharge;
   }
+  @Override
   public void setMinCubeCharge(double minCubeCharge) {
     logger.entering(_CLASS,"setMinCubeCharge(double)",minCubeCharge);
     this.minCubeCharge = minCubeCharge;
@@ -247,6 +278,7 @@ implements PersistentCubeDistancePriceModel {
    * @param mileage
    * @return
    */
+  @Override
   public double calculateCharge(int cube, double mileage) {
     logger.entering(_CLASS,"calculateCharge(int,int)",
         new Object[] {cube,mileage});

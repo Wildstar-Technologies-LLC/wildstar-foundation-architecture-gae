@@ -115,15 +115,15 @@ public abstract class WildObjectImpl<T> implements Serializable, WildObject {
    private static final long serialVersionUID = 5495762087091689261L;
    private static final String _CLASS = WildObjectImpl.class.getName();
    private static final Logger logger = Logger.getLogger(_CLASS);
-   private static final String MSG_ENTITY_NULL_VALUE = 
+   public static final String MSG_ENTITY_NULL_VALUE = 
          "The Entity parameter was null.";
-   private static final String MSG_PROPERTY_NOT_FOUND = 
+   public static final String MSG_PROPERTY_NOT_FOUND = 
          "The specified property, {0}, was not found.";
-   private static final String MSG_PROPERTY_NOT_RIGHT_TYPE = 
+   public static final String MSG_PROPERTY_NOT_RIGHT_TYPE = 
          "The specified property, {0}, is not an object of type {1}.";
-   private static final String MSG_INVALID_DATEFORMAT = 
+   public static final String MSG_INVALID_DATEFORMAT = 
          "Unable to parse the property using specified DateFormat, {0}.";
-   private static final String MSG_INVALID_DATATYPE = 
+   public static final String MSG_INVALID_DATATYPE = 
          "Unable to parse the value {0} from property, {0}, as a(n) {1}.";
    /* The date/time the object was originally created. */
    private Date dateCreated = null;
