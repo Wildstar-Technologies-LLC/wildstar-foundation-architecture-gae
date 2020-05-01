@@ -56,7 +56,7 @@ public class PasswordEncryptorTest {
 		String encryptedPassword=null;
 		
 		pe=PasswordEncryptor.getInstance();
-		encryptedPassword=pe.encryptPassword("delivery12");
+		encryptedPassword=pe.encryptPassword("Delivery12");
 		System.out.println("Encrypted Password:" + encryptedPassword);
 	}
 }

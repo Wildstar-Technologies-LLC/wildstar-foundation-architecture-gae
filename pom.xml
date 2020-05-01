@@ -36,7 +36,7 @@
  
        Wildstar Technologies, LLC.
        63 The Greenway Loop
-       Panama City Beach, FL 32413
+       Inlet Beach, FL 32461
        USA
  
        derek.berube@wildstartech.com
@@ -51,10 +51,42 @@
   <artifactId>wfa-gae</artifactId>
   <version>0.2</version>
   <packaging>jar</packaging>
-
   <name>Wildstar Foundation Architecture (GAE)</name>
-  <url>http://www.wildstartech.com</url>
-
+  <!-- Project Information -->
+  <description>
+  An implementation of the Wildstar Foundation Architecture for 
+  applications built atop the Google App Engine platform.
+  </description>
+  <url>http://www.wildstartech.com/</url>
+  <licenses>
+    <license>
+      <name>GNU General Public License v3.0 w/Classpath exception</name>
+      <url>http://www.gnu.org/licenses/gpl-3.0.html</url>
+      <distribution>repo</distribution>
+      <comments></comments>
+    </license>
+  </licenses>
+  <organization>
+    <name>Wildtar Technologies, LLC.</name>
+    <url>www.wildstartech.com</url>
+  </organization>
+  <developers>
+    <developer>
+      <id>dberube</id>
+      <name>Derek Berube</name>
+      <email>derek.berube@wildstartech.com</email>
+      <url>http://www.linkedin.com/in/derekberube</url>
+      <organization>Wildstar Technologies, LLC.</organization>
+      <roles>
+        <role>architect</role>
+        <role>developer</role>
+      </roles>
+      <timezone>America/Chicago</timezone>
+      <properties>
+         <picUrl></picUrl>
+      </properties>		
+    </developer>
+  </developers>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <appengine.target.version>1.9.54</appengine.target.version>
@@ -97,7 +129,7 @@
     <dependency>
     	<groupId>org.testng</groupId>
     	<artifactId>testng</artifactId>
-    	<version>6.9.10</version>
+    	<version>6.14.3</version>
     	<scope>test</scope>
     </dependency>
     <dependency>
@@ -125,7 +157,7 @@
 	<dependency>
 		<groupId>com.wildstartech.wfa</groupId>
 		<artifactId>ack</artifactId>
-		<version>0.1-SNAPSHOT</version>
+		<version>0.2</version>
 		<scope>test</scope>
 	</dependency>
 	<dependency>
@@ -134,10 +166,6 @@
 		<version>1.5.1</version>
 	</dependency>
   </dependencies>
-  <organization>
-  	<name>Wildstar Technologies, LLC.</name>
-  	<url>http://www.wildstartech.com/</url>
-  </organization>
   <build>
     <plugins>
       <plugin>
@@ -145,8 +173,8 @@
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.1</version>
         <configuration>
-          <source>1.7</source>
-          <target>1.7</target>
+          <source>11</source>
+          <target>11</target>
         </configuration>
       </plugin>      
   	 </plugins>

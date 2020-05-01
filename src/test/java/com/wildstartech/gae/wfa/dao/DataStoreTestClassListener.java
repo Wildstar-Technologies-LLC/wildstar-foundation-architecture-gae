@@ -4,7 +4,6 @@ import java.util.logging.Logger;
 import java.util.logging.Level;
 
 import org.testng.IClassListener;
-import org.testng.IMethodInstance;
 import org.testng.ITestClass;
 
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
@@ -23,9 +22,9 @@ public class DataStoreTestClassListener implements IClassListener {
 	private static final Logger logger=Logger.getLogger(_CLASS);
 	
 	private LocalServiceTestHelper helper=null;
-	
+
 	@Override
-	public void onBeforeClass(ITestClass testClass, IMethodInstance mi) {
+	public void onBeforeClass(ITestClass testClass) {
 		LocalDatastoreServiceTestConfig config = null;
 		String userName = null;
 		String password = null;
@@ -73,18 +72,19 @@ public class DataStoreTestClassListener implements IClassListener {
 		if (!localCtx.isAuthenticated()) {
 			logger.severe("Authentication Failed");
 		} // END if (localCtx.isAuthenticated())
-
+		
 	}
 
 	@Override
-	public void onAfterClass(ITestClass testClass, IMethodInstance mi) {
+	public void onAfterClass(ITestClass testClass) {
 		logger.entering(_CLASS, "onAfterClass(ITestClass,IMethodInstance)",
-				new Object[] {testClass,mi});
+				new Object[] {testClass});
 		try {
 			this.helper.tearDown();
 		} catch (NullPointerException ex) {
 			// NO-Op
 		}
 		logger.exiting(_CLASS, "onAfterClass(ITestClass,IMethodInstance)");
+		
 	}
 }
